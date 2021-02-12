@@ -1,0 +1,3 @@
+Ce dossier contiendra l'intégralité des interfaces du jeu
+Ainsi il sera plus simple de construire les différentes interfaces directement en html au lieu de passer par des createElement js
+Il suffira ensuite de faire une requete AJAX (XMLHttpRequest) pour récupérer le contenu de la page et l'insérer dans la page principale

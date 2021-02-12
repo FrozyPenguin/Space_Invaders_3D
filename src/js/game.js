@@ -18,6 +18,10 @@ export class Game {
         // - les invaders deviennent de plus en plus précis au cours de la partie
         // (à faire ici)
     //
+
+    /**
+     * Constructeur de la class Game
+     */
     constructor() {
         this.delta = 0;
         this.clock = new THREE.Clock();
@@ -35,19 +39,24 @@ export class Game {
         this.addHelpers();
     }
 
-    resetGame = () => {
-        invader.reset(
-            (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2),
-            0,
-            (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2)
-        )
+    /**
+     * Réinitialise la position de tout les élément de la partie
+     */
+    resetGame() {
+        this.invadersGroup.reset();
     }
 
+    /**
+     * Ajoute les différentes aides visuel à la scene
+     */
     addHelpers() {
         helpers(scene);
         this.controls = addControls(camera, renderer, this.defender);
     }
 
+    /**
+     * Boucle d'animation
+     */
     draw() {
         stats.begin();
 
@@ -67,6 +76,9 @@ export class Game {
         requestAnimationFrame(() => this.draw());
     }
 
+    /**
+     * Démarre une partie
+     */
     startGame() {
 
     }

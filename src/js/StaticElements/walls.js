@@ -2,7 +2,7 @@ import * as THREE from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
 
 /**
- * Ajoute les limites du terrain
+ * Créer un mur
  * @param { Number } width largeur du mur
  * @param { Number } height hauteur du mur
  * @param { object } pos position x et z du mur
@@ -26,6 +26,9 @@ function addWall(width, height, pos, rot) {
     return plane;
 }
 
+/**
+ * Ajoute les limites du terrain à la scène
+ */
 function initWalls() {
 
     const planeGroup = new THREE.Group();

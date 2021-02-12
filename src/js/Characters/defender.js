@@ -5,6 +5,11 @@ import THREEx from '../../lib/Threex/threex.keyboardstate.js';
 import { scene } from '../scene.js';
 
 class Defender extends THREE.Mesh {
+    /**
+     * Constructeur d'un defender
+     * @param { String } color couleur du defender
+     * @param { Number } speed vitesse de déplacement du defender
+     */
     constructor(color, speed) {
         // Create the defender object
         const defenderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
@@ -22,6 +27,10 @@ class Defender extends THREE.Mesh {
         scene.add(this);
     }
 
+    /**
+     * Boucle de controle au clavier du defender
+     * @param { Number } delta temps écoulé depuis la derniere période d'horloge
+     */
     handleKeyboardLoop(delta) {
         if(this.keyboard.pressed('right')) {
             this.position.x -= this.xSpeed * delta;
@@ -31,6 +40,9 @@ class Defender extends THREE.Mesh {
         }
     }
 
+    /**
+     * Controle au clavier du defender non répétitif
+     */
     handleKeyboardUnique() {
         // handle keydown, return early if event is an autorepeat
         this.keyboard.domElement.addEventListener('keydown', function(event){
@@ -43,12 +55,18 @@ class Defender extends THREE.Mesh {
         }.bind(this))
     }
 
+    /**
+     * Tire un projectile
+     */
     shoot() {
         let projectile = new Projectile(1, 3 , 1, 0xff00ff, this);
         projectile.setVelocity(200);
         global.updateList.push(projectile);
     }
 
+    /**
+     * Réinitialise la position
+     */
     reset() {
         this.position.x = 0;
         this.position.z = -(global.invadersSize + global.invadersPadding) * ((global.nbInvaders / global.invadersPerLine) + global.turnBeforeDeath);

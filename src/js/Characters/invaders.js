@@ -20,6 +20,13 @@ const typeInvader = [
 ].reverse();
 
 class Invader extends THREE.Mesh {
+
+    /**
+     * Constructeur d'un Invaders
+     * @param { String } color couleur de l'invader
+     * @param { typeInvader } type type de l'invader
+     * @param { Number } point point distribué lors de l'élimination de l'invader
+     */
     constructor(color, type, point) {
         const invaderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
         const invaderMaterial = new THREE.MeshBasicMaterial({ color });
@@ -30,20 +37,23 @@ class Invader extends THREE.Mesh {
         this.name = 'Invader';
     }
 
+    /**
+     * Détruit un invader
+     */
     death() {
         this.active = false;
     }
 
+    /**
+     * Ramene à la vie un invader
+     */
     live() {
         this.active = true;
     }
 
-    reset() {
-        invaderGroup.position.x = (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2);
-        invaderGroup.position.y = 0;
-        invaderGroup.position.z = (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2);
-    }
-
+    /**
+     * Tire un projectile
+     */
     shoot() {
         let projectile = new Projectile(1, 3 , 1, 0xff00ff, this);
         projectile.setVelocity(-200);
@@ -53,7 +63,19 @@ class Invader extends THREE.Mesh {
 
 const invaderGroup = new THREE.Group();
 
-function initInvaders(invadersPositionX, invadersPositionY, invadersPositionZ) {
+/**
+ * Réinitialise la position du groupe d'invaders
+ */
+invaderGroup.reset = () => {
+    invaderGroup.position.x = (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2);
+    invaderGroup.position.y = 0;
+    invaderGroup.position.z = (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2);
+}
+
+/**
+ * Créer l'ensemble des invaders
+ */
+function initInvaders() {
 
     // Create invaders objects
     invaderGroup.name = 'Les envahisseurs 2.0';
@@ -83,6 +105,9 @@ function initInvaders(invadersPositionX, invadersPositionY, invadersPositionZ) {
     return invaderGroup;
 }
 
+/**
+ * Créer le mouvement des invaders
+ */
 function moveInvaders() {
     setTimeout(() => {
         invaderGroup.translateX(20);

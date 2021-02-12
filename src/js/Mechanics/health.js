@@ -23,7 +23,7 @@ function addHeart() {
 
 /**
  * Vide un coeur.
- * @return { Number } Nombre de coeur restant
+ * @return { Number } Nombre de coeur plein restant
  */
 function takeDamage() {
     let remainingHeart = document.querySelectorAll('#heartContainer .heart:not(#refHeart):not(.empty)');
@@ -36,7 +36,7 @@ function takeDamage() {
 
 /**
  * Rempli un coeur. Si tout les coeurs sont rempli, en ajoute un.
- * @return { Number } Nombre de coeur restant
+ * @return { Number } Nombre de coeur plein restant
  */
 function giveHealth() {
     let lastHeart = document.querySelector('#heartContainer .heart.empty:not(#refHeart):last-child');
@@ -55,9 +55,29 @@ function initHealth(healthCount) {
     }
 }
 
+/**
+ * Enleve un coeur de l'écran (supprime un coeur du dom)
+ * @return { Number } Nombre de coeur plein restant
+ */
+function removeHeart() {
+    let lastHeart = document.querySelector('#heartContainer .heart:not(#refHeart):last-child');
+    if(lastHeart) lastHeart.remove();
+    return document.querySelectorAll('#heartContainer .heart:not(#refHeart):not(.empty)').length;
+}
+
+/**
+ * Donne le nombre de vie restant
+ * @return { Number } Nombre de coeur plein restant
+ */
+function getHealthValue() {
+    return document.querySelectorAll('#heartContainer .heart:not(#refHeart):not(.empty)').length;
+}
+
 export {
     addHeart,
     takeDamage,
     initHealth,
-    giveHealth
+    giveHealth,
+    removeHeart,
+    getHealthValue
 }
