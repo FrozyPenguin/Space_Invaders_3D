@@ -1,5 +1,5 @@
 export default {
-    nbInvaders: 33,
+    nbInvaders: 55,
     invadersSize: 10,
     invadersPerLine: 11,
     invadersPadding: 10,
@@ -9,5 +9,6 @@ export default {
     partie: null,
     score: 0,
     isGameOver: false,
-    updateList: []
+    timeBetweenShoots: 500,
+    probToShoot: 0.001
 }

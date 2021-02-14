@@ -3,11 +3,12 @@
     padding: 0;
 }
 
-#heartContainer .heart {
+#heartContainer .heart, #controls {
     position: absolute;
     bottom: 5px;
     left: 5px;
     height: 70px;
+    width: 70px;
     fill: red;
     stroke-linejoin: round;
     stroke: black;
@@ -17,4 +18,15 @@
 
 #heartContainer .heart.empty {
     fill: black;
+}
+
+#controls {
+    bottom: initial;
+    top: 5px;
+    left: initial;
+    right: 5px;
+}
+
+#controls div svg {
+    stroke: white;
 }

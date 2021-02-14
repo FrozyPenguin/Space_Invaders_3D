@@ -3,8 +3,9 @@ import global from '../global.js';
 import { Projectile } from '../Mechanics/projectile.js';
 import THREEx from '../../lib/Threex/threex.keyboardstate.js';
 import { scene } from '../scene.js';
+import { GameObject } from '../gameObject.js';
 
-class Defender extends THREE.Mesh {
+class Defender extends GameObject {
     /**
      * Constructeur d'un defender
      * @param { String } color couleur du defender
@@ -18,13 +19,19 @@ class Defender extends THREE.Mesh {
         this.reset();
 
         this.xSpeed = speed;
-        this.intervalId = [];
+
         this.keyboard = new THREEx.KeyboardState();
         this.handleKeyboardUnique();
 
         this.name = 'Defender';
 
         scene.add(this);
+
+        // let rightWall = scene.getObjectByName('rightWall');
+        // const helper = new THREE.Box3Helper( new THREE.Box3().setFromObject(rightWall), 0xffff00 );
+        // scene.add( helper );
+
+        this.readyToShoot = true;
     }
 
     /**
@@ -32,10 +39,10 @@ class Defender extends THREE.Mesh {
      * @param { Number } delta temps écoulé depuis la derniere période d'horloge
      */
     handleKeyboardLoop(delta) {
-        if(this.keyboard.pressed('right')) {
+        if(this.keyboard.pressed('right') && !this.isCollidingWall('right')) {
             this.position.x -= this.xSpeed * delta;
         }
-        else if(this.keyboard.pressed('left')){
+        else if(this.keyboard.pressed('left') && !this.isCollidingWall('left')) {
             this.position.x += this.xSpeed * delta;
         }
     }
@@ -49,8 +56,10 @@ class Defender extends THREE.Mesh {
             if (event.repeat) {
                 return;
             }
-            if (this.keyboard.eventMatches(event, 'space') ){
+            if (this.keyboard.eventMatches(event, 'space') && this.readyToShoot){
                 this.shoot();
+                this.readyToShoot = false;
+                setTimeout(() => this.readyToShoot = true, global.timeBetweenShoots);
             }
         }.bind(this))
     }
@@ -59,9 +68,16 @@ class Defender extends THREE.Mesh {
      * Tire un projectile
      */
     shoot() {
-        let projectile = new Projectile(1, 3 , 1, 0xff00ff, this);
+        let collideGroup = [
+            ...scene.getObjectByName('Les envahisseurs 2.0').children,
+            scene.getObjectByName('backWall')
+        ];
+
+        console.log(collideGroup)
+
+        let projectile = new Projectile(1, 3 , 1, 0xff00ff, this, collideGroup);
         projectile.setVelocity(200);
-        global.updateList.push(projectile);
+        //global.updateList.push(projectile);
     }
 
     /**

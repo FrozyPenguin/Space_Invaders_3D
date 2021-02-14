@@ -1,8 +1,12 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
 import { scene } from '../scene.js';
+import { GameObject } from '../gameObject.js';
+import { Defender } from '../Characters/defender.js';
+import { Invader } from '../Characters/invaders.js';
+import { takeDamage } from './health.js';
 
-class Projectile extends THREE.Mesh {
+class Projectile extends GameObject {
     /**
      * Constructeur du projectile
      * @param { Number } width largeur du projectile
@@ -11,17 +15,22 @@ class Projectile extends THREE.Mesh {
      * @param { String } color couleur du projectile
      * @param { THREE.Mesh } sender émetteur du projectile
      */
-    constructor(width, depth, height, color, sender) {
+    constructor(width, depth, height, color, sender, collideGroup = []) {
         const projectileGeometry = new THREE.BoxBufferGeometry(width, height, depth);
         const projectileMaterial = new THREE.MeshBasicMaterial({ color: color });
         super(projectileGeometry, projectileMaterial)
 
         this.vel;
-        this.position.set(sender.position.x, sender.position.y, sender.position.z);
+        const center = new THREE.Vector3(0, 0, 0);
+        this.position.set(sender.getWorldPosition(center).x, sender.getWorldPosition(center).y, sender.getWorldPosition(center).z);
 
         this.sender = sender;
 
         scene.add(this);
+
+        this.collideGroup = collideGroup;
+
+        this.toRemove = false;
     }
 
     /**
@@ -34,7 +43,34 @@ class Projectile extends THREE.Mesh {
 
     // Quand on collide on le détruit
     collide() {
+        this.collideGroup = this.collideGroup.filter(element => element.visible);
+        for (let i = 0; i < this.collideGroup.length; i++) {
+            const elementBox = this.collideGroup[i].getBoundingBox();
+            const element = this.collideGroup[i];
 
+            //console.log(element)
+            if(this.getBoundingBox().intersectsBox(elementBox)) {
+                if(this.sender instanceof Invader && element instanceof Defender) {
+                    if(takeDamage() == 0) {
+                        // TODO: Envoyer un event fin de partie
+                        console.log('perdu');
+                    }
+                }
+                this.visible = false;
+                if(element instanceof Invader && this.sender instanceof Defender) element.death();
+                this.toRemove = true;
+                // this.parent.remove(this);
+            }
+        }
+        //invader.death();
+    }
+
+    /**
+     * Ajoute un objet dans le groupe de collision du missile
+     * @param { THREE.Box3 } box3
+     */
+    addToCollideGroup(box3) {
+        this.collideGroup.push(box3);
     }
 
     /**
@@ -42,6 +78,7 @@ class Projectile extends THREE.Mesh {
      * @param { Number } delta temps écoulé depuis la dérniere période d'horloge
      */
     update(delta) {
+        this.collide();
         this.position.z += this.vel * delta;
     }
 }

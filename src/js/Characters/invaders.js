@@ -1,5 +1,9 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
+import { GameObject } from '../gameObject.js';
+import { scene } from '../scene.js';
+import { Projectile } from '../Mechanics/projectile.js';
+import { takeDamage } from '../Mechanics/health.js';
 
 const typeInvader = [
     {
@@ -16,10 +20,28 @@ const typeInvader = [
         type: 'ultraVenere',
         color: new THREE.Color(0x00ffff),
         point: 50
+    },
+    {
+        type: 'ultraVenere',
+        color: new THREE.Color(0x00ffff),
+        point: 50
+    },
+    {
+        type: 'ultraVenere',
+        color: new THREE.Color(0x00ffff),
+        point: 50
     }
 ].reverse();
 
-class Invader extends THREE.Mesh {
+
+
+let directionSpeed = {
+    x: 50,
+    y: 0,
+    z: 0
+}
+
+class Invader extends GameObject {
 
     /**
      * Constructeur d'un Invaders
@@ -41,23 +63,68 @@ class Invader extends THREE.Mesh {
      * Détruit un invader
      */
     death() {
-        this.active = false;
+        // TODO: Ajouter des points
+        this.visible = false;
+
+        // TODO: Génération aléatoire de bonus
+        // Plus on est au level, moins on a de proba
+        let level = 1;
+        const bonus = Math.random();
+        if(bonus < 0.01 * level) console.log('Bonus');
     }
 
     /**
      * Ramene à la vie un invader
      */
     live() {
-        this.active = true;
+        this.visible = true;
     }
 
     /**
      * Tire un projectile
      */
     shoot() {
-        let projectile = new Projectile(1, 3 , 1, 0xff00ff, this);
+        let collideGroup = [
+            scene.getObjectByName('Defender'),
+            scene.getObjectByName('frontWall')
+        ];
+
+        let projectile = new Projectile(1, 3 , 1, 0xffff00, this, collideGroup);
         projectile.setVelocity(-200);
-        global.updateList.push(projectile);
+        //global.updateList.push(projectile);
+    }
+
+    isCollidingDefender() {
+        let defender = scene.getObjectByName(`Defender`);
+        if(defender) {
+            let defenderBB = new THREE.Box3().setFromObject(defender);
+
+            return this.getBoundingBox().intersectsBox(defenderBB);
+        }
+        return false;
+    }
+
+    update(delta) {
+        const haveToShoot = Math.random();
+        if(haveToShoot < global.probToShoot) this.shoot();
+
+        if(this.isCollidingWall('left')) {
+            directionSpeed.x = directionSpeed.x > 0 ? directionSpeed.x * -1 : directionSpeed.x;
+            directionSpeed.z = -200;
+        }
+        else if(this.isCollidingWall('right')) {
+            directionSpeed.x = directionSpeed.x < 0 ? directionSpeed.x * -1 : directionSpeed.x;
+            directionSpeed.z = -200;
+        }
+
+        if(this.isCollidingDefender()) {
+            if(takeDamage() == 0) {
+                directionSpeed = { x: 0, y: 0, z: 0 };
+                global.probToShoot = 0;
+            };
+
+            // TODO: FIN DU GAME
+        }
     }
 }
 
@@ -105,17 +172,19 @@ function initInvaders() {
     return invaderGroup;
 }
 
+
 /**
  * Créer le mouvement des invaders
  */
-function moveInvaders() {
-    setTimeout(() => {
-        invaderGroup.translateX(20);
-    }, 300);
+invaderGroup.update = (delta) => {
+    invaderGroup.position.x += delta * directionSpeed.x;
+    invaderGroup.position.y += delta * directionSpeed.y;
+    invaderGroup.position.z += delta * directionSpeed.z;
+
+    directionSpeed.z = 0;
 }
 
 export {
     initInvaders,
     Invader,
-    moveInvaders
 }

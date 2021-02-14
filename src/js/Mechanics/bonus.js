@@ -1,8 +1,9 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
 import { scene } from '../scene.js';
+import { GameObject } from '../gameObject.js';
 
-class Bonus extends THREE.Mesh {
+class Bonus extends GameObject {
     /**
      * Constructeur d'un bonus
      */

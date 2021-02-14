@@ -1,29 +1,33 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
+import { GameObject } from '../gameObject.js';
 
-/**
- * Créer un mur
- * @param { Number } width largeur du mur
- * @param { Number } height hauteur du mur
- * @param { object } pos position x et z du mur
- * @param { object } rot rotation x,y,z du mur en degré
- */
-function addWall(width, height, pos, rot) {
-    // const invaderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
-    // const invaderMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.BackSide });
+class Wall extends GameObject {
+    /**
+     * Créer un mur
+     * @param { Number } width largeur du mur
+     * @param { Number } height hauteur du mur
+     * @param { object } pos position x et z du mur
+     * @param { object } rot rotation x,y,z du mur en degré
+     * @param { String } color couleur du mur
+     */
+    constructor(name, width, height, pos, rot, color = 0x000000) {
+        // const invaderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
+        // const invaderMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.BackSide });
 
-    const geometry = new THREE.PlaneGeometry(width, height);
-    const material = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide });
-    const plane = new THREE.Mesh(geometry, material);
+        const geometry = new THREE.PlaneGeometry(width, height);
+        const material = new THREE.MeshBasicMaterial({ color, side: THREE.BackSide });
+        super(geometry, material);
 
-    rot.x = THREE.Math.degToRad(rot.x);
-    rot.y = THREE.Math.degToRad(rot.y);
-    rot.z = THREE.Math.degToRad(rot.z);
-    plane.rotation.set(rot.x, rot.y, rot.z);
+        rot.x = THREE.Math.degToRad(rot.x);
+        rot.y = THREE.Math.degToRad(rot.y);
+        rot.z = THREE.Math.degToRad(rot.z);
+        this.rotation.set(rot.x, rot.y, rot.z);
 
-    plane.position.set(pos.x, pos.y, pos.z);
+        this.position.set(pos.x, pos.y, pos.z);
 
-    return plane;
+        this.name = name;
+    }
 }
 
 /**
@@ -48,26 +52,27 @@ function initWalls() {
     let offset = size / 2;
 
     // Bas
-    planeGroup.add(addWall(size, size, {x: 0, y: 0, z: 0}, {x: 90, y: 0, z: 0}));
+    planeGroup.add(new Wall('bottomWall', size, size, {x: 0, y: 0, z: 0}, {x: 90, y: 0, z: 0}));
 
     // Haut
-    planeGroup.add(addWall(size, size, {x: 0, y: size, z: 0}, {x: -90, y: 0, z: 0}));
-
-    // Droite
-    planeGroup.add(addWall(size, size, {x: offset, y: offset, z: 0}, {x: 0, y: 90, z: 0}));
+    planeGroup.add(new Wall('topWall', size, size, {x: 0, y: size, z: 0}, {x: -90, y: 0, z: 0}));
 
     // Gauche
-    planeGroup.add(addWall(size, size, {x: -offset, y: offset, z: 0}, {x: 0, y: -90, z: 0}));
+    planeGroup.add(new Wall('leftWall', size, size, {x: offset, y: offset, z: 0}, {x: 0, y: 90, z: 0}, 0x222222));
+
+    // Droite
+    planeGroup.add(new Wall('rightWall', size, size, {x: -offset, y: offset, z: 0}, {x: 0, y: -90, z: 0}, 0x222222));
 
     // Derriere
-    planeGroup.add(addWall(size, size, {x: 0, y: offset, z: offset}, {x: 0, y: 0, z: 0}));
+    planeGroup.add(new Wall('backWall', size, size, {x: 0, y: offset, z: offset}, {x: 0, y: 0, z: 0}));
 
     // Devant
-    planeGroup.add(addWall(size, size, {x: 0, y: offset, z: -offset}, {x: 0, y: 180, z: 0}));
+    planeGroup.add(new Wall('frontWall', size, size, {x: 0, y: offset, z: -offset}, {x: 0, y: 180, z: 0}));
 
     return planeGroup;
 }
 
 export {
-    initWalls
+    initWalls,
+    Wall
 }
