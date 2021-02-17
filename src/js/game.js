@@ -12,7 +12,9 @@ import { initDomControls } from './domEvent/controls.js';
 import { EventEmitter } from './Utils/eventEmitter.js';
 import { Keyboard } from './Mechanics/keyboard.js';
 import { takeDamage } from './Mechanics/health.js';
+import { PathFollower } from './Mechanics/pathFollower.js';
 import { Bernoulli, Gerono } from './Utils/lemniscate.js';
+import { Flow, InstancedFlow } from '../lib/Three.js/examples/jsm/modifiers/CurveModifier.js';
 
 const gameEvent = new EventEmitter();
 
@@ -36,7 +38,7 @@ class Game {
 
     // Idée jeu a la manette : https://gamepad-tester.com/for-developers
     // https://samiare.github.io/Controller.js/
-    // Idée jeu jojo avec des le defender c'est un rageux qui veut exterminer les jojo poses
+    // Idée jeu jojo avec le defender c'est un rageux qui veut exterminer les jojo poses
     // Idée model invaders : https://www.youtube.com/watch?v=Pavv_E2Uss8
     // Idée start : https://www.youtube.com/watch?v=_eL3-6YYWYE
     // Idée fond sonore : https://www.youtube.com/watch?v=2MtOpB5LlUA
@@ -69,7 +71,7 @@ class Game {
         initHealth(global.lifeCount);
 
         // Scene
-        //scene.add(this.invadersGroup);
+        scene.add(this.invadersGroup);
         scene.add(this.walls);
         this.currentCamera = Cameras.main;
 
@@ -221,6 +223,11 @@ class Game {
     }
 
     test() {
+        // https://github.com/mrdoob/three.js/blob/master/examples/webgl_modifier_curve_instanced.html
+        // https://github.com/mrdoob/three.js/blob/master/examples/webgl_modifier_curve.html
+
+        // TODO: Déplacer toute cette logique dans un endroit adéquat
+
         // Dessine la lemniscate
         let scale = global.invadersPerLine*(global.invadersPadding+global.invadersSize);
         let nbPoints = global.nbInvaders;
@@ -228,70 +235,84 @@ class Game {
 
         pointsBernoulli = pointsBernoulli.map(point => new THREE.Vector3( point.x, 10, point.y ));
 
-        let pointsGerono = Gerono(scale, nbPoints);
-
-        pointsGerono = pointsGerono.map(point => new THREE.Vector3( point.x, 10, point.y ))
-
-        const materialBernoulli = new THREE.LineBasicMaterial( { color: Math.random()*0xffffff } );
-        const geometryBernoulli = new THREE.BufferGeometry().setFromPoints( pointsBernoulli );
-        const lineBernoulli = new THREE.Line( geometryBernoulli, materialBernoulli );
-        scene.add(lineBernoulli);
-
-        const materialGerono = new THREE.LineBasicMaterial( { color: 0xCC12DF } );
-        const geometryGerono = new THREE.BufferGeometry().setFromPoints( pointsGerono );
-        const lineGerono = new THREE.Line( geometryGerono, materialGerono );
-
-        lineGerono.rotation.y = Math.PI/2;
-        scene.add(lineGerono);
-
         const cubes = new THREE.Group();
+        cubes.name = 'Les Envahisseurs du 8 perdu !';
+        const flows = [];
+
+        const curve = new THREE.CatmullRomCurve3(pointsBernoulli);
+        curve.curveType = "centripetal";
+        curve.closed = true;
+
+        const line = new THREE.LineLoop(
+            new THREE.BufferGeometry().setFromPoints( pointsBernoulli ),
+            new THREE.LineBasicMaterial( { color: 0x00ff00 } )
+        );
+        scene.add(line)
 
         for(let i = 0; i < pointsBernoulli.length; i++) {
             const invaderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
-            const invaderMaterial = new THREE.MeshBasicMaterial({ color: Math.random()*0xffffff });
+            const invaderMaterial = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
             const cube = new THREE.Mesh(invaderGeometry, invaderMaterial);
 
-            cube.position.x = pointsBernoulli[i].x
-            cube.position.y = pointsBernoulli[i].y
-            cube.position.z = pointsBernoulli[i].z
+            // cube.position.x = pointsBernoulli[i].x
+            // cube.position.y = pointsBernoulli[i].y
+            // cube.position.z = pointsBernoulli[i].z
 
-            cube.target = i;
+            let flow = new Flow(cube);
+            flow.updateCurve(0, curve)
+            flow.moveAlongCurve(i * 1 / global.nbInvaders);
 
-            cubes.add(cube)
+            cubes.add(flow.object3D);
+            flows.push(flow);
         }
 
-        scene.add(cubes)
+        scene.add(cubes);
+
+        console.log(scene)
 
         return {
             pointsBernoulli,
             cubes,
-            scale
+            curve,
+            flows
         }
     }
 
     testUpdate(delta) {
         let taille = this.obj.cubes.children.length;
         let cubes = this.obj.cubes.children;
-        let Bernoulli = this.obj.pointsBernoulli
-        let scale = this.obj.scale;
-        let t = 0.2 * delta;
+        // let Bernoulli = this.obj.pointsBernoulli
+        // let scale = this.obj.scale;
+        // let t = 0;
+        // let s = 1 * delta;
         for(let i = 0; i < taille; i++) {
-            // Ca commence à me saouler
+            this.obj.flows[i].moveAlongCurve(delta * 0.06)
+            cubes[i].rotation.set(0, 0, 0);
+        }
+        //     let arrows = cubes;
+        //     let path = this.obj.curve;
+        //     // Ca commence à me saouler
 
-            // let x = (scale * Math.cos(cubes[i].position.x)) / (1 + Math.pow(Math.sin(cubes[i].position.x), 2));
-            // let z = (scale * Math.sin(cubes[i].position.z) * Math.cos(cubes[i].position.z)) / (1 + Math.pow(Math.sin(cubes[i].position.z), 2));
+        //     // let x = (scale * Math.cos(cubes[i].position.x)) / (1 + Math.pow(Math.sin(cubes[i].position.x), 2));
+        //     // let z = (scale * Math.sin(cubes[i].position.z) * Math.cos(cubes[i].position.z)) / (1 + Math.pow(Math.sin(cubes[i].position.z), 2));
 
-            // cubes[i].position.x = x * delta;
-            // cubes[i].position.z = z * delta;
+        //     // cubes[i].position.x = x * delta;
+        //     // cubes[i].position.z = z * delta;
 
 
             // if(cubes[i].position.distanceTo(Bernoulli[cubes[i].target]) < 5) {
             //     cubes[i].target = (cubes[i].target+1)%taille;
-            // //     console.log('suivant')
             // }
-            // cubes[i].position.lerp(Bernoulli[cubes[i].target], 0.001)
-        }
-        //this.obj.cubes.children[0].position.lerp(this.obj.pointsBernoulli[1], 0.1)
+            // cubes[i].position.lerp(Bernoulli[cubes[i].target], 0.01)
+
+            // cubes[i].position.x += (Bernoulli[cubes[i].target].x - Bernoulli[((cubes[i].target-1 % taille) + taille) % taille].x) * delta;
+            // cubes[i].position.z += (Bernoulli[cubes[i].target].z - Bernoulli[((cubes[i].target-1 % taille) + taille) % taille].z) * delta;
+
+
+        //     // Catmullromcurve peut etre
+        // }
+        //this.obj.path.update();
+        //this.obj.flow.moveAlongCurve(0.001);
     }
 
     /**
