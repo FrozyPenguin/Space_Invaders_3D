@@ -58,6 +58,8 @@ THREEx.KeyboardState	= function(domElement)
 
 	// bind window blur
 	window.addEventListener("blur", this._onBlur, false);
+
+	this.key = 'Default';
 }
 
 /**
@@ -112,7 +114,8 @@ THREEx.KeyboardState.prototype._onKeyChange	= function(event)
  * @returns {Boolean} true if the key is pressed, false otherwise
 */
 THREEx.KeyboardState.prototype.pressed	= function(keyDesc){
-	var keys	= keyDesc.split("+");
+	let keys = keyDesc.split("+");
+
 	for(var i = 0; i < keys.length; i++){
 		var key		= keys[i]
 		var pressed	= false
@@ -124,6 +127,7 @@ THREEx.KeyboardState.prototype.pressed	= function(keyDesc){
 			pressed	= this.keyCodes[key.toUpperCase().charCodeAt(0)]
 		}
 		if( !pressed)	return false;
+		this.key = key;
 	};
 	return true;
 }

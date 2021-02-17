@@ -1,6 +1,6 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
-import { GameObject } from '../gameObject.js';
+import { GameObject } from './gameObject.js';
 
 class Wall extends GameObject {
     /**

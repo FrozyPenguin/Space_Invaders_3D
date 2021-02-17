@@ -1,4 +1,5 @@
 import * as THREE from '../lib/Three.js/build/three.module.js';
+import { gameEvent } from './game.js';
 import global from './global.js';
 import cameras from './Mechanics/cameras.js';
 
@@ -18,6 +19,7 @@ window.addEventListener('resize', () => {
         if(typeof camera === 'function') return;
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
+        gameEvent.emit('onResize');
     }
 });
 

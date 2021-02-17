@@ -1,7 +1,7 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
 import { scene } from '../scene.js';
-import { GameObject } from '../gameObject.js';
+import { GameObject } from '../StaticElements/gameObject.js';
 
 class Bonus extends GameObject {
     /**

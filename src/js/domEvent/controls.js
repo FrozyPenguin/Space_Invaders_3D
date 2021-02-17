@@ -1,36 +1,60 @@
+import { gameEvent } from '../game.js';
+
 const pauseBtn = document.querySelector('#pause');
 const playBtn = document.querySelector('#play');
-const soundMute = document.querySelector('#soundMute');
-const soundUnmute = document.querySelector('#soundUnmute');
+const soundUnmute = document.querySelector('#soundMute');
+const soundMute = document.querySelector('#soundUnmute');
 
 function initDomControls() {
-    pause.addEventListener('click', event => {
+    pauseBtn.addEventListener('click', pause)
+
+    playBtn.addEventListener('click', play)
+
+    soundMute.addEventListener('click', mute)
+
+    soundUnmute.addEventListener('click', unMute)
+
+    window.addEventListener('blur', event => {
+        pause();
+        mute();
+    })
+
+    window.addEventListener('focus', event => {
+        // play();
+        unMute();
+    })
+
+    function pause(event) {
         pauseBtn.style.display = 'none';
         playBtn.style.display = 'block';
 
         // Emit pause
-    })
+        gameEvent.emit('onPause');
+    }
 
-    play.addEventListener('click', event => {
+    function play(event) {
         playBtn.style.display = 'none';
         pauseBtn.style.display = 'block';
 
         // Emit play
-    })
+        gameEvent.emit('onResume');
+    }
 
-    soundMute.addEventListener('click', event => {
+    function mute(event) {
         soundMute.style.display = 'none';
         soundUnmute.style.display = 'block';
 
-        // Emit pause
-    })
+        // Emit mute
+        gameEvent.emit('onMute');
+    }
 
-    soundUnmute.addEventListener('click', event => {
-        soundUnmute.style.display = 'none';
+    function unMute(event) {
         soundMute.style.display = 'block';
+        soundUnmute.style.display = 'none';
 
-        // Emit play
-    })
+        // Emit unmute
+        gameEvent.emit('onUnMute');
+    }
 }
 
 export {

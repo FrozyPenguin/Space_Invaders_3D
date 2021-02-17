@@ -18,13 +18,13 @@ const camera3 = new PerspectiveCamera(80, window.innerWidth / window.innerHeight
 
 function changeView(code) {
     switch(code) {
-        case 'Digit1':
+        case '1':
             return main;
-        case 'Digit2':
+        case '2':
             return camera1;
-        case 'Digit3':
+        case '3':
             return camera2;
-        case 'Digit4':
+        case '4':
             return camera3;
         default:
             return;

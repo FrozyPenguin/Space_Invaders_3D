@@ -1,10 +1,9 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
-import global from '../global.js';
 import { scene } from '../scene.js';
-import { GameObject } from '../gameObject.js';
+import { GameObject } from '../StaticElements/gameObject.js';
 import { Defender } from '../Characters/defender.js';
 import { Invader } from '../Characters/invaders.js';
-import { takeDamage } from './health.js';
+import { gameEvent } from '../game.js';
 
 class Projectile extends GameObject {
     /**
@@ -51,13 +50,10 @@ class Projectile extends GameObject {
             //console.log(element)
             if(this.getBoundingBox().intersectsBox(elementBox)) {
                 if(this.sender instanceof Invader && element instanceof Defender) {
-                    if(takeDamage() == 0) {
-                        // TODO: Envoyer un event fin de partie
-                        console.log('perdu');
-                    }
+                    gameEvent.emit('onDefenderDamage');
                 }
                 this.visible = false;
-                if(element instanceof Invader && this.sender instanceof Defender) element.death();
+                if(element instanceof Invader && this.sender instanceof Defender) gameEvent.emit('onInvaderDeath', element);
                 this.toRemove = true;
                 // this.parent.remove(this);
             }

@@ -1,9 +1,10 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
-import { GameObject } from '../gameObject.js';
+import { GameObject } from '../StaticElements/gameObject.js';
 import { scene } from '../scene.js';
 import { Projectile } from '../Mechanics/projectile.js';
 import { takeDamage } from '../Mechanics/health.js';
+import { gameEvent } from '../game.js';
 
 const typeInvader = [
     {
@@ -49,12 +50,12 @@ class Invader extends GameObject {
      * @param { typeInvader } type type de l'invader
      * @param { Number } point point distribué lors de l'élimination de l'invader
      */
-    constructor(color, type, point) {
+    constructor(color, type, points) {
         const invaderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
         const invaderMaterial = new THREE.MeshBasicMaterial({ color });
         super(invaderGeometry, invaderMaterial);
         this.name = type;
-        this.point = point;
+        this.points = points;
 
         this.name = 'Invader';
     }
@@ -63,14 +64,13 @@ class Invader extends GameObject {
      * Détruit un invader
      */
     death() {
-        // TODO: Ajouter des points
         this.visible = false;
 
         // TODO: Génération aléatoire de bonus
         // Plus on est au level, moins on a de proba
         let level = 1;
         const bonus = Math.random();
-        if(bonus < 0.01 * level) console.log('Bonus');
+        if(bonus < 0.01 * level) gameEvent.emit('onBonus', { pos: this.position });;
     }
 
     /**

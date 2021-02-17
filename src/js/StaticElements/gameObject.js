@@ -1,5 +1,5 @@
-import * as THREE from '../lib/Three.js/build/three.module.js';
-import { scene } from './scene.js';
+import * as THREE from '../../lib/Three.js/build/three.module.js';
+import { scene } from '../scene.js';
 
 export class GameObject extends THREE.Mesh {
     getBoundingBox() {
