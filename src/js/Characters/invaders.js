@@ -70,7 +70,7 @@ class Invader extends GameObject {
         // Plus on est au level, moins on a de proba
         let level = 1;
         const bonus = Math.random();
-        if(bonus < 0.01 * level) gameEvent.emit('onBonus', { pos: this.position });;
+        if(bonus < 0.01 * level) gameEvent.emit('onBonus', { pos: this.position });
     }
 
     /**

@@ -1,0 +1,63 @@
+{
+    "name": "Premier niveau",
+    "id": 1,
+    "invaders": {
+        "count": 55,
+        "speed": 10,
+        "placement": "classic",
+        "perLine": 11,
+        "shotProb": 0.0001,
+        "class": [
+            {
+                "name": "les faibles",
+                "health": 1,
+                "models": [
+                    "",
+                    ""
+                ],
+                "color": "",
+                "lineCount": 2
+            },
+            {
+                "name": "les moyens",
+                "health": 1,
+                "models": [
+                    "",
+                    ""
+                ],
+                "color": "",
+                "lineCount": 1
+            },
+            {
+                "name": "les forts",
+                "health": 1,
+                "models": [
+                    "",
+                    ""
+                ],
+                "color": "",
+                "lineCount": 1
+            }
+        ]
+    },
+    "projectiles": {
+        "speed": 10
+    },
+    "defender": {
+        "speed": 10,
+        "shotDelay": 5,
+        "model": ""
+    },
+    "shields": {
+        "count": 3,
+        "models": [
+            "",
+            ""
+        ],
+        "health": 3
+    },
+    "boss": {
+        "speed": 20,
+        "model": ""
+    }
+}

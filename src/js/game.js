@@ -12,7 +12,6 @@ import { initDomControls } from './domEvent/controls.js';
 import { EventEmitter } from './Utils/eventEmitter.js';
 import { Keyboard } from './Mechanics/keyboard.js';
 import { takeDamage } from './Mechanics/health.js';
-import { PathFollower } from './Mechanics/pathFollower.js';
 import { Bernoulli, Gerono } from './Utils/lemniscate.js';
 import { Flow, InstancedFlow } from '../lib/Three.js/examples/jsm/modifiers/CurveModifier.js';
 
@@ -247,7 +246,7 @@ class Game {
             new THREE.BufferGeometry().setFromPoints( pointsBernoulli ),
             new THREE.LineBasicMaterial( { color: 0x00ff00 } )
         );
-        scene.add(line)
+        // scene.add(line)
 
         for(let i = 0; i < pointsBernoulli.length; i++) {
             const invaderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
@@ -266,7 +265,7 @@ class Game {
             flows.push(flow);
         }
 
-        scene.add(cubes);
+        // scene.add(cubes);
 
         console.log(scene)
 
