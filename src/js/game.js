@@ -12,29 +12,25 @@ import { initDomControls } from './domEvent/controls.js';
 import { EventEmitter } from './Utils/eventEmitter.js';
 import { Keyboard } from './Mechanics/keyboard.js';
 import { takeDamage } from './Mechanics/health.js';
-import { Bernoulli, Gerono } from './Utils/lemniscate.js';
-import { Flow, InstancedFlow } from '../lib/Three.js/examples/jsm/modifiers/CurveModifier.js';
+import { Lemniscate } from './Mechanics/lemniscate.js';
+import { InterfaceLoader } from './interface/interfaceLoader.js';
 
 const gameEvent = new EventEmitter();
 
 class Game {
 
     // TODO: Faire le comportement du jeu :
-        // - les invaders bougent (à faire dans invaderMovement)
-        // - ils peuvent mourir (à faire dans invaders.js)
-        // - s'ils touchent le joueur il a perdu (à faire ici)
-        // - s'il les tue tous il a gagné (à faire ici)
-        // - les invaders deviennent de plus en plus précis au cours de la partie
+        // - les invaders bougent (à faire dans invaderMovement) - fait
+        // - ils peuvent mourir (à faire dans invaders.js) - fait
+        // - s'ils touchent le joueur il a perdu (à faire ici) - fait
+        // - s'il les tue tous il a gagné (à faire ici) - A faire
+        // - les invaders deviennent de plus en plus précis au cours de la partie - A faire
         // (à faire ici)
     //
 
-    // TODO: Réfléchir à comment tout organiser
-    // Par event géré par game par exemple
+    // TODO: Mettre en pause si on focus pas la fenetre tester au lancement si possible
 
-    // TODO: Mettre en pause si on focus pas la fenetre
-
-    // TODO: Faire la fonction pause et resume
-
+    // TODO : Implémenter la manette si j'ai le temps
     // Idée jeu a la manette : https://gamepad-tester.com/for-developers
     // https://samiare.github.io/Controller.js/
     // Idée jeu jojo avec le defender c'est un rageux qui veut exterminer les jojo poses
@@ -49,7 +45,7 @@ class Game {
      */
     constructor() {
         // Instances
-        this.clock = new THREE.Clock();
+        this.clock = new THREE.Clock(false);
         this.defender = new Defender(0xff0000, 150);
         this.keyboard = new Keyboard();
 
@@ -60,43 +56,40 @@ class Game {
         this.levels = [];
         this.isPaused = false;
         this.drawId = 0;
-        this.actLvl = 1;
 
-        // Invaders
-        this.invadersGroup = initInvaders();
-        this.walls = initWalls();
-
-        // Vie
-        initHealth(global.lifeCount);
-
-        // Scene
-        scene.add(this.invadersGroup);
-        scene.add(this.walls);
-        this.currentCamera = Cameras.main;
-
-        this.addHelpers();
-
-        // Controles
-        initDomControls();
-        this.keyboard.unique();
-
-        // Events
-        this.receiveEvent();
+        // InterfaceLoader
+        this.interfaceLoader = new InterfaceLoader();
 
         // Points
         this.score = 0;
-        this.bestScore = 0;
 
         if(localStorage.getItem('score')) {
             this.bestScore = parseInt(localStorage.getItem('score'));
         }
 
-        this.obj = this.test()
+        // Murs
+        this.walls = initWalls();
+        scene.add(this.walls);
+
+        // Camera
+        this.currentCamera = Cameras.main;
+
+        // Clavier
+        this.keyboard.unique();
+
+        // Events
+        this.receiveEvent();
+
+        // Projectiles
+        this.projectiles = new THREE.Group();
+        this.projectiles.name = "Projectiles";
+        scene.add(this.projectiles);
+
+        this.addHelpers();
     }
 
+    loadMenu() {
 
-    loadLevel() {
-        this.levels[this.actLvl];
     }
 
     /**
@@ -104,6 +97,7 @@ class Game {
      */
     resetGame() {
         this.invadersGroup.reset();
+        this.defender.reset();
     }
 
     /**
@@ -121,6 +115,7 @@ class Game {
 
     play() {
         this.clock.start();
+        this.toPaused = false;
         this.draw();
     }
 
@@ -128,6 +123,7 @@ class Game {
         // https://stackoverflow.com/questions/50454680/three-js-pausing-animation-when-not-in-use
         // https://stackoverflow.com/questions/38034787/three-js-and-buttons-for-start-and-pause-animation
         this.clock.stop();
+        this.toPaused = true;
         cancelAnimationFrame(this.drawId);
         console.log('pause')
     }
@@ -173,6 +169,8 @@ class Game {
             this.score += data.points;
 
             document.querySelector('#score #actual').innerHTML = this.score;
+
+            // TODO: Regarder combien d'invader il reste pour lancer le prochain niveau
         })
 
         gameEvent.on('onBonus', data => {
@@ -208,8 +206,6 @@ class Game {
         gameEvent.on('onChangeLevel', () => {
             // Afficher écran changement de niveau
             // Passer au niveau suivant
-            this.actLvl++;
-            this.loadLevel();
         })
 
         gameEvent.on('onChangeCamera', data => {
@@ -221,108 +217,15 @@ class Game {
         })
     }
 
-    test() {
-        // https://github.com/mrdoob/three.js/blob/master/examples/webgl_modifier_curve_instanced.html
-        // https://github.com/mrdoob/three.js/blob/master/examples/webgl_modifier_curve.html
-
-        // TODO: Déplacer toute cette logique dans un endroit adéquat
-
-        // Dessine la lemniscate
-        let scale = global.invadersPerLine*(global.invadersPadding+global.invadersSize);
-        let nbPoints = global.nbInvaders;
-        let pointsBernoulli = Bernoulli(scale, nbPoints);
-
-        pointsBernoulli = pointsBernoulli.map(point => new THREE.Vector3( point.x, 10, point.y ));
-
-        const cubes = new THREE.Group();
-        cubes.name = 'Les Envahisseurs du 8 perdu !';
-        const flows = [];
-
-        const curve = new THREE.CatmullRomCurve3(pointsBernoulli);
-        curve.curveType = "centripetal";
-        curve.closed = true;
-
-        const line = new THREE.LineLoop(
-            new THREE.BufferGeometry().setFromPoints( pointsBernoulli ),
-            new THREE.LineBasicMaterial( { color: 0x00ff00 } )
-        );
-        // scene.add(line)
-
-        for(let i = 0; i < pointsBernoulli.length; i++) {
-            const invaderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
-            const invaderMaterial = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
-            const cube = new THREE.Mesh(invaderGeometry, invaderMaterial);
-
-            // cube.position.x = pointsBernoulli[i].x
-            // cube.position.y = pointsBernoulli[i].y
-            // cube.position.z = pointsBernoulli[i].z
-
-            let flow = new Flow(cube);
-            flow.updateCurve(0, curve)
-            flow.moveAlongCurve(i * 1 / global.nbInvaders);
-
-            cubes.add(flow.object3D);
-            flows.push(flow);
-        }
-
-        // scene.add(cubes);
-
-        console.log(scene)
-
-        return {
-            pointsBernoulli,
-            cubes,
-            curve,
-            flows
-        }
-    }
-
-    testUpdate(delta) {
-        let taille = this.obj.cubes.children.length;
-        let cubes = this.obj.cubes.children;
-        // let Bernoulli = this.obj.pointsBernoulli
-        // let scale = this.obj.scale;
-        // let t = 0;
-        // let s = 1 * delta;
-        for(let i = 0; i < taille; i++) {
-            this.obj.flows[i].moveAlongCurve(delta * 0.06)
-            cubes[i].rotation.set(0, 0, 0);
-        }
-        //     let arrows = cubes;
-        //     let path = this.obj.curve;
-        //     // Ca commence à me saouler
-
-        //     // let x = (scale * Math.cos(cubes[i].position.x)) / (1 + Math.pow(Math.sin(cubes[i].position.x), 2));
-        //     // let z = (scale * Math.sin(cubes[i].position.z) * Math.cos(cubes[i].position.z)) / (1 + Math.pow(Math.sin(cubes[i].position.z), 2));
-
-        //     // cubes[i].position.x = x * delta;
-        //     // cubes[i].position.z = z * delta;
-
-
-            // if(cubes[i].position.distanceTo(Bernoulli[cubes[i].target]) < 5) {
-            //     cubes[i].target = (cubes[i].target+1)%taille;
-            // }
-            // cubes[i].position.lerp(Bernoulli[cubes[i].target], 0.01)
-
-            // cubes[i].position.x += (Bernoulli[cubes[i].target].x - Bernoulli[((cubes[i].target-1 % taille) + taille) % taille].x) * delta;
-            // cubes[i].position.z += (Bernoulli[cubes[i].target].z - Bernoulli[((cubes[i].target-1 % taille) + taille) % taille].z) * delta;
-
-
-        //     // Catmullromcurve peut etre
-        // }
-        //this.obj.path.update();
-        //this.obj.flow.moveAlongCurve(0.001);
-    }
-
     /**
      * Boucle d'animation
      */
     draw() {
+        if(this.toPaused) return;
+
         stats.begin();
 
         this.delta = this.clock.getDelta();
-
-        this.testUpdate(this.delta)
 
         if(this.controls) this.controls.update();
 
@@ -353,12 +256,79 @@ class Game {
      */
     startGame() {
         // Afficher ecran de jeu
+        this.interfaceLoader.load('/src/html/inGameInterface.html')
+        .then(() => {
+            // Invaders
+            this.invadersGroup = initInvaders();
+            console.log(this.invadersGroup);
+
+            // Vie
+            initHealth(global.lifeCount);
+
+            // TODO: Remplir ce group dans game ou levelManager au lieu de Invader
+            // TODO: Déplacer l'ajout à la scene dans le constructeur de game ca sera plus propre
+            // Scene
+            scene.remove(this.invadersGroup);
+            scene.add(this.invadersGroup);
+
+            // Controles
+            initDomControls();
+
+            // Collisions
+            let defenderCollideGroup = [
+                ...this.invadersGroup.children,
+                scene.getObjectByName('backWall')
+            ];
+
+            this.defender.setCollideGroup(defenderCollideGroup);
+
+            let invaderCollideGroup = [
+                this.defender,
+                scene.getObjectByName('frontWall')
+            ];
+
+            for(let i = 0; i < this.invadersGroup.children.length; i++) {
+                this.invadersGroup.children[i].setCollideGroup(invaderCollideGroup);
+            }
+
+            this.resetGame();
+
+            this.play();
+        })
+        .catch(error => console.error(error?.response));
+    }
+
+    clearScene() {
+        scene.remove(...scene.children);
     }
 
     stopGame() {
         console.log('fin du jeu');
+
+        this.pause();
+
+        // Mise à jour des scores
+        if(this.bestScore < this.score) {
+            this.bestScore = this.score;
+            localStorage.setItem('score', this.score);
+        }
+
         // Afficher ecran de game over
-        localStorage.setItem('score', this.score);
+        this.interfaceLoader.load('/src/html/gameOver.html')
+        .then(() => {
+            document.querySelector('#overBestScore').innerHTML = this.bestScore;
+            document.querySelector('#overScore').innerHTML = this.score;
+
+            document.querySelector('#retry').addEventListener('click', () => {
+                this.score = 0;
+                this.projectiles.remove(...this.projectiles.children);
+                console.log(this.projectiles)
+                console.log(scene)
+                this.startGame();
+            });
+        })
+        .catch(error => console.error(error?.response));
+
         // Afficher recap des scores
     }
 }

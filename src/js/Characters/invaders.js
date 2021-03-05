@@ -50,7 +50,7 @@ class Invader extends GameObject {
      * @param { typeInvader } type type de l'invader
      * @param { Number } point point distribué lors de l'élimination de l'invader
      */
-    constructor(color, type, points) {
+    constructor(color, type, points, projectileSpeed = 200) {
         const invaderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
         const invaderMaterial = new THREE.MeshBasicMaterial({ color });
         super(invaderGeometry, invaderMaterial);
@@ -58,6 +58,8 @@ class Invader extends GameObject {
         this.points = points;
 
         this.name = 'Invader';
+
+        this.projectileSpeed = projectileSpeed;
     }
 
     /**
@@ -84,16 +86,19 @@ class Invader extends GameObject {
      * Tire un projectile
      */
     shoot() {
-        let collideGroup = [
-            scene.getObjectByName('Defender'),
-            scene.getObjectByName('frontWall')
-        ];
-
-        let projectile = new Projectile(1, 3 , 1, 0xffff00, this, collideGroup);
-        projectile.setVelocity(-200);
+        let projectile = new Projectile(1, 3 , 1, 0xffff00, this, this.collideGroup);
+        projectile.setVelocity(-this.projectileSpeed);
+        console.log("shoot")
         //global.updateList.push(projectile);
     }
 
+    setCollideGroup(group) {
+        this.collideGroup = group;
+    }
+
+    /**
+     * Detecte si un invader rentre en collision avec le defender
+     */
     isCollidingDefender() {
         let defender = scene.getObjectByName(`Defender`);
         if(defender) {
@@ -105,9 +110,6 @@ class Invader extends GameObject {
     }
 
     update(delta) {
-        const haveToShoot = Math.random();
-        if(haveToShoot < global.probToShoot) this.shoot();
-
         if(this.isCollidingWall('left')) {
             directionSpeed.x = directionSpeed.x > 0 ? directionSpeed.x * -1 : directionSpeed.x;
             directionSpeed.z = -200;
@@ -117,13 +119,14 @@ class Invader extends GameObject {
             directionSpeed.z = -200;
         }
 
+        //const haveToShoot = Math.random();
+        if(Math.random() < global.probToShoot) this.shoot();
+
+        // Si un invader rentre en collision avec le defender, alors il prend des dégats
         if(this.isCollidingDefender()) {
             if(takeDamage() == 0) {
-                directionSpeed = { x: 0, y: 0, z: 0 };
-                global.probToShoot = 0;
+                gameEvent.emit('onDefenderDamage');
             };
-
-            // TODO: FIN DU GAME
         }
     }
 }
@@ -135,21 +138,20 @@ const invaderGroup = new THREE.Group();
  */
 invaderGroup.reset = () => {
     invaderGroup.position.x = (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2);
-    invaderGroup.position.y = 0;
+    invaderGroup.position.y = global.invadersSize / 2 + 0.001;
     invaderGroup.position.z = (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2);
+
+    directionSpeed.x = Math.abs(directionSpeed.x);
 }
 
 /**
  * Créer l'ensemble des invaders
  */
 function initInvaders() {
+    invaderGroup.remove(...invaderGroup.children);
 
     // Create invaders objects
     invaderGroup.name = 'Les envahisseurs 2.0';
-    // Voir si on lance un reset au lancement de l'application => Si oui c'est useless de redef la position
-    invaderGroup.position.x = (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2);
-    invaderGroup.position.z = (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2);
-    invaderGroup.position.y = 0;
 
     for (let i = 0; i < global.nbInvaders; i++) {
         let type = typeInvader[Math.floor(i/global.invadersPerLine)];
@@ -168,7 +170,6 @@ function initInvaders() {
         invaderGroup.add(invader);
     }
 
-    invaderGroup.position.y = global.invadersSize / 2 + 0.001;
     return invaderGroup;
 }
 

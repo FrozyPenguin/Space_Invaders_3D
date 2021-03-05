@@ -1,28 +1,32 @@
 import { gameEvent } from '../game.js';
 
-const pauseBtn = document.querySelector('#pause');
-const playBtn = document.querySelector('#play');
-const soundUnmute = document.querySelector('#soundMute');
-const soundMute = document.querySelector('#soundUnmute');
-
 function initDomControls() {
-    pauseBtn.addEventListener('click', pause)
+    const pauseBtn = document.querySelector('#pause');
+    const playBtn = document.querySelector('#play');
+    const soundUnmute = document.querySelector('#soundMute');
+    const soundMute = document.querySelector('#soundUnmute');
 
-    playBtn.addEventListener('click', play)
+    pauseBtn.addEventListener('click', pause);
 
-    soundMute.addEventListener('click', mute)
+    playBtn.addEventListener('click', play);
 
-    soundUnmute.addEventListener('click', unMute)
+    soundMute.addEventListener('click', mute);
 
-    window.addEventListener('blur', event => {
+    soundUnmute.addEventListener('click', unMute);
+
+    window.addEventListener('blur', blur);
+
+    window.addEventListener('focus', focus);
+
+    function blur(event) {
         pause();
         mute();
-    })
+    }
 
-    window.addEventListener('focus', event => {
+    function focus(event) {
         // play();
         unMute();
-    })
+    }
 
     function pause(event) {
         pauseBtn.style.display = 'none';

@@ -25,11 +25,13 @@ class Projectile extends GameObject {
 
         this.sender = sender;
 
-        scene.add(this);
+        scene.getObjectByName('Projectiles').add(this);
 
         this.collideGroup = collideGroup;
 
         this.toRemove = false;
+
+        this.name = 'Projectile';
     }
 
     /**

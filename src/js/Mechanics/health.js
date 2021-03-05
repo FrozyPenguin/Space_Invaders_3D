@@ -1,10 +1,10 @@
-const heart = document.querySelector('#refHeart');
-const heartContainer = document.querySelector('#heartContainer');
-
 /**
  * Ajoute un coeur à l'écran
  */
 function addHeart() {
+    const heart = document.querySelector('#refHeart');
+    const heartContainer = document.querySelector('#heartContainer');
+
     let lastHeart = document.querySelector('#heartContainer .heart:not(#refHeart):last-child');
     let heartPosLeft = 5;
 
@@ -50,6 +50,7 @@ function giveHealth() {
  * @param { Number } healthCount Nombre total de coeur
  */
 function initHealth(healthCount) {
+    document.querySelectorAll('#heartContainer').innerHTML = "";
     for(let i = 0; i < healthCount; i++) {
         addHeart();
     }

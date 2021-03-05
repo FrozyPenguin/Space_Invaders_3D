@@ -10,7 +10,7 @@ class Defender extends GameObject {
      * @param { String } color couleur du defender
      * @param { Number } speed vitesse de déplacement du defender
      */
-    constructor(color, speed) {
+    constructor(color, speed, projectileSpeed = 200) {
         // Create the defender object
         const defenderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
         const defenderMaterial = new THREE.MeshBasicMaterial({ color });
@@ -31,6 +31,8 @@ class Defender extends GameObject {
         // scene.add( helper );
 
         this.readyToShoot = true;
+
+        this.projectileSpeed = projectileSpeed;
     }
 
     /**
@@ -54,17 +56,16 @@ class Defender extends GameObject {
         if(this.readyToShoot) {
             this.readyToShoot = false;
 
-            let collideGroup = [
-                ...scene.getObjectByName('Les envahisseurs 2.0').children,
-                scene.getObjectByName('backWall')
-            ];
-
-            let projectile = new Projectile(1, 3 , 1, 0xff00ff, this, collideGroup);
-            projectile.setVelocity(200);
+            let projectile = new Projectile(1, 3 , 1, 0xff00ff, this, this.collideGroup);
+            projectile.setVelocity(this.projectileSpeed);
 
             setTimeout(() => this.readyToShoot = true, global.timeBetweenShoots);
             //global.updateList.push(projectile);
         }
+    }
+
+    setCollideGroup(group) {
+        this.collideGroup = group;
     }
 
     /**
