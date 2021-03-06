@@ -1,6 +1,5 @@
 import * as THREE from '../lib/Three.js/build/three.module.js';
 import global from './global.js';
-import { initInvaders } from './Characters/invaders.js';
 import { Defender } from './Characters/defender.js';
 import { initWalls } from './StaticElements/walls.js'
 import stats from './Utils/stats.js';
@@ -14,6 +13,8 @@ import { Keyboard } from './Mechanics/keyboard.js';
 import { takeDamage } from './Mechanics/health.js';
 import { Lemniscate } from './Mechanics/lemniscate.js';
 import { InterfaceLoader } from './interface/interfaceLoader.js';
+import { LevelManager } from './levels/levelManager.js';
+import { Grid } from './Mechanics/grid.js';
 
 const gameEvent = new EventEmitter();
 
@@ -48,12 +49,12 @@ class Game {
         this.clock = new THREE.Clock(false);
         this.defender = new Defender(0xff0000, 150);
         this.keyboard = new Keyboard();
+        this.level = new LevelManager();
 
         // Clock
         this.delta = 0;
 
         // Game general
-        this.levels = [];
         this.isPaused = false;
         this.drawId = 0;
 
@@ -84,6 +85,10 @@ class Game {
         this.projectiles = new THREE.Group();
         this.projectiles.name = "Projectiles";
         scene.add(this.projectiles);
+
+        // Invaders
+        this.invadersGroup = new Grid('Les envahisseurs 2.0');
+        scene.add(this.invadersGroup);
 
         this.addHelpers();
     }
@@ -160,7 +165,7 @@ class Game {
 
         gameEvent.on('onDefenderDamage', () => {
             if(takeDamage() == 0) {
-                this.stopGame();
+                this.stopGame(false);
             }
         })
 
@@ -171,6 +176,12 @@ class Game {
             document.querySelector('#score #actual').innerHTML = this.score;
 
             // TODO: Regarder combien d'invader il reste pour lancer le prochain niveau
+            const taille = this.invadersGroup.length;
+            for(let i = 0; i < taille; i++) {
+                if(this.invadersGroup.children[i].visible) return;
+            }
+
+            this.changeLevel();
         })
 
         gameEvent.on('onBonus', data => {
@@ -201,11 +212,6 @@ class Game {
 
         gameEvent.on('onStart', () => {
             this.startGame();
-        })
-
-        gameEvent.on('onChangeLevel', () => {
-            // Afficher écran changement de niveau
-            // Passer au niveau suivant
         })
 
         gameEvent.on('onChangeCamera', data => {
@@ -255,54 +261,112 @@ class Game {
      * Démarre une partie
      */
     startGame() {
+        this.level.current = 0;
+
         // Afficher ecran de jeu
         this.interfaceLoader.load('/src/html/inGameInterface.html')
         .then(() => {
-            // Invaders
-            this.invadersGroup = initInvaders();
-            console.log(this.invadersGroup);
+            this.changeLevel()
+            .then(() => {
+                // Invaders
+                console.log(false)
+                this.invadersGroup.createGrid();
+                //console.log(this.invadersGroup);
 
-            // Vie
-            initHealth(global.lifeCount);
+                // Vie
+                initHealth(global.lifeCount);
 
-            // TODO: Remplir ce group dans game ou levelManager au lieu de Invader
-            // TODO: Déplacer l'ajout à la scene dans le constructeur de game ca sera plus propre
-            // Scene
-            scene.remove(this.invadersGroup);
-            scene.add(this.invadersGroup);
+                // TODO: Remplir ce group dans game ou levelManager au lieu de Invader
+                // TODO: Déplacer l'ajout à la scene dans le constructeur de game ca sera plus propre
+                // Scene
+                //scene.remove(this.invadersGroup);
+                //scene.add(this.invadersGroup);
 
-            // Controles
-            initDomControls();
+                // Controles
+                initDomControls();
 
-            // Collisions
-            let defenderCollideGroup = [
-                ...this.invadersGroup.children,
-                scene.getObjectByName('backWall')
-            ];
+                // Collisions
+                let defenderCollideGroup = [
+                    ...this.invadersGroup.children,
+                    scene.getObjectByName('backWall')
+                ];
 
-            this.defender.setCollideGroup(defenderCollideGroup);
+                this.defender.setCollideGroup(defenderCollideGroup);
 
-            let invaderCollideGroup = [
-                this.defender,
-                scene.getObjectByName('frontWall')
-            ];
+                let invaderCollideGroup = [
+                    this.defender,
+                    scene.getObjectByName('frontWall')
+                ];
 
-            for(let i = 0; i < this.invadersGroup.children.length; i++) {
-                this.invadersGroup.children[i].setCollideGroup(invaderCollideGroup);
-            }
+                for(let i = 0; i < this.invadersGroup.children.length; i++) {
+                    this.invadersGroup.children[i].setCollideGroup(invaderCollideGroup);
+                }
 
-            this.resetGame();
+                this.resetGame();
 
-            this.play();
+                this.play();
+            });
         })
-        .catch(error => console.error(error?.response));
+        .catch(error => console.error(error?.response ?? error));
     }
 
     clearScene() {
         scene.remove(...scene.children);
     }
 
-    stopGame() {
+    parseLevelFile(file) {
+        console.log(file)
+        this.invadersGroup.remove(...this.invadersGroup.children);
+        scene.remove(this.invadersGroup);
+        scene.remove(this.walls);
+
+        if(file.invaders.placement == "grid")
+            this.invadersGroup = new Grid(`Les Envahisseurs du level ${file.id}`, file.invaders.speed, file.invaders.count, file.invaders.class);
+        // Sinon machalla
+
+        global.nbInvaders = file.invaders.count;
+        global.invadersPerLine = file.invaders.perLine;
+        global.probToShoot = file.invaders.shotProb;
+        global.invadersSize = file.invaders.size;
+        global.invadersPadding = file.invaders.padding;
+        global.projectilesSpeed = file.projectiles.speed;
+
+        this.walls = initWalls();
+
+        scene.add(this.invadersGroup);
+        scene.add(this.walls);
+    }
+
+    changeLevel() {
+        return new Promise((resolve, reject) => {
+            this.level.nextLevel()
+            .then(level => {
+                // Afficher interface changement de niveau avec le niveau
+                // Creer les objets
+
+                if (level.status == 404 && level != 200) {
+                    this.stopGame(true);
+                }
+                console.log(true)
+
+                if(level.ok) {
+                    level.json()
+                    .then(json => {
+                        this.parseLevelFile(json);
+
+                        resolve();
+                    })
+                }
+
+            })
+            .catch(error => {
+                console.error(error);
+                reject(error);
+            })
+        })
+    }
+
+    stopGame(win) {
         console.log('fin du jeu');
 
         this.pause();
@@ -313,21 +377,36 @@ class Game {
             localStorage.setItem('score', this.score);
         }
 
-        // Afficher ecran de game over
-        this.interfaceLoader.load('/src/html/gameOver.html')
-        .then(() => {
-            document.querySelector('#overBestScore').innerHTML = this.bestScore;
-            document.querySelector('#overScore').innerHTML = this.score;
+        if(!win) {
+            // Afficher ecran de game over
+            this.interfaceLoader.load('/src/html/gameOver.html')
+            .then(() => {
+                document.querySelector('#overBestScore').innerHTML = this.bestScore;
+                document.querySelector('#overScore').innerHTML = this.score;
 
-            document.querySelector('#retry').addEventListener('click', () => {
-                this.score = 0;
-                this.projectiles.remove(...this.projectiles.children);
-                console.log(this.projectiles)
-                console.log(scene)
-                this.startGame();
-            });
-        })
-        .catch(error => console.error(error?.response));
+                document.querySelector('#retry').addEventListener('click', () => {
+                    this.score = 0;
+                    this.projectiles.remove(...this.projectiles.children);
+                    this.startGame();
+                });
+            })
+            .catch(error => console.error(error?.response));
+        }
+        else {
+            // Afficher ecran de win
+            this.interfaceLoader.load('/src/html/win.html')
+            .then(() => {
+                document.querySelector('#winBestScore').innerHTML = this.bestScore;
+                document.querySelector('#winScore').innerHTML = this.score;
+
+                document.querySelector('#retry').addEventListener('click', () => {
+                    this.score = 0;
+                    this.projectiles.remove(...this.projectiles.children);
+                    this.startGame();
+                });
+            })
+            .catch(error => console.error(error?.response));
+        }
 
         // Afficher recap des scores
     }

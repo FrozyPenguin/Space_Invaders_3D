@@ -3,16 +3,21 @@
     "id": 1,
     "invaders": {
         "count": 55,
-        "speed": 10,
-        "placement": "classic",
+        "speed": {
+            "x": 50,
+            "z": 0
+        },
+        "placement": "grid",
         "perLine": 11,
         "shotProb": 0.0001,
+        "size": 10,
+        "padding": 5,
         "class": [
             {
                 "name": "les faibles",
                 "health": 1,
                 "models": [
-                    "",
+                    "/src/medias/models/avocadoSword.gltf",
                     ""
                 ],
                 "color": "",
@@ -41,11 +46,11 @@
         ]
     },
     "projectiles": {
-        "speed": 10
+        "speed": 200
     },
     "defender": {
         "speed": 10,
-        "shotDelay": 5,
+        "shotDelay": 5, 
         "model": ""
     },
     "shields": {

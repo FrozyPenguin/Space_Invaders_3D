@@ -9,11 +9,31 @@
 
 class LevelManager {
     constructor() {
-        this.current = 1;
+        this.current = 0;
     }
 
     nextLevel() {
         this.current++;
+        return this.load(this.current);
+    }
+
+    load(levelId) {
+        return fetch(`/src/js/levels/level-${levelId}.json`);
+
+        // return new Promise((resolve, reject) => {
+        //     var http = new XMLHttpRequest();
+        //     http.onreadystatechange = () => {
+        //         if (http.readyState == 4 && http.status == 200) {
+        //             let response = http.response;
+        //             resolve();
+        //         }
+        //         else if (http.readyState == 4 && http.status != 200) reject(http);
+        //     };
+
+        //     http.open('GET', `/src/js/levels/level-${levelId}.json`, true);
+        //     http.responseType = 'json';
+        //     http.send();
+        // })
     }
 }
 

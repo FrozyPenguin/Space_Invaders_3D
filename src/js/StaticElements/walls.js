@@ -48,26 +48,27 @@ function initWalls() {
     //     planeGroup.add(addWall(global.widthWall, h, p, r));
     // }
 
-    let size = (global.invadersPerLine + Math.floor(global.invadersPerLine / 2)) * (global.invadersSize + global.invadersPadding) * 1.5;
-    let offset = size / 2;
+    //let size = (global.invadersPerLine + Math.floor(global.invadersPerLine / 2)) * (global.invadersSize + global.invadersPadding) * 1.5;
+    let size = (global.invadersSize + global.invadersPadding) * ((global.nbInvaders / global.invadersPerLine) + global.turnBeforeDeath) * 1.5;
+    let offset = size / 2; // + Taile du bos TODO:
 
     // Bas
-    planeGroup.add(new Wall('bottomWall', size, size, {x: 0, y: 0, z: 0}, {x: 90, y: 0, z: 0}));
+    planeGroup.add(new Wall('bottomWall', size, size, {x: 0, y: 0, z: -offset/2}, {x: 90, y: 0, z: 0}));
 
     // Haut
-    planeGroup.add(new Wall('topWall', size, size, {x: 0, y: size, z: 0}, {x: -90, y: 0, z: 0}));
+    planeGroup.add(new Wall('topWall', size, size, {x: 0, y: size, z: -offset/2}, {x: -90, y: 0, z: 0}));
 
     // Gauche
-    planeGroup.add(new Wall('leftWall', size, size, {x: offset, y: offset, z: 0}, {x: 0, y: 90, z: 0}, 0x222222));
+    planeGroup.add(new Wall('leftWall', size, size, {x: offset, y: offset, z: -offset/2}, {x: 0, y: 90, z: 0}, 0x222222));
 
     // Droite
-    planeGroup.add(new Wall('rightWall', size, size, {x: -offset, y: offset, z: 0}, {x: 0, y: -90, z: 0}, 0x222222));
+    planeGroup.add(new Wall('rightWall', size, size, {x: -offset, y: offset, z: -offset/2}, {x: 0, y: -90, z: 0}, 0x222222));
 
     // Derriere
-    planeGroup.add(new Wall('backWall', size, size, {x: 0, y: offset, z: offset}, {x: 0, y: 0, z: 0}));
+    planeGroup.add(new Wall('backWall', size, size, {x: 0, y: offset, z: offset/2}, {x: 0, y: 0, z: 0}));
 
     // Devant
-    planeGroup.add(new Wall('frontWall', size, size, {x: 0, y: offset, z: -offset}, {x: 0, y: 180, z: 0}));
+    planeGroup.add(new Wall('frontWall', size, size, {x: 0, y: offset, z: -size*0.75}, {x: 0, y: 180, z: 0}));
 
     return planeGroup;
 }

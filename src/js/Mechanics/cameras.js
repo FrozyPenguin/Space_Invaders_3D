@@ -7,7 +7,7 @@ main.position.y = global.invadersSize * 4;
 main.position.z = -(global.invadersSize * 1.5 + global.invadersPadding) * ((global.nbInvaders / global.invadersPerLine) + global.turnBeforeDeath)
 
 const camera1 = new PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 1000);
-camera1.position.y = ((global.invadersPerLine + global.invadersPerLine) * (global.invadersSize + global.invadersPadding) / 1.5);
+camera1.position.y = (global.invadersSize + global.invadersPadding) * ((global.nbInvaders / global.invadersPerLine) + global.turnBeforeDeath) * 1.5;
 camera1.position.x = 0;
 camera1.position.z = 0;
 camera1.lookAt(0, 0, 0);
