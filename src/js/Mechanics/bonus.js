@@ -2,6 +2,7 @@ import * as THREE from '../../lib/Three.js/build/three.module.js';
 import { scene } from '../scene.js';
 import { GameObject } from '../StaticElements/gameObject.js';
 
+// TODO: faire les bonus
 class Bonus extends GameObject {
     /**
      * Constructeur d'un bonus

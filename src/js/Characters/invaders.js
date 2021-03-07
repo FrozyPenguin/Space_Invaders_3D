@@ -5,6 +5,7 @@ import { Projectile } from '../Mechanics/projectile.js';
 import { takeDamage } from '../Mechanics/health.js';
 import { gameEvent } from '../game.js';
 
+// TODO: Faire l'intelligence artificielle progressive au fil des niveau avec en fonction de l'id du niveau courant on augmente la précision
 class Invader extends GameObject {
 
     /**

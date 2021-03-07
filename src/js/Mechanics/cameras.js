@@ -1,7 +1,8 @@
 import { PerspectiveCamera } from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
 
-// Faire une classe parceque il faut changer les vues a chaque changement de niveau
+// TODO: Faire une classe parceque il faut changer les vues a chaque changement de niveau
+// TODO: Supprimer global
 
 // En créer une seul et juste changer sa position
 
