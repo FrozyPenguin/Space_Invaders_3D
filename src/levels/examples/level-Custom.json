@@ -1,0 +1,110 @@
+{
+    "name": "Premier niveau",
+    "id": 1,
+    "turnBeforeDeath": 10,
+    "invaders": {
+        "speed": {
+            "x": 30,
+            "z": 0
+        },
+        "placement": "custom",
+        "lines": [
+            ["F", "H", "M"],
+            ["M", "M", "M"],
+            ["F", "F", "F"]
+        ],
+        "shootProb": 0.0005,
+        "size": 10,
+        "padding": 5,
+        "types": [
+            {
+                "name": "les faibles",
+                "health": 3,
+                "colors": [
+                    "0xffffff",
+                    "0xff0000",
+                    "0x00ff00"
+                ],
+                "points": 10,
+                "projectiles": {
+                    "speed": 200,
+                    "model": "",
+                    "color": "0x0000ff",
+                    "size": 2
+                },
+                "alias": "F"
+            },
+            {
+                "name": "les moyens",
+                "health": 1,
+                "models": [
+                    "/src/medias/models/avocadoSword.gltf"
+                ],
+                "colors": [],
+                "points": 20,
+                "projectiles": {
+                    "speed": 200,
+                    "model": "",
+                    "color": "0xffff00",
+                    "size": 2
+                },
+                "alias": "M"
+            },
+            {
+                "name": "les forts",
+                "health": 1,
+                "models": [
+                    "/src/medias/models/avocadoSword.gltf"
+                ],
+                "colors": [],
+                "points": 50,
+                "projectiles": {
+                    "speed": 200,
+                    "model": "",
+                    "color": "0x252525",
+                    "size": 2
+                },
+                "alias": "H"
+            }
+        ]
+    },
+    "defender": {
+        "speed": 100,
+        "shotDelay": 0,
+        "model": "",
+        "color": "0xff0000",
+        "width": 10,
+        "height": 10,
+        "projectiles": {
+            "speed": 200,
+            "model": "",
+            "color": "0xff00ff",
+            "size": 2
+        }
+    },
+    "shields": {
+        "count": 3,
+        "models": [],
+        "colors": [
+            "0x008000",
+            "0xb38b6d",
+            "0x00ffff",
+            "0xfe01d3",
+            "0xeb7549"
+        ],
+        "width": 20,
+        "height": 10,
+        "health": 3,
+        "padding": 50
+    },
+    "boss": {
+        "speed": 20,
+        "model": "",
+        "projectiles": {
+            "speed": 200,
+            "model": "",
+            "color": "",
+            "size": 2
+        }
+    }
+}

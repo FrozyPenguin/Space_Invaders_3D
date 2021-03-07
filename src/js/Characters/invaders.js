@@ -98,7 +98,17 @@ class Invader extends GameObject {
         return false;
     }
 
-    // TODO: Detecter collision avec bouclier et emit un event damage shield
+    /**
+     * Detecte si un invader rentre en collision avec un shield
+     */
+     isCollidingShields() {
+        let shields = scene.getObjectByName(`Shields`);
+        shields?.children?.forEach(shield => {
+            if(this.getBoundingBox().intersectsBox(shield.getBoundingBox())) {
+                gameEvent.emit('onShieldDamage', shield)
+            };
+        })
+    }
 
     update(delta) {
         //const haveToShoot = Math.random();
@@ -110,6 +120,8 @@ class Invader extends GameObject {
                 gameEvent.emit('onDefenderDamage');
             };
         }
+
+        this.isCollidingShields();
     }
 
     clone() {

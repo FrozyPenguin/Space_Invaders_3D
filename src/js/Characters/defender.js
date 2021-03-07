@@ -44,7 +44,7 @@ class Defender extends GameObject {
         // super(defenderGeometry, defenderMaterial);
         // this.reset();
 
-        this.position.z = -210
+        //this.position.z = -210
 
         this.xSpeed = localConfig.speed;
         this.shootDelay = localConfig.shotDelay;
@@ -105,7 +105,7 @@ class Defender extends GameObject {
     reset() {
         this.position.x = 0;
 
-        this.position.z = -210
+        //this.position.z = -210
     }
 
     setZPosition(z) {

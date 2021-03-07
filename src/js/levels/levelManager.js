@@ -18,7 +18,7 @@ class LevelManager {
     }
 
     load(levelId) {
-        return fetch(`/src/js/levels/level-${levelId}.json`);
+        return fetch(`/src/levels/level-${levelId}.json`);
 
         // return new Promise((resolve, reject) => {
         //     var http = new XMLHttpRequest();

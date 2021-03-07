@@ -11,12 +11,11 @@ import { initDomControls } from './domEvent/controls.js';
 import { EventEmitter } from './Utils/eventEmitter.js';
 import { Keyboard } from './Mechanics/keyboard.js';
 import { takeDamage } from './Mechanics/health.js';
-import { Lemniscate } from './Mechanics/lemniscate.js';
 import { InterfaceLoader } from './interface/interfaceLoader.js';
 import { LevelManager } from './levels/levelManager.js';
-import { Grid } from './Mechanics/grid.js';
-import { Invader } from './Characters/invaders.js';
+import { Grid } from './placements/grid.js';
 import { ShieldManager } from './Mechanics/shieldManager.js';
+import { CustomPlacement } from './placements/custom.js';
 
 const gameEvent = new EventEmitter();
 
@@ -26,7 +25,7 @@ class Game {
         // - les invaders bougent (à faire dans invaderMovement) - fait
         // - ils peuvent mourir (à faire dans invaders.js) - fait
         // - s'ils touchent le joueur il a perdu (à faire ici) - fait
-        // - s'il les tue tous il a gagné (à faire ici) - A faire
+        // - s'il les tue tous il a gagné (à faire ici) - Fait
         // - les invaders deviennent de plus en plus précis au cours de la partie - A faire
         // (à faire ici)
     //
@@ -124,7 +123,7 @@ class Game {
      * Ajoute les différentes aides visuel à la scene
      */
     addHelpers(invadersConfig) {
-        helpers(scene, invadersConfig);
+        helpers(scene, invadersConfig, this.invadersGroup.getPerLine());
         this.controls = addControls(this.currentCamera, renderer, this.defender);
     }
 
@@ -246,8 +245,6 @@ class Game {
         gameEvent.on('onShieldDamage', data => {
             data.takeDamage();
         });
-
-        // TODO: receive event damageShield avec le shield en question en param et lui faire un dégat
     }
 
     /**
@@ -298,16 +295,8 @@ class Game {
                 // Vie
                 initHealth(global.lifeCount);
 
-                // TODO: Remplir ce group dans game ou levelManager au lieu de Invader
-                // TODO: Déplacer l'ajout à la scene dans le constructeur de game ca sera plus propre
-                // Scene
-                //scene.remove(this.invadersGroup);
-                //scene.add(this.invadersGroup);
-
                 // Controles
                 initDomControls();
-
-                this.resetGame();
 
                 this.play();
             });
@@ -320,7 +309,6 @@ class Game {
     }
 
     parseLevelFile(file) {
-        console.log(file)
         this.invadersGroup?.remove?.(...this.invadersGroup.children);
         scene.remove(this.invadersGroup);
         scene.remove(this.walls);
@@ -337,20 +325,22 @@ class Game {
             this.invadersGroup = new Grid(`Les Envahisseurs du level ${file.id}`, file.invaders, file.turnBeforeDeath);
             this.invadersGroup.createGrid();
         }
-        // Sinon machalla
+        else if(file.invaders.placement == "custom") {
+            this.invadersGroup = new CustomPlacement(`Les Envahisseurs du level ${file.id}`, file.invaders, file.turnBeforeDeath);
+            this.invadersGroup.createGrid();
+        }
+        else throw 'Configuration de placement invalide ou inexistante !';
 
-        this.defender.setZPosition(-(file.invaders.size + file.invaders.padding) * ((this.invadersGroup.getNbInvaders() / file.invaders.perLine) + file.turnBeforeDeath));
-
-        console.log(file.invaders)
+        this.defender.setZPosition(-(file.invaders.size + file.invaders.padding) * ((this.invadersGroup.getNbInvaders() / this.invadersGroup.getPerLine()) + file.turnBeforeDeath));
 
         // Helpers
         this.addHelpers(file.invaders);
 
         // Ajustement de la taille de la zone de jeu
-        this.walls = initWalls(this.invadersGroup.getNbInvaders(), file.invaders.size, file.invaders.padding, file.invaders.perLine, file.turnBeforeDeath);
+        this.walls = initWalls(this.invadersGroup.getNbInvaders(), file.invaders.size, file.invaders.padding, this.invadersGroup.getPerLine(), file.turnBeforeDeath);
 
         // Shields
-        this.shields = new ShieldManager("Boucliers", file.shields, this.defender.position.z + file.defender.height * 2);
+        this.shields = new ShieldManager("Shields", file.shields, this.defender.position.z + file.defender.height * 2);
         this.shields.createShield();
 
         scene.add(this.invadersGroup);
@@ -368,7 +358,6 @@ class Game {
                 if (level.status == 404 && level != 200) {
                     this.stopGame(true);
                 }
-                console.log(true)
 
                 if(level.ok) {
                     level.json()
@@ -393,6 +382,8 @@ class Game {
                         for(let i = 0; i < this.invadersGroup.children.length; i++) {
                             this.invadersGroup.children[i].setCollideGroup(invaderCollideGroup);
                         }
+
+                        this.resetGame();
 
                         resolve();
                     })
