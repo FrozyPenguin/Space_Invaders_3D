@@ -1,5 +1,4 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
-import global from '../global.js';
 import { GameObject } from '../StaticElements/gameObject.js';
 import { scene } from '../scene.js';
 import { Projectile } from '../Mechanics/projectile.js';
@@ -14,69 +13,79 @@ class Invader extends GameObject {
      * @param { typeInvader } type type de l'invader
      * @param { Number } point point distribué lors de l'élimination de l'invader
      */
-    constructor(color, type, points, projectileSpeed = 200, model) {
-        if(!model) {
-            const invaderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
-            const invaderMaterial = new THREE.MeshBasicMaterial({ color });
+    constructor(size, shootProb, localConfig) {
+        if(!localConfig.projectiles) throw "Config de l'invader invalide ! : Aucun projectile";
+
+        if(localConfig.models?.length && localConfig.models instanceof Array) {
+            super();
+
+            this.models = localConfig.models;
+        }
+        else if(localConfig.colors && localConfig.colors != []) {
+            const invaderGeometry = new THREE.BoxBufferGeometry(size, size, size);
+            const invaderMaterial = new THREE.MeshBasicMaterial();
             super(invaderGeometry, invaderMaterial);
 
-            this.position.y = global.invadersSize / 2 + 0.001;
+            this.position.y = size / 2 + 0.001;
+
+            this.colors = localConfig.colors;
         }
         else {
-            super();
-            this.load(model)
-            .then(() => {
-                this.children.forEach(child => {
-                    child.scale.x *= global.invadersSize;
-                    child.scale.y *= global.invadersSize;
-                    child.scale.z *= global.invadersSize;
-                })
-            })
-            .catch(err => {
-                console.error(err);
-            });
+            throw "Config des invaders invalide !";
         }
 
-        this.name = type;
-        this.points = points;
+        this.health = this.maxModel = localConfig.health;
+
+        this.loadNext();
+
+        this.points = localConfig.points;
 
         this.name = 'Invader';
 
-        this.projectileSpeed = projectileSpeed;
+        this.probToShoot = shootProb;
+        this.size = size;
+
+        this.localConfig = localConfig;
+
+        //this.isCollidingDefender()
     }
 
     /**
      * Détruit un invader
      */
     death() {
-        this.visible = false;
+        this.health--;
+        if(this.health <= 0) {
+            this.visible = false;
 
-        // TODO: Génération aléatoire de bonus
-        // Plus on est au level, moins on a de proba
-        let level = 1;
-        const bonus = Math.random();
-        if(bonus < 0.01 * level) gameEvent.emit('onBonus', { pos: this.position });
+            // TODO: Génération aléatoire de bonus
+            // Plus on est au level, moins on a de proba
+            let level = 1;
+            const bonus = Math.random();
+            if(bonus < 0.01 * level) gameEvent.emit('onBonus', { pos: this.position });
+            return true;
+        }
+        else {
+            this.loadNext();
+            return false;
+        }
     }
 
     /**
      * Ramene à la vie un invader
      */
-    live() {
+    live(health) {
         this.visible = true;
+        this.health = health;
+        this.loadNext();
     }
 
     /**
      * Tire un projectile
      */
     shoot() {
-        let projectile = new Projectile(1, 3 , 1, 0xffff00, this, this.collideGroup);
-        projectile.setVelocity(-this.projectileSpeed);
+        let projectile = new Projectile(this.localConfig.projectiles, this, this.collideGroup);
         console.log("shoot")
-        //global.updateList.push(projectile);
-    }
-
-    setCollideGroup(group) {
-        this.collideGroup = group;
     }
 
     /**
@@ -84,17 +93,15 @@ class Invader extends GameObject {
      */
     isCollidingDefender() {
         let defender = scene.getObjectByName(`Defender`);
-        if(defender) {
-            let defenderBB = new THREE.Box3().setFromObject(defender);
-
-            return this.getBoundingBox().intersectsBox(defenderBB);
-        }
+        if(defender) return this.getBoundingBox().intersectsBox(defender.getBoundingBox());
         return false;
     }
 
+    // TODO: Detecter collision avec bouclier et emit un event damage shield
+
     update(delta) {
         //const haveToShoot = Math.random();
-        if(Math.random() < global.probToShoot) this.shoot();
+        if(Math.random() < this.probToShoot) this.shoot();
 
         // Si un invader rentre en collision avec le defender, alors il prend des dégats
         if(this.isCollidingDefender()) {

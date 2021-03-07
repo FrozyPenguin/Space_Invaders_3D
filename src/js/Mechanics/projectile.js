@@ -4,6 +4,7 @@ import { GameObject } from '../StaticElements/gameObject.js';
 import { Defender } from '../Characters/defender.js';
 import { Invader } from '../Characters/invaders.js';
 import { gameEvent } from '../game.js';
+import { Shield } from './shield.js';
 
 class Projectile extends GameObject {
     /**
@@ -14,10 +15,31 @@ class Projectile extends GameObject {
      * @param { String } color couleur du projectile
      * @param { THREE.Mesh } sender émetteur du projectile
      */
-    constructor(width, depth, height, color, sender, collideGroup = []) {
-        const projectileGeometry = new THREE.BoxBufferGeometry(width, height, depth);
-        const projectileMaterial = new THREE.MeshBasicMaterial({ color: color });
-        super(projectileGeometry, projectileMaterial)
+    constructor(localConfig, sender, collideGroup = []) {
+        if(localConfig.model) {
+            super();
+
+            this.load(localConfig.model)
+            .then(() => {
+                this.children.forEach(child => {
+                    child.scale.x *= localConfig.size;
+                    child.scale.y *= localConfig.size;
+                    child.scale.z *= localConfig.size;
+                })
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        }
+        else if(localConfig.color) {
+            // Create the defender object
+            const projectileGeometry = new THREE.BoxBufferGeometry(localConfig.size, localConfig.size, localConfig.size);
+            const projectileMaterial = new THREE.MeshBasicMaterial({ color: parseInt(localConfig.color) });
+            super(projectileGeometry, projectileMaterial)
+        }
+        else {
+            throw "Config du projectile invalide !";
+        }
 
         this.vel;
         const center = new THREE.Vector3(0, 0, 0);
@@ -32,6 +54,12 @@ class Projectile extends GameObject {
         this.toRemove = false;
 
         this.name = 'Projectile';
+
+        this.vel = localConfig.speed;
+
+        if(!(sender instanceof Defender)) {
+            this.vel *= -1;
+        }
     }
 
     /**
@@ -49,13 +77,17 @@ class Projectile extends GameObject {
             const elementBox = this.collideGroup[i].getBoundingBox();
             const element = this.collideGroup[i];
 
-            //console.log(element)
             if(this.getBoundingBox().intersectsBox(elementBox)) {
+                this.visible = false;
+
                 if(this.sender instanceof Invader && element instanceof Defender) {
                     gameEvent.emit('onDefenderDamage');
                 }
-                this.visible = false;
+
                 if(element instanceof Invader && this.sender instanceof Defender) gameEvent.emit('onInvaderDeath', element);
+
+                if(element instanceof Shield) gameEvent.emit('onShieldDamage', element);
+
                 this.toRemove = true;
                 // this.parent.remove(this);
             }

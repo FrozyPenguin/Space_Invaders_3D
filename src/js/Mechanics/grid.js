@@ -1,51 +1,22 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
 import { Invader } from '../Characters/invaders.js';
-import global from '../global.js';
-
-const typeInvader = [
-    {
-        type: 'novice',
-        color: new THREE.Color(0xffffff),
-        point: 10
-    },
-    {
-        type: 'venere',
-        color: new THREE.Color(0xff0000),
-        point: 20
-    },
-    {
-        type: 'ultraVenere',
-        color: new THREE.Color(0x00ffff),
-        point: 50
-    },
-    {
-        type: 'ultraVenere',
-        color: new THREE.Color(0x00ffff),
-        point: 50
-    },
-    {
-        type: 'ultraVenere',
-        color: new THREE.Color(0x00ffff),
-        point: 50
-    }
-].reverse();
 
 export class Grid extends THREE.Group {
-    constructor(name, speed, nbInvaders, type) {
+    constructor(name, invadersConfig, turnBeforeDeath) {
         super();
-        this.speed = speed || { x: 50, z: 0 };
-        this.length = nbInvaders || global.nbInvaders;
+        this.invadersConfig = invadersConfig;
         this.name = name;
-        this.type = type;
+        this.speed = this.invadersConfig.speed;
+        this.turnBeforeDeath = turnBeforeDeath;
     }
 
     /**
      * Réinitialise la position du groupe d'invaders
      */
     reset = () => {
-        this.position.x = (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2);
-        this.position.y = /*global.invadersSize / 2 + 0.001*/ 0;
-        this.position.z = (global.invadersSize + global.invadersPadding) * Math.floor(global.invadersPerLine / 2);
+        this.position.x = (this.invadersConfig.size + this.invadersConfig.padding) * Math.floor(this.invadersConfig.perLine / 2);
+        this.position.y = 0;
+        this.position.z = (this.invadersConfig.size + this.invadersConfig.padding) * Math.floor(this.invadersConfig.perLine / 2);
 
         this.speed.x = Math.abs(this.speed.x);
     }
@@ -56,42 +27,65 @@ export class Grid extends THREE.Group {
     createGrid() {
         this.remove(...this.children);
 
-        for (let i = 0; i < this.length; i++) {
-            let type = typeInvader[Math.floor(i/global.invadersPerLine)];
+        let lineNumber = 0;
+        this.invadersConfig.types.reverse().forEach(type => {
+            let nbInvaders = type.lineCount * this.invadersConfig.perLine;
+            for(let i = 0; i < nbInvaders; i++) {
+                let invader = new Invader(this.invadersConfig.size, this.invadersConfig.shootProb, type);
 
-            let invader = new Invader(type.color, type.type, type.point, global.projectilesSpeed, this.type[0].models[0]);
-            //invader.load();
-
-            if (i != 0) {
-                invader.position.x = this.children[i - 1].position.x - (global.invadersSize + global.invadersPadding);
-                invader.position.z = this.children[i - 1].position.z;
-
-                if (i % global.invadersPerLine == 0) {
-                    invader.position.x = this.children[0].position.x;
-                    invader.position.z = this.children[i - 1].position.z - (global.invadersSize + global.invadersPadding);
+                if(this.children.length != 0) {
+                    if(i  % this.invadersConfig.perLine == 0) {
+                        lineNumber++;
+                        invader.position.x = this.children[0].position.x;
+                        invader.position.z = this.children[lineNumber * this.invadersConfig.perLine - 1].position.z - (this.invadersConfig.size + this.invadersConfig.padding);
+                    }
+                    else {
+                        invader.position.x = this.children[i % this.invadersConfig.perLine + lineNumber * this.invadersConfig.perLine - 1].position.x - (this.invadersConfig.size + this.invadersConfig.padding);
+                        invader.position.z = this.children[i % this.invadersConfig.perLine + lineNumber * this.invadersConfig.perLine - 1].position.z;
+                    }
                 }
-            }
 
-            // invader.on('kill') => Parcourir invaderGroup -> Si tout active = false alors fin de game niveau suivant
-            this.add(invader);
-        }
+                this.add(invader);
+            }
+        })
+
+        // for (let i = 0; i < this.invadersConfig.count; i++) {
+        //     let type = typeInvader[Math.floor(i / this.invadersConfig.perLine)];
+
+        //     let invader = new Invader(this.invadersConfig.size, this.invadersConfig.shootProb, this.projectilesSpeed, this.invadersConfig.types[0]);
+        //     //invader.load();
+
+        //     if (i != 0) {
+        //         invader.position.x = this.children[i - 1].position.x - (this.invadersConfig.size + this.invadersConfig.padding);
+        //         invader.position.z = this.children[i - 1].position.z;
+
+        //         if (i % this.invadersConfig.perLine == 0) {
+        //             invader.position.x = this.children[0].position.x;
+        //             invader.position.z = this.children[i - 1].position.z - (this.invadersConfig.size + this.invadersConfig.padding);
+        //         }
+        //     }
+
+        //     // invader.on('kill') => Parcourir invaderGroup -> Si tout active = false alors fin de game niveau suivant
+        //     this.add(invader);
+        // }
     }
 
 
     /**
      * Créer le mouvement des invaders
      */
-    update = (delta) => {
+    update(delta) {
         this.traverseVisible((invader) => {
             if(!(invader instanceof Invader)) return;
 
             if(invader.isCollidingWall('left')) {
                 this.speed.x = this.speed.x > 0 ? this.speed.x * -1 : this.speed.x;
-                this.speed.z = -(global.invadersSize + global.invadersPadding) * ((global.nbInvaders / global.invadersPerLine) + global.turnBeforeDeath) / global.turnBeforeDeath;
+
+                this.speed.z = -(this.invadersConfig.size + this.invadersConfig.padding) * ((this.children.length / this.invadersConfig.perLine) + this.turnBeforeDeath) / this.turnBeforeDeath;
             }
             else if(invader.isCollidingWall('right')) {
                 this.speed.x = this.speed.x < 0 ? this.speed.x * -1 : this.speed.x;
-                this.speed.z = -(global.invadersSize + global.invadersPadding) * ((global.nbInvaders / global.invadersPerLine) + global.turnBeforeDeath) / global.turnBeforeDeath;
+                this.speed.z = -(this.invadersConfig.size + this.invadersConfig.padding) * ((this.children.length / this.invadersConfig.perLine) + this.turnBeforeDeath) / this.turnBeforeDeath;
             }
         })
 
@@ -99,5 +93,9 @@ export class Grid extends THREE.Group {
         this.position.z += this.speed.z;
 
         this.speed.z = 0;
+    }
+
+    getNbInvaders() {
+        return this.children.length;
     }
 }

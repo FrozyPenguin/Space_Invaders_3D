@@ -5,7 +5,5 @@ export default {
     invadersPadding: 10,
     turnBeforeDeath: 10,
     parent: document.body,
-    lifeCount: 3,
-    timeBetweenShoots: 500,
-    probToShoot: 0.001
+    lifeCount: 3
 }

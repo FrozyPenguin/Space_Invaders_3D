@@ -1,6 +1,10 @@
 import { PerspectiveCamera } from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
 
+// Faire une classe parceque il faut changer les vues a chaque changement de niveau
+
+// En créer une seul et juste changer sa position
+
 // Création de la caméra principale
 const main = new PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 1000);
 main.position.y = global.invadersSize * 4;

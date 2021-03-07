@@ -25,7 +25,7 @@ function initDomControls() {
 
     function focus(event) {
         // play();
-        unMute();
+        //unMute();
     }
 
     function pause(event) {

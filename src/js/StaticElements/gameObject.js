@@ -1,11 +1,11 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
 import { GLTFLoader } from '../../lib/Three.js/examples/jsm/loaders/GLTFLoader.js';
 import { scene } from '../scene.js';
-import global from '../global.js';
 
 export class GameObject extends THREE.Group {
     constructor(geometry, material) {
         super();
+
         if(geometry && material)
             this.add(new THREE.Mesh(geometry, material));
     }
@@ -40,5 +40,35 @@ export class GameObject extends THREE.Group {
                 reject(err);
             })
         });
+    }
+
+    loadNext() {
+        if((this.models && this.models?.length < this.health && this.models instanceof Array && this.models?.length)
+        || this.colors && this.colors?.length < this.health && this.colors instanceof Array && this.colors?.length) {
+            throw `Config de ${this.constructor.name} invalide !`;
+        }
+
+        if(this.models?.length) {
+            this.remove(...this.children);
+
+            this.load(this.models[this.maxModel - this.health])
+            .then(() => {
+                this.children.forEach(child => {
+                    child.scale.x *= this.size;
+                    child.scale.y *= this.size;
+                    child.scale.z *= this.size;
+                })
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        }
+        else {
+            this.children[0].material.color.setHex(parseInt(this.colors[this.maxModel - this.health]));
+        }
+    }
+
+    setCollideGroup(group) {
+        this.collideGroup = group;
     }
 }

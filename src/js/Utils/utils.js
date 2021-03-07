@@ -1,11 +1,10 @@
 import { GridHelper, AxesHelper } from '../../lib/Three.js/build/three.module.js';
 import { OrbitControls } from '../../lib/Three.js/examples/jsm/controls/OrbitControls.js';
-import global from '../global.js';
 
 // Ajoute les différents helpers
-const helpers = (scene) => {
-    const gridHelper = new GridHelper(global.invadersPerLine * (global.invadersSize + global.invadersPadding), global.invadersPerLine);
-    const axesHelper = new AxesHelper(global.invadersSize);
+const helpers = (scene, invadersConfig) => {
+    const gridHelper = new GridHelper(invadersConfig.perLine * (invadersConfig.size + invadersConfig.padding), invadersConfig.perLine);
+    const axesHelper = new AxesHelper(invadersConfig.size);
 
     scene.add(gridHelper);
     scene.add(axesHelper);

@@ -15,6 +15,8 @@ import { Lemniscate } from './Mechanics/lemniscate.js';
 import { InterfaceLoader } from './interface/interfaceLoader.js';
 import { LevelManager } from './levels/levelManager.js';
 import { Grid } from './Mechanics/grid.js';
+import { Invader } from './Characters/invaders.js';
+import { ShieldManager } from './Mechanics/shieldManager.js';
 
 const gameEvent = new EventEmitter();
 
@@ -47,7 +49,6 @@ class Game {
     constructor() {
         // Instances
         this.clock = new THREE.Clock(false);
-        this.defender = new Defender(0xff0000, 150);
         this.keyboard = new Keyboard();
         this.level = new LevelManager();
 
@@ -69,8 +70,8 @@ class Game {
         }
 
         // Murs
-        this.walls = initWalls();
-        scene.add(this.walls);
+        // this.walls = initWalls();
+        // scene.add(this.walls);
 
         // Camera
         this.currentCamera = Cameras.main;
@@ -87,10 +88,24 @@ class Game {
         scene.add(this.projectiles);
 
         // Invaders
-        this.invadersGroup = new Grid('Les envahisseurs 2.0');
-        scene.add(this.invadersGroup);
+        // this.invadersGroup = new Grid('Les envahisseurs 2.0');
+        // scene.add(this.invadersGroup);
 
-        this.addHelpers();
+        const listener = new THREE.AudioListener();
+        this.currentCamera.add(listener);
+
+        // create a global audio source
+        this.sound = new THREE.Audio(listener);
+
+        // load a sound and set it as the Audio object's buffer
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load('/src/medias/sounds/laMusique.mp3', buffer => {
+            this.sound.setBuffer(buffer);
+            this.sound.setLoop(true);
+            this.sound.setVolume(0.5);
+            // TODO: Enlever ca d'ici pour le mettre sur le start game
+            this.sound.play();
+        });
     }
 
     loadMenu() {
@@ -101,15 +116,15 @@ class Game {
      * Réinitialise la position de tout les élément de la partie
      */
     resetGame() {
-        this.invadersGroup.reset();
         this.defender.reset();
+        this.invadersGroup.reset();
     }
 
     /**
      * Ajoute les différentes aides visuel à la scene
      */
-    addHelpers() {
-        helpers(scene);
+    addHelpers(invadersConfig) {
+        helpers(scene, invadersConfig);
         this.controls = addControls(this.currentCamera, renderer, this.defender);
     }
 
@@ -122,6 +137,8 @@ class Game {
         this.clock.start();
         this.toPaused = false;
         this.draw();
+        // TODO: Mettre a jour l'interface au niveau du son principalement
+        if(/*!this.sound.userMuted && */this.sound.buffer) this.unMute();
     }
 
     pause() {
@@ -131,14 +148,18 @@ class Game {
         this.toPaused = true;
         cancelAnimationFrame(this.drawId);
         console.log('pause')
+        this.mute();
     }
 
     mute() {
         // Couper la musique
+        this.sound.pause();
     }
 
     unMute() {
+        console.log("oui")
         // Lancer la musique
+        this.sound.play();
     }
 
     receiveEvent() {
@@ -167,60 +188,66 @@ class Game {
             if(takeDamage() == 0) {
                 this.stopGame(false);
             }
-        })
+        });
 
         gameEvent.on('onInvaderDeath', data => {
-            data.death();
-            this.score += data.points;
+            if(data.death()) {
+                this.score += data.points;
 
-            document.querySelector('#score #actual').innerHTML = this.score;
+                document.querySelector('#score #actual').innerHTML = this.score;
 
-            // TODO: Regarder combien d'invader il reste pour lancer le prochain niveau
-            const taille = this.invadersGroup.length;
-            for(let i = 0; i < taille; i++) {
-                if(this.invadersGroup.children[i].visible) return;
+                const taille = this.invadersGroup.children.length;
+                for(let i = 0; i < taille; i++) {
+                    if(this.invadersGroup.children[i].visible) return;
+                }
+
+                this.changeLevel();
             }
-
-            this.changeLevel();
-        })
+        });
 
         gameEvent.on('onBonus', data => {
             console.log('Bonus');
             // Position de l'invader a sa mort
             console.log(data.pos);
-        })
+        });
 
         gameEvent.on('onPause', () => {
             this.pause();
-        })
+        });
 
         gameEvent.on('onResume', () => {
             this.play();
-        })
+        });
 
         gameEvent.on('onMute', () => {
             this.mute();
-        })
+        });
 
         gameEvent.on('onUnMute', () => {
             this.unMute();
-        })
+        });
 
         gameEvent.on('onStart', () => {
             this.startGame();
-        })
+        });
 
         gameEvent.on('onStart', () => {
             this.startGame();
-        })
+        });
 
         gameEvent.on('onChangeCamera', data => {
             this.changeCamera(data.code);
-        })
+        });
 
         gameEvent.on('onResize', data => {
             renderer.render(scene, this.currentCamera);
-        })
+        });
+
+        gameEvent.on('onShieldDamage', data => {
+            data.takeDamage();
+        });
+
+        // TODO: receive event damageShield avec le shield en question en param et lui faire un dégat
     }
 
     /**
@@ -268,11 +295,6 @@ class Game {
         .then(() => {
             this.changeLevel()
             .then(() => {
-                // Invaders
-                console.log(false)
-                this.invadersGroup.createGrid();
-                //console.log(this.invadersGroup);
-
                 // Vie
                 initHealth(global.lifeCount);
 
@@ -284,23 +306,6 @@ class Game {
 
                 // Controles
                 initDomControls();
-
-                // Collisions
-                let defenderCollideGroup = [
-                    ...this.invadersGroup.children,
-                    scene.getObjectByName('backWall')
-                ];
-
-                this.defender.setCollideGroup(defenderCollideGroup);
-
-                let invaderCollideGroup = [
-                    this.defender,
-                    scene.getObjectByName('frontWall')
-                ];
-
-                for(let i = 0; i < this.invadersGroup.children.length; i++) {
-                    this.invadersGroup.children[i].setCollideGroup(invaderCollideGroup);
-                }
 
                 this.resetGame();
 
@@ -316,25 +321,41 @@ class Game {
 
     parseLevelFile(file) {
         console.log(file)
-        this.invadersGroup.remove(...this.invadersGroup.children);
+        this.invadersGroup?.remove?.(...this.invadersGroup.children);
         scene.remove(this.invadersGroup);
         scene.remove(this.walls);
+        scene.remove(this.shields);
 
-        if(file.invaders.placement == "grid")
-            this.invadersGroup = new Grid(`Les Envahisseurs du level ${file.id}`, file.invaders.speed, file.invaders.count, file.invaders.class);
+        if(!this.defender) {
+            this.defender = new Defender(file.defender);
+        }
+
+        this.defender.setShootDelay(file.defender.shotDelay);
+
+        // Creation des invaders du niveau actuel
+        if(file.invaders.placement == "grid") {
+            this.invadersGroup = new Grid(`Les Envahisseurs du level ${file.id}`, file.invaders, file.turnBeforeDeath);
+            this.invadersGroup.createGrid();
+        }
         // Sinon machalla
 
-        global.nbInvaders = file.invaders.count;
-        global.invadersPerLine = file.invaders.perLine;
-        global.probToShoot = file.invaders.shotProb;
-        global.invadersSize = file.invaders.size;
-        global.invadersPadding = file.invaders.padding;
-        global.projectilesSpeed = file.projectiles.speed;
+        this.defender.setZPosition(-(file.invaders.size + file.invaders.padding) * ((this.invadersGroup.getNbInvaders() / file.invaders.perLine) + file.turnBeforeDeath));
 
-        this.walls = initWalls();
+        console.log(file.invaders)
+
+        // Helpers
+        this.addHelpers(file.invaders);
+
+        // Ajustement de la taille de la zone de jeu
+        this.walls = initWalls(this.invadersGroup.getNbInvaders(), file.invaders.size, file.invaders.padding, file.invaders.perLine, file.turnBeforeDeath);
+
+        // Shields
+        this.shields = new ShieldManager("Boucliers", file.shields, this.defender.position.z + file.defender.height * 2);
+        this.shields.createShield();
 
         scene.add(this.invadersGroup);
         scene.add(this.walls);
+        scene.add(this.shields);
     }
 
     changeLevel() {
@@ -353,6 +374,25 @@ class Game {
                     level.json()
                     .then(json => {
                         this.parseLevelFile(json);
+
+                        // Collisions
+                        let defenderCollideGroup = [
+                            ...this.invadersGroup.children,
+                            scene.getObjectByName('backWall'),
+                            ...this.shields.children
+                        ];
+
+                        this.defender.setCollideGroup(defenderCollideGroup);
+
+                        let invaderCollideGroup = [
+                            this.defender,
+                            scene.getObjectByName('frontWall'),
+                            ...this.shields.children
+                        ];
+
+                        for(let i = 0; i < this.invadersGroup.children.length; i++) {
+                            this.invadersGroup.children[i].setCollideGroup(invaderCollideGroup);
+                        }
 
                         resolve();
                     })

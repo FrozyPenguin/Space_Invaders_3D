@@ -1,5 +1,4 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
-import global from '../global.js';
 import { GameObject } from './gameObject.js';
 
 class Wall extends GameObject {
@@ -33,7 +32,7 @@ class Wall extends GameObject {
 /**
  * Ajoute les limites du terrain à la scène
  */
-function initWalls() {
+function initWalls(nbCharacters, characterSize, characterPadding, characterPerLine, turnBeforeDeath) {
 
     const planeGroup = new THREE.Group();
     planeGroup.name = 'Les murs';
@@ -49,7 +48,7 @@ function initWalls() {
     // }
 
     //let size = (global.invadersPerLine + Math.floor(global.invadersPerLine / 2)) * (global.invadersSize + global.invadersPadding) * 1.5;
-    let size = (global.invadersSize + global.invadersPadding) * ((global.nbInvaders / global.invadersPerLine) + global.turnBeforeDeath) * 1.5;
+    let size = (characterSize + characterPadding) * ((nbCharacters / characterPerLine) + turnBeforeDeath) * 1.5;
     let offset = size / 2; // + Taile du bos TODO:
 
     // Bas

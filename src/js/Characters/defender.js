@@ -1,5 +1,4 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
-import global from '../global.js';
 import { Projectile } from '../Mechanics/projectile.js';
 import { scene } from '../scene.js';
 import { GameObject } from '../StaticElements/gameObject.js';
@@ -10,14 +9,45 @@ class Defender extends GameObject {
      * @param { String } color couleur du defender
      * @param { Number } speed vitesse de déplacement du defender
      */
-    constructor(color, speed, projectileSpeed = 200) {
-        // Create the defender object
-        const defenderGeometry = new THREE.BoxBufferGeometry(global.invadersSize, global.invadersSize, global.invadersSize);
-        const defenderMaterial = new THREE.MeshBasicMaterial({ color });
-        super(defenderGeometry, defenderMaterial);
-        this.reset();
+    constructor(localConfig) {
+        if(!localConfig.projectiles) throw "Config du defender invalide ! : Aucun projectile";
 
-        this.xSpeed = speed;
+        if(localConfig.model) {
+            super();
+
+            this.load(localConfig.model)
+            .then(() => {
+                this.children.forEach(child => {
+                    child.scale.x *= localConfig.width;
+                    child.scale.y *= localConfig.height;
+                    child.scale.z *= localConfig.height;
+                })
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        }
+        else if(localConfig.color) {
+            // Create the defender object
+            const defenderGeometry = new THREE.BoxBufferGeometry(localConfig.width, localConfig.height, localConfig.height);
+            const defenderMaterial = new THREE.MeshBasicMaterial({ color: parseInt(localConfig.color) });
+            super(defenderGeometry, defenderMaterial);
+
+            this.position.y = localConfig.height / 2 + 0.001;
+        }
+        else {
+            throw "Config du defender invalide !";
+        }
+        // // Create the defender object
+        // const defenderGeometry = new THREE.BoxBufferGeometry(localConfig.width, localConfig.height, localConfig.height);
+        // const defenderMaterial = new THREE.MeshBasicMaterial({ color });
+        // super(defenderGeometry, defenderMaterial);
+        // this.reset();
+
+        this.position.z = -210
+
+        this.xSpeed = localConfig.speed;
+        this.shootDelay = localConfig.shotDelay;
 
         // this.keyboard = new THREEx.KeyboardState();
         // this.handleKeyboardUnique();
@@ -32,7 +62,10 @@ class Defender extends GameObject {
 
         this.readyToShoot = true;
 
-        this.projectileSpeed = projectileSpeed;
+        this.height = localConfig.height;
+        this.width = localConfig.width;
+
+        this.localConfig = localConfig;
     }
 
     /**
@@ -56,16 +89,14 @@ class Defender extends GameObject {
         if(this.readyToShoot) {
             this.readyToShoot = false;
 
-            let projectile = new Projectile(1, 3 , 1, 0xff00ff, this, this.collideGroup);
-            projectile.setVelocity(this.projectileSpeed);
+            let projectile = new Projectile(this.localConfig.projectiles, this, this.collideGroup);
 
-            setTimeout(() => this.readyToShoot = true, global.timeBetweenShoots);
-            //global.updateList.push(projectile);
+            setTimeout(() => this.readyToShoot = true, this.shootDelay);
         }
     }
 
-    setCollideGroup(group) {
-        this.collideGroup = group;
+    setShootDelay(delay) {
+        this.shootDelay = delay;
     }
 
     /**
@@ -73,8 +104,12 @@ class Defender extends GameObject {
      */
     reset() {
         this.position.x = 0;
-        this.position.z = -(global.invadersSize + global.invadersPadding) * ((global.nbInvaders / global.invadersPerLine) + global.turnBeforeDeath);
-        this.position.y = global.invadersSize / 2 + 0.001;
+
+        this.position.z = -210
+    }
+
+    setZPosition(z) {
+        this.position.z = z;
     }
 }
 

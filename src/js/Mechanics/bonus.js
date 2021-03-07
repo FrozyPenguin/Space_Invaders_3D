@@ -1,5 +1,4 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
-import global from '../global.js';
 import { scene } from '../scene.js';
 import { GameObject } from '../StaticElements/gameObject.js';
 
