@@ -59,6 +59,14 @@ function initDomControls() {
         // Emit unmute
         gameEvent.emit('onUnMute');
     }
+
+    document.querySelector('#overRetry').addEventListener('click', () => {
+        gameEvent.emit('onRetry');
+    });
+
+    document.querySelector('#winRetry').addEventListener('click', () => {
+        gameEvent.emit('onRetry');
+    });
 }
 
 export {

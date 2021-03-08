@@ -33,7 +33,7 @@
                 ],
                 "points": 10,
                 "projectiles": {
-                    "speed": 200,
+                    "speed": 150,
                     "model": "",
                     "color": "0x0000ff",
                     "size": 2

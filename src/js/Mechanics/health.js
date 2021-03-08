@@ -50,7 +50,7 @@ function giveHealth() {
  * @param { Number } healthCount Nombre total de coeur
  */
 function initHealth(healthCount) {
-    document.querySelectorAll('#heartContainer').innerHTML = "";
+    document.querySelectorAll('#heartContainer .heart:not(#refHeart)').forEach(heart => heart.remove());
     for(let i = 0; i < healthCount; i++) {
         addHeart();
     }

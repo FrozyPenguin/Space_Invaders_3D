@@ -1,6 +1,7 @@
 export class InterfaceLoader {
     constructor() {
         this.main = document.querySelector('#display');
+        this.interfaces = [];
     }
 
     load(url) {
@@ -16,8 +17,10 @@ export class InterfaceLoader {
                 response = response.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
                 response = response.replace(/<!--.*-->/gi, '')
 
-                this.main.innerHTML = response;
-                resolve();
+                const gui = this.main.appendChild(parser.parseFromString(response, 'text/html').body.firstChild);
+                gui.style.display = "none";
+                this.interfaces.push(gui);
+                resolve(this.interfaces[this.interfaces.length - 1]);
             })
             .catch(error => reject(error));
 
@@ -39,5 +42,15 @@ export class InterfaceLoader {
             // http.responseType = 'document';
             // http.send();
         })
+    }
+
+    show(gui) {
+        if(!this.interfaces.filter(child => gui == child).length) throw `L'interface à charger est inexistante !`;
+
+        this.interfaces.forEach(child => {
+            child.style.display = 'none';
+        })
+
+        gui.style.display = 'block';
     }
 }

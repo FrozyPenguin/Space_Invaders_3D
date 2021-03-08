@@ -51,7 +51,7 @@
     font-size: 3em;
 }
 
-#over, #win {
+.center-block {
     position: absolute;
     font-weight: bolder;
     color: white;
@@ -62,7 +62,7 @@
     width: 100%;
 }
 
-#over p, #over button, #win p, #win button {
+.center-block p, .center-block button {
     font-size: 2rem !important;
     padding: 5px 20px;
 }
@@ -90,4 +90,36 @@
             linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
             linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
     background-color: black;
+}
+
+#loader h1 {
+    font-size: 4em !important;
+}
+
+#loader h1 span {
+    position: relative;
+    display: inline-block;
+    animation: pointAnimation .6s ease infinite alternate;
+}
+
+#loader h1 span:nth-child(1) {
+    animation-delay: .2s;
+}
+
+#loader h1 span:nth-child(2) {
+    animation-delay: .4s;
+}
+
+#loader h1 span:nth-child(3) {
+    animation-delay: .6s;
+}
+
+@keyframes pointAnimation {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-1rem);
+    }
 }

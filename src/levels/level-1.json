@@ -26,7 +26,7 @@
                 "projectiles": {
                     "speed": 200,
                     "model": "",
-                    "color": "0x0000ff",
+                    "color": "0x00ffff",
                     "size": 2
                 }
             },
@@ -58,7 +58,7 @@
                 "projectiles": {
                     "speed": 200,
                     "model": "",
-                    "color": "0x252525",
+                    "color": "0x00ff00",
                     "size": 2
                 }
             }

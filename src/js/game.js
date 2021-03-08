@@ -5,12 +5,11 @@ import { initWalls } from './StaticElements/walls.js'
 import stats from './Utils/stats.js';
 import { scene, renderer } from './scene.js';
 import { helpers, addControls } from './Utils/utils.js';
-import { initHealth } from './Mechanics/health.js';
+import { initHealth, takeDamage } from './Mechanics/health.js';
 import Cameras from './Mechanics/cameras.js';
 import { initDomControls } from './domEvent/controls.js';
 import { EventEmitter } from './Utils/eventEmitter.js';
 import { Keyboard } from './Mechanics/keyboard.js';
-import { takeDamage } from './Mechanics/health.js';
 import { InterfaceLoader } from './interface/interfaceLoader.js';
 import { LevelManager } from './levels/levelManager.js';
 import { Grid } from './placements/grid.js';
@@ -90,6 +89,7 @@ class Game {
         // this.invadersGroup = new Grid('Les envahisseurs 2.0');
         // scene.add(this.invadersGroup);
 
+        // Chargement de la musique et des effets sonores
         const listener = new THREE.AudioListener();
         this.currentCamera.add(listener);
 
@@ -105,10 +105,37 @@ class Game {
             // TODO: Enlever ca d'ici pour le mettre sur le start game
             this.sound.play();
         });
+
+        // Chargement des interfaces
+        this.interfaces = {};
+        this.loadInterfaces();
     }
 
-    loadMenu() {
+    async loadInterfaces() {
+        let promises = [];
+        promises.push(this.interfaceLoader.load('/src/html/inGameInterface.html'));
+        promises.push(this.interfaceLoader.load('/src/html/changeLevel.html'));
+        promises.push(this.interfaceLoader.load('/src/html/gameOver.html'));
+        promises.push(this.interfaceLoader.load('/src/html/menu.html'));
+        promises.push(this.interfaceLoader.load('/src/html/win.html'));
 
+        Promise.all(promises)
+        .then(interfaces => {
+            setTimeout(() => {
+                document.querySelector('#loader').parentElement.style.display = "none";
+
+                this.interfaces.inGame = interfaces[0];
+                this.interfaces.changeLevel = interfaces[1];
+                this.interfaces.gameOver = interfaces[2];
+                this.interfaces.menu = interfaces[3];
+                this.interfaces.win = interfaces[4];
+
+                this.startGame();
+            }, 1000)
+        })
+        .catch(error => {
+            throw error?.response ?? error;
+        })
     }
 
     /**
@@ -226,14 +253,6 @@ class Game {
             this.unMute();
         });
 
-        gameEvent.on('onStart', () => {
-            this.startGame();
-        });
-
-        gameEvent.on('onStart', () => {
-            this.startGame();
-        });
-
         gameEvent.on('onChangeCamera', data => {
             this.changeCamera(data.code);
         });
@@ -245,6 +264,12 @@ class Game {
         gameEvent.on('onShieldDamage', data => {
             data.takeDamage();
         });
+
+        gameEvent.on('onRetry', () => {
+            this.score = 0;
+            this.projectiles.remove(...this.projectiles.children);
+            this.startGame();
+        })
     }
 
     /**
@@ -286,22 +311,20 @@ class Game {
      */
     startGame() {
         this.level.current = 0;
-
         // Afficher ecran de jeu
-        this.interfaceLoader.load('/src/html/inGameInterface.html')
+        this.interfaceLoader.show(this.interfaces.inGame);
+
+        this.changeLevel()
         .then(() => {
-            this.changeLevel()
-            .then(() => {
-                // Vie
-                initHealth(global.lifeCount);
+            // Vie
+            initHealth(global.lifeCount);
 
-                // Controles
-                initDomControls();
+            // Controles
+            initDomControls();
 
-                this.play();
-            });
-        })
-        .catch(error => console.error(error?.response ?? error));
+            this.play();
+        });
+
     }
 
     clearScene() {
@@ -409,34 +432,18 @@ class Game {
         }
 
         if(!win) {
-            // Afficher ecran de game over
-            this.interfaceLoader.load('/src/html/gameOver.html')
-            .then(() => {
-                document.querySelector('#overBestScore').innerHTML = this.bestScore;
-                document.querySelector('#overScore').innerHTML = this.score;
+            document.querySelector('#overBestScore').innerHTML = this.bestScore;
+            document.querySelector('#overScore').innerHTML = this.score;
 
-                document.querySelector('#retry').addEventListener('click', () => {
-                    this.score = 0;
-                    this.projectiles.remove(...this.projectiles.children);
-                    this.startGame();
-                });
-            })
-            .catch(error => console.error(error?.response));
+            // Afficher ecran de game over
+            this.interfaceLoader.show(this.interfaces.gameOver);
         }
         else {
-            // Afficher ecran de win
-            this.interfaceLoader.load('/src/html/win.html')
-            .then(() => {
-                document.querySelector('#winBestScore').innerHTML = this.bestScore;
-                document.querySelector('#winScore').innerHTML = this.score;
+            document.querySelector('#winBestScore').innerHTML = this.bestScore;
+            document.querySelector('#winScore').innerHTML = this.score;
 
-                document.querySelector('#retry').addEventListener('click', () => {
-                    this.score = 0;
-                    this.projectiles.remove(...this.projectiles.children);
-                    this.startGame();
-                });
-            })
-            .catch(error => console.error(error?.response));
+            // Afficher ecran de win
+            this.interfaceLoader.show(this.interfaces.win);
         }
 
         // Afficher recap des scores
