@@ -54,7 +54,7 @@ class Game {
         this.delta = 0;
 
         // Game general
-        this.isPaused = false;
+        this.isStop = false;
         this.drawId = 0;
 
         // InterfaceLoader
@@ -130,6 +130,9 @@ class Game {
                 this.interfaces.menu = interfaces[3];
                 this.interfaces.win = interfaces[4];
 
+                // Ajoute les évenement dom des différentes interfaces
+                initDomControls();
+
                 this.startGame();
             }, 1000)
         })
@@ -160,19 +163,27 @@ class Game {
     }
 
     play() {
-        this.clock.start();
-        this.toPaused = false;
-        this.draw();
+
         // TODO: Mettre a jour l'interface au niveau du son principalement
         if(/*!this.sound.userMuted && */this.sound.buffer) this.unMute();
+
+        // this.toPaused = false;
+        // this.draw();
+
+        this.clock.stop();
+
+        setTimeout(() => {
+            // Attente avant de lancer le niveau pour laisser le temps d'observer la configuration et de se préparer
+            this.clock.start();
+        }, 1000);
     }
 
     pause() {
         // https://stackoverflow.com/questions/50454680/three-js-pausing-animation-when-not-in-use
         // https://stackoverflow.com/questions/38034787/three-js-and-buttons-for-start-and-pause-animation
         this.clock.stop();
-        this.toPaused = true;
-        cancelAnimationFrame(this.drawId);
+        // this.toPaused = true;
+        // cancelAnimationFrame(this.drawId);
         console.log('pause')
         this.mute();
     }
@@ -207,6 +218,8 @@ class Game {
         });
 
         gameEvent.on('onDefenderShoot', () => {
+            // Ne peut tirer que si l'horloge tourne et que donc le jeu n'est pas en pause
+            if(!this.clock.running) return;
             this.defender.shoot();
         });
 
@@ -227,7 +240,13 @@ class Game {
                     if(this.invadersGroup.children[i].visible) return;
                 }
 
-                this.changeLevel();
+                this.pause();
+
+                this.changeLevel()
+                .then(() => this.play())
+                .catch(error => {
+                    throw error;
+                });
             }
         });
 
@@ -276,7 +295,7 @@ class Game {
      * Boucle d'animation
      */
     draw() {
-        if(this.toPaused) return;
+        if(this.toStop) return;
 
         stats.begin();
 
@@ -291,15 +310,20 @@ class Game {
             element.update(this.delta);
         });*/
 
-        this.keyboard.loop(this.delta);
+        // Met à jour les élements seulement si l'horloge est en route
+        // Cette façon de faire offre la possibilité de laisser le stat tourner ainsi que orbit controls
+        // par contre l'inconvénient c'est que la boucle d'animation continu de tourner
+        if(this.clock.running) {
+            this.keyboard.loop(this.delta);
 
-        const elementToRemove = scene.remove(scene.getObjectByProperty('toRemove', true));
-        if(elementToRemove) scene.remove(elementToRemove);
+            const elementToRemove = scene.remove(scene.getObjectByProperty('toRemove', true));
+            if(elementToRemove) scene.remove(elementToRemove);
 
-        // Parcourt les descendant visible de la scène et les met à jour si besoin
-        scene.traverseVisible((child) => {
-            if(child.update) child.update(this.delta);
-        });
+            // Parcourt les descendant visible de la scène et les met à jour si besoin
+            scene.traverseVisible((child) => {
+                if(child.update) child.update(this.delta);
+            });
+        }
 
         stats.end();
 
@@ -310,18 +334,18 @@ class Game {
      * Démarre une partie
      */
     startGame() {
-        this.level.current = 0;
-        // Afficher ecran de jeu
-        this.interfaceLoader.show(this.interfaces.inGame);
+        this.level.resetLevel();
 
         this.changeLevel()
         .then(() => {
-            // Vie
+
+            // Reinitialise la vie
             initHealth(global.lifeCount);
 
-            // Controles
-            initDomControls();
+            this.toStop = false;
+            this.draw();
 
+            // Lance la boucle d'animation
             this.play();
         });
 
@@ -375,9 +399,6 @@ class Game {
         return new Promise((resolve, reject) => {
             this.level.nextLevel()
             .then(level => {
-                // Afficher interface changement de niveau avec le niveau
-                // Creer les objets
-
                 if (level.status == 404 && level != 200) {
                     this.stopGame(true);
                 }
@@ -385,6 +406,12 @@ class Game {
                 if(level.ok) {
                     level.json()
                     .then(json => {
+                        // Affiche l'interface de changement de niveau
+                        this.interfaceLoader.show(this.interfaces.changeLevel);
+                        document.querySelector('#idLevel').innerHTML = json.id;
+                        document.querySelector('#levelName').innerHTML = json.name;
+
+                        // Ajoute les éléments nécessaire au niveau
                         this.parseLevelFile(json);
 
                         // Collisions
@@ -408,7 +435,11 @@ class Game {
 
                         this.resetGame();
 
-                        resolve();
+                        setTimeout(() => {
+                            // Afficher ecran de jeu
+                            this.interfaceLoader.show(this.interfaces.inGame);
+                            resolve();
+                        }, 1500);
                     })
                 }
 
@@ -423,7 +454,12 @@ class Game {
     stopGame(win) {
         console.log('fin du jeu');
 
+        // Met en pause et donc arrête l'horloge
         this.pause();
+        this.toStop = true;
+        cancelAnimationFrame(this.drawId);
+
+        // Arrete la boucle d'animation
 
         // Mise à jour des scores
         if(this.bestScore < this.score) {

@@ -35,6 +35,10 @@ class LevelManager {
         //     http.send();
         // })
     }
+
+    resetLevel() {
+        this.current = 0;
+    }
 }
 
 export {
