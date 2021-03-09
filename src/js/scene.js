@@ -4,7 +4,6 @@ import { OBJLoader } from '../lib/Three.js/examples/jsm/loaders/OBJLoader.js';
 import { MTLLoader } from '../lib/Three.js/examples/jsm/loaders/MTLLoader.js';
 import { gameEvent } from './game.js';
 import global from './global.js';
-import cameras from './Mechanics/cameras.js';
 import { GLTFLoader } from '../lib/Three.js/examples/jsm/loaders/GLTFLoader.js';
 
 // Création de la scene 3D
@@ -15,17 +14,6 @@ scene.background = new THREE.Color(0x581845);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 global.parent.appendChild(renderer.domElement);
-
-// Redimensionne le canvas quand la page est redimensionné
-window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    for(let [index, camera] of Object.entries(cameras)) {
-        if(typeof camera === 'function') return;
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        gameEvent.emit('onResize');
-    }
-});
 
 // Ajoute une lumière ambiante à la scene
 const ambient = new THREE.AmbientLight(0xffffff, 1);

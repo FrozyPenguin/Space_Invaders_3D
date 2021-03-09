@@ -4,10 +4,10 @@ import { Defender } from './Characters/defender.js';
 import { initWalls } from './StaticElements/walls.js'
 import stats from './Utils/stats.js';
 import { scene, renderer } from './scene.js';
-import { helpers, addControls } from './Utils/utils.js';
+import { helpers } from './Utils/utils.js';
 import { initHealth, takeDamage } from './Mechanics/health.js';
-import Cameras from './Mechanics/cameras.js';
-import { initDomControls, play, pause, mute, unMute, userPaused, userMuted } from './domEvent/controls.js';
+import { GameCamera } from './Mechanics/cameras.js';
+import { initDomControls, play, pause, mute, unMute, userMuted, userPaused } from './domEvent/controls.js';
 import { EventEmitter } from './Utils/eventEmitter.js';
 import { Keyboard } from './Mechanics/keyboard.js';
 import { InterfaceLoader } from './interface/interfaceLoader.js';
@@ -70,7 +70,8 @@ class Game {
         // scene.add(this.walls);
 
         // Camera
-        this.currentCamera = Cameras.main;
+        this.currentCamera = new GameCamera(renderer);
+        this.currentCamera.addControls();
 
         // Clavier
         this.keyboard.unique();
@@ -90,7 +91,7 @@ class Game {
         // TODO: sound design
         // Chargement de la musique et des effets sonores
         const listener = new THREE.AudioListener();
-        this.currentCamera.add(listener);
+        //this.currentCamera.add(listener);
 
         // create a global audio source
         this.music = new THREE.Audio(listener);
@@ -106,6 +107,7 @@ class Game {
         // Chargement des interfaces
         this.interfaces = {};
         this.loadInterfaces();
+        this.levelsNumber = 0;
     }
 
     async loadInterfaces() {
@@ -130,12 +132,45 @@ class Game {
                 // Ajoute les évenement dom des différentes interfaces
                 initDomControls();
 
-                this.startGame();
+                // Afficher menu
+                this.displayMenuInterface();
+                // this.startGame();
             }, 1000)
         })
         .catch(error => {
             throw error?.response ?? error;
         })
+    }
+
+    async displayMenuInterface() {
+        const levelManager = new LevelManager();
+        const recapPoints = document.querySelector('#recapPoints');
+        let levelJson = null;
+
+        do {
+            levelJson = await levelManager.nextLevel();
+            if(levelJson.ok) {
+                this.levelsNumber++;
+                let level = await levelJson.json();
+
+                console.log(level.invaders)
+                // Injection dans tableau #recapPoints
+                let textHtml = `<table><thead><tr><th colspan="2">Niveau ${level.id}<br>${level.name}</th></tr></thead><tbody>`;
+                level.invaders.types.forEach(invadersType => {
+                    let iconeHtml = '';
+                    if(invadersType.icon) {
+                        iconeHtml = `<img src="${invadersType.icon}" alt="icone invader ${invadersType.name}">`;
+                    }
+
+                    textHtml += `<tr><td>${iconeHtml} ${invadersType.name}</td><td>${invadersType.points}pts</td></tr>`;
+                });
+                textHtml += `</tbody></table>`
+                recapPoints.innerHTML += textHtml;
+            }
+        }
+        while(levelJson.ok)
+
+        this.interfaceLoader.show(this.interfaces.menu);
     }
 
     /**
@@ -151,12 +186,12 @@ class Game {
      */
     addHelpers(invadersConfig) {
         helpers(scene, invadersConfig, this.invadersGroup.getPerLine());
-        this.controls = addControls(this.currentCamera, renderer, this.defender);
+        //this.controls = addControls(this.currentCamera, renderer, this.defender);
     }
 
     changeCamera(num) {
-        let camera = Cameras.changeView(num);
-        if(camera) this.currentCamera = camera;
+        /*let camera = */this.currentCamera.changeView(num);
+        //if(camera) this.currentCamera = camera;
     }
 
     play() {
@@ -171,7 +206,7 @@ class Game {
 
         setTimeout(() => {
             // Attente avant de lancer le niveau pour laisser le temps d'observer la configuration et de se préparer
-            this.clock.start();
+            if(!userPaused) this.clock.start();
 
             // Si quand on lance on a perdu le focus de la fenetre alors on met en pause
             if(!document.hasFocus()) pause();
@@ -277,6 +312,9 @@ class Game {
         });
 
         gameEvent.on('onResize', data => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            this.currentCamera.aspect = window.innerWidth / window.innerHeight;
+            this.currentCamera.updateProjectionMatrix();
             renderer.render(scene, this.currentCamera);
         });
 
@@ -286,8 +324,19 @@ class Game {
 
         gameEvent.on('onRetry', () => {
             this.score = 0;
-            this.projectiles.remove(...this.projectiles.children);
             this.startGame();
+        })
+
+        gameEvent.on('onStartGame', () => {
+            this.startGame();
+        })
+
+        gameEvent.on('onEndGame', () => {
+            this.stopGame();
+        })
+
+        gameEvent.on('onMenu', () => {
+            this.interfaceLoader.show(this.interfaces.menu);
         })
     }
 
@@ -301,7 +350,7 @@ class Game {
 
         this.delta = this.clock.getDelta();
 
-        if(this.controls) this.controls.update();
+        if(this.currentCamera.controls) this.currentCamera.controls.update();
 
         renderer.render(scene, this.currentCamera);
         //this.defender.handleKeyboardLoop(this.delta);
@@ -355,10 +404,6 @@ class Game {
     }
 
     parseLevelFile(file) {
-        this.invadersGroup?.remove?.(...this.invadersGroup.children);
-        scene.remove(this.invadersGroup);
-        scene.remove(this.walls);
-        scene.remove(this.shields);
 
         if(!this.defender) {
             this.defender = new Defender(file.defender);
@@ -389,6 +434,9 @@ class Game {
         this.shields = new ShieldManager("Shields", file.shields, this.defender.position.z + file.defender.height * 2);
         this.shields.createShield();
 
+        // Cameras
+        this.currentCamera.setInvadersConfig(file.invaders.padding, file.invaders.size, this.invadersGroup.getNbInvaders(), this.invadersGroup.getPerLine(), file.turnBeforeDeath)
+
         scene.add(this.invadersGroup);
         scene.add(this.walls);
         scene.add(this.shields);
@@ -396,7 +444,7 @@ class Game {
 
     changeLevel() {
         return new Promise((resolve, reject) => {
-            this.level.nextLevel()
+            this.level.nextLevel(this.levelsNumber)
             .then(level => {
                 if (level.status == 404 && level != 200) {
                     this.stopGame(true);
@@ -405,6 +453,12 @@ class Game {
                 if(level.ok) {
                     level.json()
                     .then(json => {
+                        this.invadersGroup?.remove?.(...this.invadersGroup.children);
+                        this.projectiles.remove(...this.projectiles.children);
+                        scene.remove(this.invadersGroup);
+                        scene.remove(this.walls);
+                        scene.remove(this.shields);
+
                         // Affiche l'interface de changement de niveau
                         this.interfaceLoader.show(this.interfaces.changeLevel);
                         document.querySelector('#idLevel').innerHTML = json.id;

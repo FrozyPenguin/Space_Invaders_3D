@@ -1,5 +1,5 @@
 {
-    "name": "Premier niveau",
+    "name": "El grande classico",
     "id": 1,
     "turnBeforeDeath": 10,
     "invaders": {
@@ -28,7 +28,8 @@
                     "model": "",
                     "color": "0x00ffff",
                     "size": 2
-                }
+                },
+                "icon": "https://icons.iconarchive.com/icons/goodstuff-no-nonsense/free-space/1024/space-invader-icon.png"
             },
             {
                 "name": "les moyens",
@@ -44,7 +45,8 @@
                     "model": "",
                     "color": "0xffff00",
                     "size": 2
-                }
+                },
+                "icon": ""
             },
             {
                 "name": "les forts",
@@ -60,7 +62,8 @@
                     "model": "",
                     "color": "0x00ff00",
                     "size": 2
-                }
+                },
+                "icon": ""
             }
         ]
     },

@@ -12,8 +12,10 @@ class LevelManager {
         this.current = 0;
     }
 
-    nextLevel() {
+    nextLevel(levelsNumber) {
         this.current++;
+
+        if(this.current > levelsNumber) return new Promise((resolve, reject) => resolve({ ok: false, status: 404 }));
         return this.load(this.current);
     }
 

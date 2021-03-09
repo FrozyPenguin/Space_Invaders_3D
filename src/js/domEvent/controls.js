@@ -4,6 +4,7 @@ let pauseBtn = null;
 let playBtn = null;
 let soundUnmute = null;
 let soundMute = null;
+let enGamePannel = null;
 
 let userMuted = false;
 let userPaused = false;
@@ -13,6 +14,7 @@ function initDomControls() {
     playBtn = document.querySelector('#play');
     soundUnmute = document.querySelector('#soundMute');
     soundMute = document.querySelector('#soundUnmute');
+    enGamePannel = document.querySelector('#enGamePannel');
 
     pauseBtn.addEventListener('click', (event) => {
         userPaused = true;
@@ -38,13 +40,33 @@ function initDomControls() {
 
     window.addEventListener('focus', focus);
 
-    document.querySelector('#overRetry').addEventListener('click', () => {
+    document.querySelectorAll('.retry').forEach(child => child.addEventListener('click', () => {
+        userPaused = false;
         gameEvent.emit('onRetry');
+    }));
+
+    document.querySelectorAll('.toGameMenu').forEach(child => child.addEventListener('click', () => {
+        gameEvent.emit('onMenu');
+    }));
+
+    // console.log()
+    document.querySelector('#startGame').addEventListener('click', () => {
+        gameEvent.emit('onStartGame');
     });
 
-    document.querySelector('#winRetry').addEventListener('click', () => {
-        gameEvent.emit('onRetry');
-    });
+    window.addEventListener('resize', () => {
+        gameEvent.emit('onResize');
+    })
+
+    document.querySelector('#endGameButton').addEventListener('click', () => {
+        userPaused = false;
+        gameEvent.emit('onEndGame');
+    })
+
+    document.querySelector('#resumeGameButton').addEventListener('click', (event) => {
+        userPaused = false;
+        play(event);
+    })
 }
 
 function blur(event) {
@@ -60,6 +82,7 @@ function focus(event) {
 function pause(event, levelChange) {
     pauseBtn.style.display = 'none';
     playBtn.style.display = 'block';
+    enGamePannel.style.display = 'block';
 
     // Emit pause
     gameEvent.emit('onPause', levelChange);
@@ -68,6 +91,7 @@ function pause(event, levelChange) {
 function play(event) {
     playBtn.style.display = 'none';
     pauseBtn.style.display = 'block';
+    enGamePannel.style.display = 'none';
 
     // Emit play
     gameEvent.emit('onResume');

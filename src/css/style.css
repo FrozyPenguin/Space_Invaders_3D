@@ -71,7 +71,7 @@
     font-size: 10rem !important;
 }
 
-#over button, #win button {
+button {
     border: 2px solid white;
     border-radius: 3px;
     background: none;
@@ -122,4 +122,35 @@
     to {
         transform: translateY(-1rem);
     }
+}
+
+#recapPoints {
+    margin-top: 5%;
+}
+
+#recapPoints table{
+    display: inline-table;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin: 2%;
+    min-width: 25%;
+}
+
+#recapPoints table, #recapPoints th, #recapPoints td {
+    border: 1px solid white;
+}
+
+#recapPoints th, #recapPoints td {
+    height: 50px;
+}
+
+#recapPoints img {
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+#startGame {
+    margin-top: 5%;
 }
