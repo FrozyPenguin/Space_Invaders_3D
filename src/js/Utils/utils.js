@@ -19,7 +19,7 @@ const helpers = (scene, invadersConfig, perLine) => {
 
 const addControls = (camera, renderer, centerObject) => {
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.target.copy(centerObject.position);
+    //controls.target.copy(centerObject.position);
     return controls;
 }
 

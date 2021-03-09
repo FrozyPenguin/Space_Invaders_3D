@@ -29,8 +29,6 @@ class Game {
         // (à faire ici)
     //
 
-    // TODO: Mettre en pause si on focus pas la fenetre tester au lancement si possible
-
     // TODO : Implémenter la manette si j'ai le temps
     // Idée jeu a la manette : https://gamepad-tester.com/for-developers
     // https://samiare.github.io/Controller.js/
@@ -89,21 +87,20 @@ class Game {
         // this.invadersGroup = new Grid('Les envahisseurs 2.0');
         // scene.add(this.invadersGroup);
 
+        // TODO: sound design
         // Chargement de la musique et des effets sonores
         const listener = new THREE.AudioListener();
         this.currentCamera.add(listener);
 
         // create a global audio source
-        this.sound = new THREE.Audio(listener);
+        this.music = new THREE.Audio(listener);
 
         // load a sound and set it as the Audio object's buffer
         const audioLoader = new THREE.AudioLoader();
         audioLoader.load('/src/medias/sounds/laMusique.mp3', buffer => {
-            this.sound.setBuffer(buffer);
-            this.sound.setLoop(true);
-            this.sound.setVolume(0.5);
-            // TODO: Enlever ca d'ici pour le mettre sur le start game
-            this.sound.play();
+            this.music.setBuffer(buffer);
+            this.music.setLoop(true);
+            this.music.setVolume(0.5);
         });
 
         // Chargement des interfaces
@@ -165,7 +162,7 @@ class Game {
     play() {
 
         // Lance la musique seulement si l'utilisateur n'a pas mute
-        if(!userMuted && this.sound.buffer) unMute();
+        if(!userMuted && this.music.buffer) unMute();
 
         // this.toPaused = false;
         // this.draw();
@@ -175,28 +172,31 @@ class Game {
         setTimeout(() => {
             // Attente avant de lancer le niveau pour laisser le temps d'observer la configuration et de se préparer
             this.clock.start();
+
+            // Si quand on lance on a perdu le focus de la fenetre alors on met en pause
+            if(!document.hasFocus()) pause();
         }, 1000);
     }
 
-    pause() {
+    pause(changeLevel) {
         // https://stackoverflow.com/questions/50454680/three-js-pausing-animation-when-not-in-use
         // https://stackoverflow.com/questions/38034787/three-js-and-buttons-for-start-and-pause-animation
         this.clock.stop();
         // this.toPaused = true;
         // cancelAnimationFrame(this.drawId);
         console.log('pause')
-        mute();
+        if(!changeLevel) mute();
     }
 
     mute() {
         // Couper la musique
-        this.sound.pause();
+        this.music.pause();
     }
 
     unMute() {
         console.log("oui")
         // Lancer la musique
-        this.sound.play();
+        if(!this.music.isPlaying) this.music.play();
     }
 
     receiveEvent() {
@@ -240,7 +240,7 @@ class Game {
                     if(this.invadersGroup.children[i].visible) return;
                 }
 
-                pause();
+                pause(null, true);
 
                 this.changeLevel()
                 .then(() => play())
@@ -256,8 +256,8 @@ class Game {
             console.log(data.pos);
         });
 
-        gameEvent.on('onPause', () => {
-            this.pause();
+        gameEvent.on('onPause', levelChange => {
+            this.pause(levelChange);
         });
 
         gameEvent.on('onResume', () => {
@@ -338,7 +338,6 @@ class Game {
 
         this.changeLevel()
         .then(() => {
-
             // Reinitialise la vie
             initHealth(global.lifeCount);
 
@@ -456,6 +455,7 @@ class Game {
 
         // Met en pause et donc arrête l'horloge
         pause();
+        this.music.stop();
         this.toStop = true;
         cancelAnimationFrame(this.drawId);
 

@@ -1,6 +1,18 @@
 import { PerspectiveCamera } from '../../lib/Three.js/build/three.module.js';
 import global from '../global.js';
 
+class Camera extends PerspectiveCamera {
+    constructor() {
+        super(80, window.innerWidth / window.innerHeight, 1, 1000);
+
+        this.position
+    }
+
+    lookCenter() {
+        this.lookAt(0, 0, 0);
+    }
+}
+
 // TODO: Faire une classe parceque il faut changer les vues a chaque changement de niveau
 // TODO: Supprimer global
 
@@ -10,6 +22,8 @@ import global from '../global.js';
 const main = new PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 1000);
 main.position.y = global.invadersSize * 4;
 main.position.z = -(global.invadersSize * 1.5 + global.invadersPadding) * ((global.nbInvaders / global.invadersPerLine) + global.turnBeforeDeath)
+
+main.lookAt(0, 0, 0);
 
 const camera1 = new PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 1000);
 camera1.position.y = (global.invadersSize + global.invadersPadding) * ((global.nbInvaders / global.invadersPerLine) + global.turnBeforeDeath) * 1.5;

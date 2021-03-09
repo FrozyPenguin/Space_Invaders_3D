@@ -57,12 +57,12 @@ function focus(event) {
     //unMute();
 }
 
-function pause(event) {
+function pause(event, levelChange) {
     pauseBtn.style.display = 'none';
     playBtn.style.display = 'block';
 
     // Emit pause
-    gameEvent.emit('onPause');
+    gameEvent.emit('onPause', levelChange);
 }
 
 function play(event) {
