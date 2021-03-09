@@ -7,7 +7,7 @@ import { scene, renderer } from './scene.js';
 import { helpers, addControls } from './Utils/utils.js';
 import { initHealth, takeDamage } from './Mechanics/health.js';
 import Cameras from './Mechanics/cameras.js';
-import { initDomControls } from './domEvent/controls.js';
+import { initDomControls, play, pause, mute, unMute, userPaused, userMuted } from './domEvent/controls.js';
 import { EventEmitter } from './Utils/eventEmitter.js';
 import { Keyboard } from './Mechanics/keyboard.js';
 import { InterfaceLoader } from './interface/interfaceLoader.js';
@@ -164,8 +164,8 @@ class Game {
 
     play() {
 
-        // TODO: Mettre a jour l'interface au niveau du son principalement
-        if(/*!this.sound.userMuted && */this.sound.buffer) this.unMute();
+        // Lance la musique seulement si l'utilisateur n'a pas mute
+        if(!userMuted && this.sound.buffer) unMute();
 
         // this.toPaused = false;
         // this.draw();
@@ -185,7 +185,7 @@ class Game {
         // this.toPaused = true;
         // cancelAnimationFrame(this.drawId);
         console.log('pause')
-        this.mute();
+        mute();
     }
 
     mute() {
@@ -240,10 +240,10 @@ class Game {
                     if(this.invadersGroup.children[i].visible) return;
                 }
 
-                this.pause();
+                pause();
 
                 this.changeLevel()
-                .then(() => this.play())
+                .then(() => play())
                 .catch(error => {
                     throw error;
                 });
@@ -346,7 +346,7 @@ class Game {
             this.draw();
 
             // Lance la boucle d'animation
-            this.play();
+            play();
         });
 
     }
@@ -455,7 +455,7 @@ class Game {
         console.log('fin du jeu');
 
         // Met en pause et donc arrête l'horloge
-        this.pause();
+        pause();
         this.toStop = true;
         cancelAnimationFrame(this.drawId);
 
