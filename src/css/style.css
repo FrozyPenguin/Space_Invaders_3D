@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +9,8 @@
     -moz-user-select: none; /* Old versions of Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "DotGothic16", Arial, Helvetica, sans-serif;
+    letter-spacing: 1.8px;
 }
 
 #heartContainer .heart, #controls {
@@ -73,7 +76,7 @@
 
 button {
     border: 2px solid white;
-    border-radius: 3px;
+    border-radius: 9px;
     background: none;
     color: inherit;
     font: inherit;
@@ -131,13 +134,20 @@ button {
 #recapPoints table{
     display: inline-table;
     border-collapse: collapse;
-    table-layout: fixed;
     margin: 2%;
     min-width: 25%;
 }
 
 #recapPoints table, #recapPoints th, #recapPoints td {
     border: 1px solid white;
+}
+
+#recapPoints table {
+    border-radius: 9px;
+}
+
+tbody, thead {
+    border-radius: 9px !important;
 }
 
 #recapPoints th, #recapPoints td {

@@ -39,8 +39,8 @@ function takeDamage() {
  * @return { Number } Nombre de coeur plein restant
  */
 function giveHealth() {
-    let lastHeart = document.querySelector('#heartContainer .heart.empty:not(#refHeart):last-child');
-    if(lastHeart) lastHeart.classList.remove('empty');
+    let lastHeart = document.querySelectorAll('#heartContainer .heart.empty:not(#refHeart)');
+    if(lastHeart.length) lastHeart[0].classList.remove('empty');
     else addHeart();
     return document.querySelectorAll('#heartContainer .heart:not(#refHeart):not(.empty)').length;
 }

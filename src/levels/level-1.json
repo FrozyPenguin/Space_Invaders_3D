@@ -35,7 +35,19 @@
                 "name": "les moyens",
                 "health": 1,
                 "models": [
-                    "/src/medias/models/avocadoSword.gltf"
+                    {
+                        "src": "/src/medias/models/greninja.gltf",
+                        "scale": {
+                            "x": 8,
+                            "y": 8,
+                            "z": 8
+                        },
+                        "rotate": {
+                            "x": 180,
+                            "y": 0,
+                            "z": 180
+                        }
+                    }
                 ],
                 "colors": [],
                 "lineCount": 1,
@@ -50,9 +62,34 @@
             },
             {
                 "name": "les forts",
-                "health": 1,
+                "health": 2,
                 "models": [
-                    "/src/medias/models/avocadoSword.gltf"
+                    {
+                        "src": "/src/medias/models/mewtwo.gltf",
+                        "scale": {
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "rotate": {
+                            "x": -90,
+                            "y": 180,
+                            "z": 0
+                        }
+                    },
+                    {
+                        "src": "/src/medias/models/mewtwoHurt.gltf",
+                        "scale": {
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "rotate": {
+                            "x": -90,
+                            "y": 180,
+                            "z": 0
+                        }
+                    }
                 ],
                 "colors": [],
                 "lineCount": 1,
@@ -70,7 +107,7 @@
     "defender": {
         "speed": 100,
         "shotDelay": 0,
-        "model": "",
+        "model": "/src/medias/models/lysandre.gltf",
         "color": "0xff0000",
         "width": 10,
         "height": 10,

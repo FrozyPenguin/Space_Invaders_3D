@@ -17,6 +17,8 @@ class GameCamera extends PerspectiveCamera {
 
         this.changeView(1);
         this.lookCenter();
+
+        this.toUpdate = false;
     }
 
     lookCenter() {
@@ -40,13 +42,17 @@ class GameCamera extends PerspectiveCamera {
         const view = this.viewsArray[code - 1]
 
         let position = view.position;
-        if(!(position instanceof Vector3)) position = scene.getObjectByName(position).position;
+        if(!(position instanceof Vector3)) {
+            position = scene.getObjectByName(position).position
+        }
 
         this.position.copy(position);
 
         this.actualView = code;
 
         this.controls?.update();
+
+        this.toUpdate = view.toUpdate ? true : false;
 
         this.lookCenter();
     }
@@ -63,19 +69,24 @@ class GameCamera extends PerspectiveCamera {
         this.viewsArray = [
             {
                 position: new Vector3(
-                        0,
-                        this.invadersConfig.size * 5,
-                        -(this.invadersConfig.size * 1.5 + this.invadersConfig.padding) * ((this.invadersConfig.nbInvaders / this.invadersConfig.perLine) + this.invadersConfig.turnBeforeDeath)
-                ),
-                rotation: new Vector3(0, 0, 0)
-            },
-            {
-                position: new Vector3(
                     0,
                     (this.invadersConfig.size + this.invadersConfig.padding) * ((this.invadersConfig.nbInvaders / this.invadersConfig.perLine) + this.invadersConfig.turnBeforeDeath) * 1.5,
                     -(this.invadersConfig.size + this.invadersConfig.padding) * ((this.invadersConfig.nbInvaders / this.invadersConfig.perLine) + this.invadersConfig.turnBeforeDeath) / 2
                 ),
                 rotation: new Vector3(0, 0, Math.PI)
+            },
+            {
+                position: 'Defender',
+                rotation: new Vector3(0, 0, 0),
+                toUpdate: true
+            },
+            {
+                position: new Vector3(
+                        0,
+                        this.invadersConfig.size * 5,
+                        -(this.invadersConfig.size * 1.5 + this.invadersConfig.padding) * ((this.invadersConfig.nbInvaders / this.invadersConfig.perLine) + this.invadersConfig.turnBeforeDeath)
+                ),
+                rotation: new Vector3(0, 0, 0)
             },
             {
                 position: new Vector3(
@@ -93,6 +104,20 @@ class GameCamera extends PerspectiveCamera {
     addControls() {
         if(this.controls) return;
         this.controls = new OrbitControls(this, this.renderer.domElement);
+    }
+
+    update(delta) {
+        if(this.controls) this.controls.update();
+
+        if(this.toUpdate) {
+            let position = this.viewsArray[this.actualView - 1].position;
+            if(!(position instanceof Vector3)) {
+                position = scene.getObjectByName(position).position
+            }
+
+            this.position.copy(position);
+            this.lookAt(position.x, position.y, position.z + 20);
+        }
     }
 }
 

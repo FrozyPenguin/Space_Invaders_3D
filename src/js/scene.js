@@ -1,10 +1,5 @@
 import * as THREE from '../lib/Three.js/build/three.module.js';
-import { ColladaLoader } from '../lib/Three.js/examples/jsm/loaders/ColladaLoader.js';
-import { OBJLoader } from '../lib/Three.js/examples/jsm/loaders/OBJLoader.js';
-import { MTLLoader } from '../lib/Three.js/examples/jsm/loaders/MTLLoader.js';
-import { gameEvent } from './game.js';
 import global from './global.js';
-import { GLTFLoader } from '../lib/Three.js/examples/jsm/loaders/GLTFLoader.js';
 
 // Création de la scene 3D
 const scene = new THREE.Scene();

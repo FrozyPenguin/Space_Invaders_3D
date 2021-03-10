@@ -5,7 +5,7 @@ import { initWalls } from './StaticElements/walls.js'
 import stats from './Utils/stats.js';
 import { scene, renderer } from './scene.js';
 import { helpers } from './Utils/utils.js';
-import { initHealth, takeDamage } from './Mechanics/health.js';
+import { giveHealth, initHealth, takeDamage } from './Mechanics/health.js';
 import { GameCamera } from './Mechanics/cameras.js';
 import { initDomControls, play, pause, mute, unMute, userMuted, userPaused } from './domEvent/controls.js';
 import { EventEmitter } from './Utils/eventEmitter.js';
@@ -64,6 +64,7 @@ class Game {
         if(localStorage.getItem('score')) {
             this.bestScore = parseInt(localStorage.getItem('score'));
         }
+        else this.bestScore = 0;
 
         // Murs
         // this.walls = initWalls();
@@ -71,7 +72,7 @@ class Game {
 
         // Camera
         this.currentCamera = new GameCamera(renderer);
-        this.currentCamera.addControls();
+        //this.currentCamera.addControls();
 
         // Clavier
         this.keyboard.unique();
@@ -108,6 +109,9 @@ class Game {
         this.interfaces = {};
         this.loadInterfaces();
         this.levelsNumber = 0;
+
+        // Mode invincible
+        this.godMode = false;
     }
 
     async loadInterfaces() {
@@ -170,7 +174,16 @@ class Game {
         }
         while(levelJson.ok)
 
+        this.displayBestScore();
         this.interfaceLoader.show(this.interfaces.menu);
+    }
+
+    displayBestScore() {
+        let bestScoreElement = document.querySelector('#bestScore');
+        bestScoreElement.innerHTML = '';
+        if(this.bestScore) {
+            bestScoreElement.innerHTML = `Meilleur score : ${this.bestScore}`;
+        }
     }
 
     /**
@@ -259,6 +272,7 @@ class Game {
         });
 
         gameEvent.on('onDefenderDamage', () => {
+            if(this.godMode) return;
             if(takeDamage() == 0) {
                 this.stopGame(false);
             }
@@ -278,7 +292,10 @@ class Game {
                 pause(null, true);
 
                 this.changeLevel()
-                .then(() => play())
+                .then(() => {
+                    play();
+                    giveHealth();
+                })
                 .catch(error => {
                     throw error;
                 });
@@ -336,7 +353,25 @@ class Game {
         })
 
         gameEvent.on('onMenu', () => {
+            this.displayBestScore();
             this.interfaceLoader.show(this.interfaces.menu);
+        })
+
+        gameEvent.on('onToggleGodMode', () => {
+            this.godMode = !this.godMode;
+        })
+
+        gameEvent.on('onKillAll', () => {
+            pause(null, true);
+
+            this.changeLevel()
+            .then(() => {
+                play();
+                giveHealth();
+            })
+            .catch(error => {
+                throw error;
+            });
         })
     }
 
@@ -350,7 +385,7 @@ class Game {
 
         this.delta = this.clock.getDelta();
 
-        if(this.currentCamera.controls) this.currentCamera.controls.update();
+        this.currentCamera.update(this.delta);
 
         renderer.render(scene, this.currentCamera);
         //this.defender.handleKeyboardLoop(this.delta);

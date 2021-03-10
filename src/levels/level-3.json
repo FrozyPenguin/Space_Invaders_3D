@@ -1,0 +1,134 @@
+{
+    "name": "Niveau des ténèbres",
+    "id": 3,
+    "turnBeforeDeath": 10,
+    "invaders": {
+        "speed": {
+            "x": 30,
+            "z": 0
+        },
+        "placement": "custom",
+        "lines": [
+            [" ", "N", "N", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "N", "N", " "],
+            [" ", "N", "V", "N", " ", " ", " ", " ", " ", " ", " ", " ", "N", "V", "N", " "],
+            [" ", "N", "V", "V", "N", " ", "N", "N", "N", "N", " ", "N", "V", "V", "N", " "],
+            [" ", "N", "V", "V", "V", "N", "V", "V", "V", "V", "N", "V", "V", "V", "N", " "],
+            [" ", "N", "N", "V", "V", "V", "N", "V", "V", "N", "V", "V", "V", "N", "N", " "],
+            ["N", "N", "V", "N", "V", "V", "V", "V", "V", "V", "V", "V", "N", "V", "N", "N"],
+            ["N", "V", "V", "V", "V", "V", "V", "V", "V", "V", "V", "V", "V", "V", "V", "N"],
+            [" ", "N", "V", "B", "V", "V", "V", "V", "V", "V", "V", "V", "B", "V", "N", " "],
+            ["N", "V", "V", "B", "N", "V", "V", "V", "V", "V", "V", "N", "B", "V", "V", "N"],
+            ["N", "N", "V", "B", "N", "B", "V", "V", "V", "V", "B", "N", "B", "V", "N", "N"],
+            [" ", "N", "V", "V", "V", "V", "V", "V", "V", "V", "V", "V", "V", "V", "N", " "],
+            [" ", " ", "N", "V", "N", "V", "V", "V", "V", "V", "V", "N", "V", "N", " ", " "],
+            [" ", "N", "N", "V", "V", "N", "N", "N", "N", "N", "N", "V", "V", "N", "N", " "],
+            ["N", "N", "V", "N", "V", "V", "N", "R", "R", "N", "V", "V", "N", "V", "N", "N"],
+            ["N", "V", "V", "V", "N", "N", " ", " ", " ", " ", "N", "N", "V", "V", "V", "N"],
+            ["V", "N", "V", "N", "V", "N", " ", " ", " ", " ", "N", "V", "N", "V", "N", "V"]
+        ],
+        "shootProb": 0.0005,
+        "size": 10,
+        "padding": 5,
+        "types": [
+            {
+                "name": "le violet",
+                "health": 1,
+                "colors": [
+                    "0xCC66FF"
+                ],
+                "points": 10,
+                "projectiles": {
+                    "speed": 150,
+                    "model": "",
+                    "color": "0xFF0000",
+                    "size": 2
+                },
+                "alias": "V"
+            },
+            {
+                "name": "le noir",
+                "health": 1,
+                "colors": [
+                    "0x404040"
+                ],
+                "points": 20,
+                "projectiles": {
+                    "speed": 200,
+                    "model": "",
+                    "color": "0xFF0000",
+                    "size": 2
+                },
+                "alias": "N"
+            },
+            {
+                "name": "le rose",
+                "health": 1,
+                "colors": [
+                    "0xFF0066"
+                ],
+                "points": 50,
+                "projectiles": {
+                    "speed": 200,
+                    "model": "",
+                    "color": "0xFF0000",
+                    "size": 2
+                },
+                "alias": "R"
+            },
+            {
+                "name": "le blanc",
+                "health": 1,
+                "colors": [
+                    "0xFFFFFF"
+                ],
+                "points": 50,
+                "projectiles": {
+                    "speed": 200,
+                    "model": "",
+                    "color": "0xFF0000",
+                    "size": 2
+                },
+                "alias": "B"
+            }
+        ]
+    },
+    "defender": {
+        "speed": 100,
+        "shotDelay": 0,
+        "model": "",
+        "color": "0xff0000",
+        "width": 10,
+        "height": 10,
+        "projectiles": {
+            "speed": 200,
+            "model": "",
+            "color": "0xff00ff",
+            "size": 2
+        }
+    },
+    "shields": {
+        "count": 3,
+        "models": [],
+        "colors": [
+            "0x008000",
+            "0xb38b6d",
+            "0x00ffff",
+            "0xfe01d3",
+            "0xeb7549"
+        ],
+        "width": 20,
+        "height": 10,
+        "health": 3,
+        "padding": 50
+    },
+    "boss": {
+        "speed": 20,
+        "model": "",
+        "projectiles": {
+            "speed": 200,
+            "model": "",
+            "color": "",
+            "size": 2
+        }
+    }
+}

@@ -34,7 +34,19 @@
                 "name": "les moyens",
                 "health": 1,
                 "models": [
-                    "/src/medias/models/avocadoSword.gltf"
+                    {
+                        "src": "/src/medias/models/mewtwo.gltf",
+                        "scale": {
+                            "x": 1,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "rotate": {
+                            "x": 1,
+                            "y": 1,
+                            "z": 1
+                        }
+                    }
                 ],
                 "colors": [],
                 "lineCount": 1,
@@ -50,7 +62,19 @@
                 "name": "les forts",
                 "health": 1,
                 "models": [
-                    "/src/medias/models/avocadoSword.gltf"
+                    {
+                        "src": "/src/medias/models/mewtwo.gltf",
+                        "scale": {
+                            "x": 1,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "rotate": {
+                            "x": 1,
+                            "y": 1,
+                            "z": 1
+                        }
+                    }
                 ],
                 "colors": [],
                 "lineCount": 1,

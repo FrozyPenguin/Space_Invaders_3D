@@ -50,13 +50,16 @@ export class GameObject extends THREE.Group {
 
         if(this.models?.length) {
             this.remove(...this.children);
-
-            this.load(this.models[this.maxModel - this.health])
+            let model = this.models[this.maxModel - this.health];
+            this.load(model.src)
             .then(() => {
                 this.children.forEach(child => {
-                    child.scale.x *= this.size;
-                    child.scale.y *= this.size;
-                    child.scale.z *= this.size;
+                    child.scale.x *= model.scale.x;
+                    child.scale.y *= model.scale.y;
+                    child.scale.z *= model.scale.z;
+                    child.rotation.x = THREE.Math.degToRad(model.rotate.x);
+                    child.rotation.y = THREE.Math.degToRad(model.rotate.y);
+                    child.rotation.z = THREE.Math.degToRad(model.rotate.z);
                 })
             })
             .catch(err => {

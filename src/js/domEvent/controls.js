@@ -113,6 +113,17 @@ function unMute(event) {
     gameEvent.emit('onUnMute');
 }
 
+function changeMute() {
+    if(soundMute.style.display != 'none') {
+        userMuted = true;
+        mute();
+    }
+    else {
+        userMuted = false;
+        unMute();
+    }
+}
+
 export {
     initDomControls,
     pause,
@@ -121,6 +132,7 @@ export {
     play,
     focus,
     blur,
+    changeMute,
     userMuted,
     userPaused
 }

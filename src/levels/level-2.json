@@ -39,38 +39,6 @@
                     "size": 2
                 },
                 "alias": "F"
-            },
-            {
-                "name": "les moyens",
-                "health": 1,
-                "models": [
-                    "/src/medias/models/avocadoSword.gltf"
-                ],
-                "colors": [],
-                "points": 20,
-                "projectiles": {
-                    "speed": 200,
-                    "model": "",
-                    "color": "0xffff00",
-                    "size": 2
-                },
-                "alias": "M"
-            },
-            {
-                "name": "les forts",
-                "health": 1,
-                "models": [
-                    "/src/medias/models/avocadoSword.gltf"
-                ],
-                "colors": [],
-                "points": 50,
-                "projectiles": {
-                    "speed": 200,
-                    "model": "",
-                    "color": "0x252525",
-                    "size": 2
-                },
-                "alias": "H"
             }
         ]
     },
