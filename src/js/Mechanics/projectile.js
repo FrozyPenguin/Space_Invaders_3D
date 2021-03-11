@@ -19,7 +19,7 @@ class Projectile extends GameObject {
         if(localConfig.model) {
             super();
 
-            this.load(localConfig.model)
+            this.loadModel(localConfig.model)
             .then(() => {
                 this.children.forEach(child => {
                     child.scale.x *= localConfig.size;

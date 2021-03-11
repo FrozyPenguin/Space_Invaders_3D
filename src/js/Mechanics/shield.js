@@ -25,7 +25,7 @@ export class Shield extends GameObject {
 
         this.health = this.maxModel = localConfig.health;
 
-        this.loadNext();
+        this.loadNextModel();
 
         this.name = 'Shield';
 
@@ -39,13 +39,13 @@ export class Shield extends GameObject {
             this.visible = false;
         }
         else {
-            this.loadNext();
+            this.loadNextModel();
         }
     }
 
     regen() {
         this.health = this.maxModel;
         this.visible = true;
-        this.loadNext();
+        this.loadNextModel();
     }
 }

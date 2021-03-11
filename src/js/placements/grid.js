@@ -51,26 +51,6 @@ export class Grid extends THREE.Group {
                 this.add(invader);
             }
         })
-
-        // for (let i = 0; i < this.invadersConfig.count; i++) {
-        //     let type = typeInvader[Math.floor(i / this.invadersConfig.perLine)];
-
-        //     let invader = new Invader(this.invadersConfig.size, this.invadersConfig.shootProb, this.projectilesSpeed, this.invadersConfig.types[0]);
-        //     //invader.load();
-
-        //     if (i != 0) {
-        //         invader.position.x = this.children[i - 1].position.x - (this.invadersConfig.size + this.invadersConfig.padding);
-        //         invader.position.z = this.children[i - 1].position.z;
-
-        //         if (i % this.invadersConfig.perLine == 0) {
-        //             invader.position.x = this.children[0].position.x;
-        //             invader.position.z = this.children[i - 1].position.z - (this.invadersConfig.size + this.invadersConfig.padding);
-        //         }
-        //     }
-
-        //     // invader.on('kill') => Parcourir invaderGroup -> Si tout active = false alors fin de game niveau suivant
-        //     this.add(invader);
-        // }
     }
 
 

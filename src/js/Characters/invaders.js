@@ -37,7 +37,7 @@ class Invader extends GameObject {
 
         this.health = this.maxModel = localConfig.health;
 
-        this.loadNext();
+        this.loadNextModel();
 
         this.points = localConfig.points;
 
@@ -47,8 +47,6 @@ class Invader extends GameObject {
         this.size = size;
 
         this.localConfig = localConfig;
-
-        //this.isCollidingDefender()
     }
 
     /**
@@ -67,7 +65,7 @@ class Invader extends GameObject {
             return true;
         }
         else {
-            this.loadNext();
+            this.loadNextModel();
             return false;
         }
     }
@@ -78,7 +76,7 @@ class Invader extends GameObject {
     live(health) {
         this.visible = true;
         this.health = health;
-        this.loadNext();
+        this.loadNextModel();
     }
 
     /**

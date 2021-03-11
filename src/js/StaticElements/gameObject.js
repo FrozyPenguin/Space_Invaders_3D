@@ -16,15 +16,11 @@ export class GameObject extends THREE.Group {
 
     isCollidingWall(wallName) {
         let wall = scene.getObjectByName(`${wallName}Wall`);
-        if(wall) {
-            let wallBoundingBox = new THREE.Box3().setFromObject(wall);
-
-            return this.getBoundingBox().intersectsBox(wallBoundingBox);
-        }
+        if(wall) return this.getBoundingBox().intersectsBox(wall.getBoundingBox());
         return false;
     }
 
-    load(model) {
+    loadModel(model) {
         return new Promise((resolse, reject) => {
             const loader = new GLTFLoader();
 
@@ -36,38 +32,59 @@ export class GameObject extends THREE.Group {
             () => { // onload
 
             },
-            (err) => {
+            (err) => { // onErr
                 reject(err);
             })
         });
     }
 
-    loadNext() {
+    loadAllModels() {
+        this.remove(...this.children);
+        let loadPromises = [];
+        this.models.forEach(model => {
+            loadPromises.push(this.loadModel(model.src));
+        })
+
+        Promise.all(loadPromises)
+        .then(() => {
+            this.children.forEach((child, index) => {
+                child.scale.x *= this.models[index].scale.x;
+                child.scale.y *= this.models[index].scale.y;
+                child.scale.z *= this.models[index].scale.z;
+                child.rotation.x = THREE.Math.degToRad(this.models[index].rotate.x);
+                child.rotation.y = THREE.Math.degToRad(this.models[index].rotate.y);
+                child.rotation.z = THREE.Math.degToRad(this.models[index].rotate.z);
+
+                // Ignore le premier model
+                if(index) child.visible = false;
+            })
+        })
+        .catch(error => {
+            throw error;
+        })
+    }
+
+    loadNextModel() {
         if((this.models && this.models?.length < this.health && this.models instanceof Array && this.models?.length)
         || this.colors && this.colors?.length < this.health && this.colors instanceof Array && this.colors?.length) {
             throw `Config de ${this.constructor.name} invalide !`;
         }
 
+        let indexToLoad = this.maxModel - this.health;
+
         if(this.models?.length) {
-            this.remove(...this.children);
-            let model = this.models[this.maxModel - this.health];
-            this.load(model.src)
-            .then(() => {
-                this.children.forEach(child => {
-                    child.scale.x *= model.scale.x;
-                    child.scale.y *= model.scale.y;
-                    child.scale.z *= model.scale.z;
-                    child.rotation.x = THREE.Math.degToRad(model.rotate.x);
-                    child.rotation.y = THREE.Math.degToRad(model.rotate.y);
-                    child.rotation.z = THREE.Math.degToRad(model.rotate.z);
+            if(this.children.length) {
+                this.children.forEach((child, index) => {
+                    if(index == indexToLoad) child.visible = true;
+                    else child.visible = false;
                 })
-            })
-            .catch(err => {
-                console.error(err);
-            });
+            }
+            else {
+                this.loadAllModels();
+            }
         }
         else {
-            this.children[0].material.color.setHex(parseInt(this.colors[this.maxModel - this.health]));
+            this.children[0].material.color.setHex(parseInt(this.colors[indexToLoad]));
         }
     }
 
