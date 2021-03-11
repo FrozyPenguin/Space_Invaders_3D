@@ -72,7 +72,7 @@ class Game {
 
         // Camera
         this.currentCamera = new GameCamera(renderer);
-        //this.currentCamera.addControls();
+        this.currentCamera.addControls();
 
         // Clavier
         this.keyboard.unique();
@@ -112,6 +112,16 @@ class Game {
 
         // Mode invincible
         this.godMode = false;
+
+        // Squelettes
+        this.skeletons = new THREE.Group();
+        this.skeletons.name = "Skeletons";
+        scene.add(this.skeletons);
+
+        // Hit boxes
+        this.hitBoxes = new THREE.Group();
+        this.hitBoxes.name = "Hit Boxes";
+        scene.add(this.hitBoxes);
     }
 
     async loadInterfaces() {
@@ -373,6 +383,37 @@ class Game {
                 throw error;
             });
         })
+
+        gameEvent.on('onShowBoxes', () => {
+            if(!this.boxesEnabled) {
+                this.boxesEnabled = true;
+                this.invadersGroup.children.forEach(child => {
+                    child.showBox();
+                })
+
+                this.defender.showBox();
+            }
+            else {
+                this.boxesEnabled = false;
+                this.hitBoxes.remove(...this.hitBoxes.children);
+            }
+        })
+
+        gameEvent.on('onShowSkeletons', () => {
+            if(!this.skeletonEnabled) {
+                this.skeletonEnabled = true;
+                this.invadersGroup.children.forEach(child => {
+                    child.showSkeleton();
+                })
+
+                this.defender.showSkeleton();
+            }
+            else {
+                this.skeletonEnabled = false;
+                this.skeletons.remove(...this.skeletons.children);
+            }
+        })
+
     }
 
     /**
@@ -405,7 +446,9 @@ class Game {
 
             // Parcourt les descendant visible de la scène et les met à jour si besoin
             scene.traverseVisible((child) => {
-                if(child.update) child.update(this.delta);
+                if(child instanceof THREE.SkeletonHelper) return;
+                if(child.update?.length && !(child instanceof THREE.BoxHelper)) child.update(this.delta)
+                else if(child.update) child.update();
             });
         }
 
@@ -490,6 +533,10 @@ class Game {
                     .then(json => {
                         this.invadersGroup?.remove?.(...this.invadersGroup.children);
                         this.projectiles.remove(...this.projectiles.children);
+                        this.skeletons.remove(...this.skeletons.children);
+                        this.hitBoxes.remove(...this.hitBoxes.children);
+                        this.boxesEnabled = false;
+                        this.skeletonEnabled = false;
                         scene.remove(this.invadersGroup);
                         scene.remove(this.walls);
                         scene.remove(this.shields);

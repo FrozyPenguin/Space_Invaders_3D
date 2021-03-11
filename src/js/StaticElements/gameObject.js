@@ -39,28 +39,31 @@ export class GameObject extends THREE.Group {
     }
 
     loadAllModels() {
-        this.remove(...this.children);
-        let loadPromises = [];
-        this.models.forEach(model => {
-            loadPromises.push(this.loadModel(model.src));
-        })
-
-        Promise.all(loadPromises)
-        .then(() => {
-            this.children.forEach((child, index) => {
-                child.scale.x *= this.models[index].scale.x;
-                child.scale.y *= this.models[index].scale.y;
-                child.scale.z *= this.models[index].scale.z;
-                child.rotation.x = THREE.Math.degToRad(this.models[index].rotate.x);
-                child.rotation.y = THREE.Math.degToRad(this.models[index].rotate.y);
-                child.rotation.z = THREE.Math.degToRad(this.models[index].rotate.z);
-
-                // Ignore le premier model
-                if(index) child.visible = false;
+        return new Promise((resolse, reject) => {
+            this.remove(...this.children);
+            let loadPromises = [];
+            this.models.forEach(model => {
+                loadPromises.push(this.loadModel(model.src));
             })
-        })
-        .catch(error => {
-            throw error;
+
+            Promise.all(loadPromises)
+            .then(() => {
+                this.children.forEach((child, index) => {
+                    child.scale.x *= this.models[index].scale.x;
+                    child.scale.y *= this.models[index].scale.y;
+                    child.scale.z *= this.models[index].scale.z;
+                    child.rotation.x = THREE.Math.degToRad(this.models[index].rotate.x);
+                    child.rotation.y = THREE.Math.degToRad(this.models[index].rotate.y);
+                    child.rotation.z = THREE.Math.degToRad(this.models[index].rotate.z);
+
+                    // Ignore le premier model
+                    if(index) child.visible = false;
+                    resolse();
+                })
+            })
+            .catch(error => {
+                reject(error);
+            })
         })
     }
 
@@ -80,7 +83,10 @@ export class GameObject extends THREE.Group {
                 })
             }
             else {
-                this.loadAllModels();
+                this.loadAllModels()
+                .catch(error => {
+                    throw error;
+                })
             }
         }
         else {
@@ -90,5 +96,23 @@ export class GameObject extends THREE.Group {
 
     setCollideGroup(group) {
         this.collideGroup = group;
+    }
+
+    showSkeleton() {
+        let skeletonGroup = scene.getObjectByName('Skeletons');
+        if(skeletonGroup) {
+            let actualModelIndex = this.models ? this.maxModel - this.health : 0;
+            const skeletonHelper = new THREE.SkeletonHelper(this.children[actualModelIndex]);
+            skeletonGroup.add(skeletonHelper);
+        }
+    }
+
+    showBox() {
+        let boxGroup = scene.getObjectByName('Hit Boxes');
+        if(boxGroup) {
+            // Add a box helper.
+            const boxHelper = new THREE.BoxHelper(this, new THREE.Color(0xFF0000));
+            boxGroup.add(boxHelper);
+        }
     }
 }
