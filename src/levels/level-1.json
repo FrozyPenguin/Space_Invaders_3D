@@ -50,7 +50,7 @@
                     }
                 ],
                 "colors": [],
-                "lineCount": 1,
+                "lineCount": 0,
                 "points": 20,
                 "projectiles": {
                     "speed": 200,
@@ -65,14 +65,14 @@
                 "health": 2,
                 "models": [
                     {
-                        "src": "/src/medias/models/mewtwo.gltf",
+                        "src": "/src/medias/models/oui.gltf",
                         "scale": {
                             "x": 0.5,
                             "y": 0.5,
                             "z": 0.5
                         },
                         "rotate": {
-                            "x": -90,
+                            "x": 90,
                             "y": 180,
                             "z": 0
                         }
@@ -107,7 +107,19 @@
     "defender": {
         "speed": 100,
         "shotDelay": 0,
-        "model": "/src/medias/models/lysandre.gltf",
+        "model": {
+            "src": "/src/medias/models/lysandre.gltf",
+            "scale": {
+                "x": 10,
+                "y": 10,
+                "z": 10
+            },
+            "rotate": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        },
         "color": "0xff0000",
         "width": 10,
         "height": 10,

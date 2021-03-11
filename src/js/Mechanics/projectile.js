@@ -16,17 +16,10 @@ class Projectile extends GameObject {
      * @param { THREE.Mesh } sender émetteur du projectile
      */
     constructor(localConfig, sender, collideGroup = []) {
-        if(localConfig.model) {
+        if(localConfig.model && localConfig.model != {} && localConfig.model instanceof Object) {
             super();
 
             this.loadModel(localConfig.model)
-            .then(() => {
-                this.children.forEach(child => {
-                    child.scale.x *= localConfig.size;
-                    child.scale.y *= localConfig.size;
-                    child.scale.z *= localConfig.size;
-                })
-            })
             .catch(err => {
                 console.error(err);
             });

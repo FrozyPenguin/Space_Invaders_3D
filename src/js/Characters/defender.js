@@ -12,17 +12,10 @@ class Defender extends GameObject {
     constructor(localConfig) {
         if(!localConfig.projectiles) throw "Config du defender invalide ! : Aucun projectile";
 
-        if(localConfig.model) {
+        if(localConfig.model && localConfig.model != {} && localConfig.model instanceof Object) {
             super();
 
             this.loadModel(localConfig.model)
-            .then(() => {
-                this.children.forEach(child => {
-                    child.scale.x *= localConfig.width;
-                    child.scale.y *= localConfig.height;
-                    child.scale.z *= localConfig.height;
-                })
-            })
             .catch(err => {
                 console.error(err);
             });

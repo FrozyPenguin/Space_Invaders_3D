@@ -24,9 +24,19 @@ export class GameObject extends THREE.Group {
         return new Promise((resolse, reject) => {
             const loader = new GLTFLoader();
 
-            loader.load(model,
+            loader.load(model.src,
             (gltf) => { // loaded
-                this.add(...gltf.scene.children);
+                if(!(model.scale && model.scale != {})) model.scale ={ x: 1, y: 1, z: 1 };
+                if(!(model.rotate && model.rotate != {})) model.rotate = { x: 0, y: 0, z: 0 };
+
+                gltf.scene.scale.x *= model.scale.x;
+                gltf.scene.scale.y *= model.scale.y;
+                gltf.scene.scale.z *= model.scale.z;
+                gltf.scene.rotation.x = THREE.Math.degToRad(model.rotate.x);
+                gltf.scene.rotation.y = THREE.Math.degToRad(model.rotate.y);
+                gltf.scene.rotation.z = THREE.Math.degToRad(model.rotate.z);
+
+                this.add(gltf.scene);
                 resolse();
             },
             () => { // onload
@@ -43,19 +53,12 @@ export class GameObject extends THREE.Group {
             this.remove(...this.children);
             let loadPromises = [];
             this.models.forEach(model => {
-                loadPromises.push(this.loadModel(model.src));
+                loadPromises.push(this.loadModel(model));
             })
 
             Promise.all(loadPromises)
             .then(() => {
                 this.children.forEach((child, index) => {
-                    child.scale.x *= this.models[index].scale.x;
-                    child.scale.y *= this.models[index].scale.y;
-                    child.scale.z *= this.models[index].scale.z;
-                    child.rotation.x = THREE.Math.degToRad(this.models[index].rotate.x);
-                    child.rotation.y = THREE.Math.degToRad(this.models[index].rotate.y);
-                    child.rotation.z = THREE.Math.degToRad(this.models[index].rotate.z);
-
                     // Ignore le premier model
                     if(index) child.visible = false;
                     resolse();
