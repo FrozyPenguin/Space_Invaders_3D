@@ -36,7 +36,14 @@ class Projectile extends GameObject {
 
         this.vel;
         const center = new THREE.Vector3(0, 0, 0);
-        this.position.set(sender.getWorldPosition(center).x, sender.getWorldPosition(center).y, sender.getWorldPosition(center).z);
+
+        let yOffset = 0;
+
+        if(!sender.getWorldPosition(center).y) {
+            yOffset = localConfig.size;
+        }
+
+        this.position.set(sender.getWorldPosition(center).x, sender.getWorldPosition(center).y + yOffset, sender.getWorldPosition(center).z);
 
         this.sender = sender;
 
