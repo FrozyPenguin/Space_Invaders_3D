@@ -388,7 +388,7 @@ class Game {
             if(!this.boxesEnabled) {
                 this.boxesEnabled = true;
                 this.invadersGroup.children.forEach(child => {
-                    child.showBox();
+                    if(child.visible) child.showBox();
                 })
 
                 this.defender.showBox();
@@ -403,7 +403,7 @@ class Game {
             if(!this.skeletonEnabled) {
                 this.skeletonEnabled = true;
                 this.invadersGroup.children.forEach(child => {
-                    child.showSkeleton();
+                    if(child.visible) child.showSkeleton();
                 })
 
                 this.defender.showSkeleton();

@@ -1,5 +1,6 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
-import { GLTFLoader } from '../../lib/Three.js/examples/jsm/loaders/GLTFLoader.js';
+import { OBJLoader } from '../../lib/Three.js/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from '../../lib/Three.js/examples/jsm/loaders/MTLLoader.js';
 import { scene } from '../scene.js';
 
 export class GameObject extends THREE.Group {
@@ -22,29 +23,37 @@ export class GameObject extends THREE.Group {
 
     loadModel(model) {
         return new Promise((resolse, reject) => {
-            const loader = new GLTFLoader();
 
-            loader.load(model.src,
-            (gltf) => { // loaded
-                if(!(model.scale && model.scale != {})) model.scale ={ x: 1, y: 1, z: 1 };
-                if(!(model.rotate && model.rotate != {})) model.rotate = { x: 0, y: 0, z: 0 };
+            const loader = new OBJLoader();
+            const mtlLoader = new MTLLoader();
 
-                gltf.scene.scale.x *= model.scale.x;
-                gltf.scene.scale.y *= model.scale.y;
-                gltf.scene.scale.z *= model.scale.z;
-                gltf.scene.rotation.x = THREE.Math.degToRad(model.rotate.x);
-                gltf.scene.rotation.y = THREE.Math.degToRad(model.rotate.y);
-                gltf.scene.rotation.z = THREE.Math.degToRad(model.rotate.z);
+            mtlLoader.load(model.mtl, (texture) => {
+                texture.preload();
+                loader.setMaterials(texture);
 
-                this.add(gltf.scene);
-                resolse();
-            },
-            () => { // onload
+                loader.load(model.src,
+                    (obj) => {
+                        if(!(model.scale && model.scale != {})) model.scale ={ x: 1, y: 1, z: 1 };
+                        if(!(model.rotate && model.rotate != {})) model.rotate = { x: 0, y: 0, z: 0 };
 
-            },
-            (err) => { // onErr
-                reject(err);
-            })
+                        obj.scale.x *= model.scale.x;
+                        obj.scale.y *= model.scale.y;
+                        obj.scale.z *= model.scale.z;
+                        obj.rotation.x = THREE.Math.degToRad(model.rotate.x);
+                        obj.rotation.y = THREE.Math.degToRad(model.rotate.y);
+                        obj.rotation.z = THREE.Math.degToRad(model.rotate.z);
+
+                        this.add(obj);
+                        resolse();
+                    },
+                    (xhr) => { // onProgress
+                        console.log((xhr.loaded / xhr.total * 100 ) + '% loaded');
+                    },
+                    (error) => { // onError
+                        reject(error);
+                    }
+                );
+            });
         });
     }
 

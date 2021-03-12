@@ -36,21 +36,26 @@
                 "health": 1,
                 "models": [
                     {
-                        "src": "/src/medias/models/greninja.gltf",
+                        "src": "/src/medias/models/Pokemons/carapuce.obj",
+                        "mtl": "/src/medias/models/Pokemons/carapuce.mtl",
                         "scale": {
-                            "x": 8,
-                            "y": 8,
-                            "z": 8
+                            "x": 10,
+                            "y": 10,
+                            "z": 10
                         },
                         "rotate": {
-                            "x": 180,
-                            "y": 0,
-                            "z": 180
+                            "x": 0,
+                            "y": 180,
+                            "z": 0
                         }
                     }
                 ],
-                "colors": [],
-                "lineCount": 0,
+                "colors": [
+                    "0xffffff",
+                    "0xff0000",
+                    "0x00ff00"
+                ],
+                "lineCount": 1,
                 "points": 20,
                 "projectiles": {
                     "speed": 200,
@@ -62,36 +67,28 @@
             },
             {
                 "name": "les forts",
-                "health": 2,
+                "health": 1,
                 "models": [
                     {
-                        "src": "/src/medias/models/oui.gltf",
+                        "src": "/src/medias/models/Pokemons/evoli.obj",
+                        "mtl": "/src/medias/models/Pokemons/evoli.mtl",
                         "scale": {
-                            "x": 0.5,
-                            "y": 0.5,
-                            "z": 0.5
+                            "x": 10,
+                            "y": 10,
+                            "z": 10
                         },
                         "rotate": {
-                            "x": 90,
-                            "y": 180,
-                            "z": 0
-                        }
-                    },
-                    {
-                        "src": "/src/medias/models/mewtwoHurt.gltf",
-                        "scale": {
-                            "x": 0.5,
-                            "y": 0.5,
-                            "z": 0.5
-                        },
-                        "rotate": {
-                            "x": -90,
+                            "x": 0,
                             "y": 180,
                             "z": 0
                         }
                     }
                 ],
-                "colors": [],
+                "colors": [
+                    "0xffffff",
+                    "0xff0000",
+                    "0x00ff00"
+                ],
                 "lineCount": 1,
                 "points": 50,
                 "projectiles": {
@@ -108,11 +105,12 @@
         "speed": 100,
         "shotDelay": 0,
         "model": {
-            "src": "/src/medias/models/lysandre.gltf",
+            "src": "/src/medias/models/defender.obj",
+            "mtl": "/src/medias/models/defender.mtl",
             "scale": {
-                "x": 10,
-                "y": 10,
-                "z": 10
+                "x": 1,
+                "y": 1,
+                "z": 1
             },
             "rotate": {
                 "x": 0,
