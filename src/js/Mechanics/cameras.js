@@ -4,7 +4,7 @@ import { OrbitControls } from '../../lib/Three.js/examples/jsm/controls/OrbitCon
 
 class GameCamera extends PerspectiveCamera {
     constructor(renderer) {
-        super(80, window.innerWidth / window.innerHeight, 1, 1000);
+        super(80, window.innerWidth / window.innerHeight, 1, 1800);
 
         this.invadersConfig = {};
 
@@ -43,7 +43,7 @@ class GameCamera extends PerspectiveCamera {
 
         let position = view.position;
         if(!(position instanceof Vector3)) {
-            position = scene.getObjectByName(position).position
+            position = new Vector3().copy(scene.getObjectByName(position).position);
         }
 
         this.position.copy(position);
@@ -112,7 +112,8 @@ class GameCamera extends PerspectiveCamera {
         if(this.toUpdate) {
             let position = this.viewsArray[this.actualView - 1].position;
             if(!(position instanceof Vector3)) {
-                position = scene.getObjectByName(position).position
+                position = new Vector3().copy(scene.getObjectByName(position).position);
+                position.z = position.z + 5;
             }
 
             this.position.copy(position);

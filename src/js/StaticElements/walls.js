@@ -52,10 +52,26 @@ function initWalls(nbCharacters, characterSize, characterPadding, characterPerLi
     let offset = size / 2; // + Taile du bos TODO:
 
     // Bas
-    planeGroup.add(new Wall('bottomWall', size, size, {x: 0, y: 0, z: -offset/2}, {x: 90, y: 0, z: 0}));
+    // planeGroup.add(new Wall('bottomWall', size, size, {x: 0, y: 0, z: -offset/2}, {x: 90, y: 0, z: 0}));
+    let bottomWall = new Wall('bottomWall', size, size, {x: 0, y: 5, z: -offset/2}, {x: 0, y: 0, z: 0});
+    bottomWall.remove(...bottomWall.children)
+    bottomWall.loadModel({
+        src: "/src/medias/models/terrain/Super_Training_Stage.obj",
+        mtl: "/src/medias/models/terrain/Super_Training_Stage.mtl",
+        scale: {
+            x: size/5,
+            y: size/5,
+            z: size/5
+        }
+    })
+    .then(() => {
+        let addedModel = bottomWall.children[0];
+        addedModel.children.splice(addedModel.children.findIndex(element => element.name == 'flag_3_flag_3_spa_prop00.png'), 1);
+    });
+    planeGroup.add(bottomWall);
 
     // Haut
-    planeGroup.add(new Wall('topWall', size, size, {x: 0, y: size, z: -offset/2}, {x: -90, y: 0, z: 0}));
+    // planeGroup.add(new Wall('topWall', size, size, {x: 0, y: size, z: -offset/2}, {x: -90, y: 0, z: 0}));
 
     // Gauche
     planeGroup.add(new Wall('leftWall', size, size, {x: offset, y: offset, z: -offset/2}, {x: 0, y: 90, z: 0}, 0x222222));
@@ -68,6 +84,14 @@ function initWalls(nbCharacters, characterSize, characterPadding, characterPerLi
 
     // Devant
     planeGroup.add(new Wall('frontWall', size, size, {x: 0, y: offset, z: -size*0.75}, {x: 0, y: 180, z: 0}));
+
+    planeGroup.children.forEach((child, index) => {
+        let mesh = child.children[0];
+        if(mesh instanceof THREE.Mesh) {
+            mesh.material.opacity = 0;
+            mesh.material.transparent = true;
+        };
+    })
 
     return planeGroup;
 }
