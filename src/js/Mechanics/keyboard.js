@@ -42,6 +42,10 @@ export class Keyboard {
             if(this.state.eventMatches(event, 's')) {
                 gameEvent.emit('onShowSkeletons');
             }
+
+            if(this.state.eventMatches(event, 'h')) {
+                gameEvent.emit('onShowShortcuts');
+            }
         }.bind(this))
     }
 

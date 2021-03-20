@@ -101,13 +101,26 @@
         "height": 10,
         "projectiles": {
             "speed": 200,
-            "model": "",
+            "model": {
+                "src": "/src/medias/models/PokeBalls/CherishBall.obj",
+                "mtl": "/src/medias/models/PokeBalls/CherishBall.mtl",
+                "scale": {
+                    "x": 50,
+                    "y": 50,
+                    "z": 50
+                },
+                "rotate": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            },
             "color": "0xff00ff",
             "size": 2
         }
     },
     "shields": {
-        "count": 3,
+        "count": 5,
         "models": [],
         "colors": [
             "0x008000",
@@ -116,7 +129,7 @@
             "0xfe01d3",
             "0xeb7549"
         ],
-        "width": 20,
+        "width": 30,
         "height": 10,
         "health": 3,
         "padding": 50

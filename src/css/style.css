@@ -63,6 +63,7 @@
     top: 50%;
     transform: translateY(-50%);
     width: 100%;
+    max-height: 100%;
 }
 
 .center-block p, .center-block button {
@@ -93,6 +94,7 @@ button {
             linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
             linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
     background-color: black;
+    overflow-y: auto;
 }
 
 #loader h1 {
@@ -163,4 +165,18 @@ tbody, thead {
 
 #startGame {
     margin-top: 5%;
+}
+
+#shortcuts {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    border-radius: 1em;
+    background-color: white;
+    color: black;
+    padding: 10px;
+}
+
+#shortcuts p {
+    font-family: Arial, Helvetica, sans-serif !important;
 }

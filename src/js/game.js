@@ -72,7 +72,7 @@ class Game {
 
         // Camera
         this.currentCamera = new GameCamera(renderer);
-        this.currentCamera.addControls();
+        //this.currentCamera.addControls();
 
         // Clavier
         this.keyboard.unique();
@@ -186,6 +186,7 @@ class Game {
 
         this.displayBestScore();
         this.interfaceLoader.show(this.interfaces.menu);
+        document.title = "Space Invaders 3D";
     }
 
     displayBestScore() {
@@ -365,6 +366,7 @@ class Game {
         gameEvent.on('onMenu', () => {
             this.displayBestScore();
             this.interfaceLoader.show(this.interfaces.menu);
+            document.title = "Space Invaders 3D";
         })
 
         gameEvent.on('onToggleGodMode', () => {
@@ -414,6 +416,11 @@ class Game {
             }
         })
 
+        gameEvent.on('onShowShortcuts', () => {
+            let shortcutsInterface = document.querySelector('#shortcuts');
+            if(shortcutsInterface.style.display == 'none') shortcutsInterface.style.display = 'block';
+            else shortcutsInterface.style.display = 'none';
+        });
     }
 
     /**
@@ -545,6 +552,7 @@ class Game {
                         this.interfaceLoader.show(this.interfaces.changeLevel);
                         document.querySelector('#idLevel').innerHTML = json.id;
                         document.querySelector('#levelName').innerHTML = json.name;
+                        document.title = json.name;
 
                         // Ajoute les éléments nécessaire au niveau
                         this.parseLevelFile(json);
@@ -609,6 +617,7 @@ class Game {
 
             // Afficher ecran de game over
             this.interfaceLoader.show(this.interfaces.gameOver);
+            document.title = "Vous avez perdu !";
         }
         else {
             document.querySelector('#winBestScore').innerHTML = this.bestScore;
@@ -616,6 +625,7 @@ class Game {
 
             // Afficher ecran de win
             this.interfaceLoader.show(this.interfaces.win);
+            document.title = "Bravo !";
         }
 
         // Afficher recap des scores
