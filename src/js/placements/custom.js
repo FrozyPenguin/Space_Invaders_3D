@@ -33,29 +33,6 @@ export class CustomPlacement extends Grid {
                 }
             }
         })
-
-        // this.invadersConfig.types.reverse().forEach(type => {
-        //     if(!type.lineCount) throw "Nombre d'invaders invalide !";
-
-        //     let nbInvaders = type.lineCount * this.invadersConfig.perLine;
-        //     for(let i = 0; i < nbInvaders; i++) {
-        //         let invader = new Invader(this.invadersConfig.size, this.invadersConfig.shootProb, type);
-
-        //         if(this.children.length != 0) {
-        //             if(i  % this.invadersConfig.perLine == 0) {
-        //                 lineNumber++;
-        //                 invader.position.x = this.children[0].position.x;
-        //                 invader.position.z = this.children[lineNumber * this.invadersConfig.perLine - 1].position.z - (this.invadersConfig.size + this.invadersConfig.padding);
-        //             }
-        //             else {
-        //                 invader.position.x = this.children[i % this.invadersConfig.perLine + lineNumber * this.invadersConfig.perLine - 1].position.x - (this.invadersConfig.size + this.invadersConfig.padding);
-        //                 invader.position.z = this.children[i % this.invadersConfig.perLine + lineNumber * this.invadersConfig.perLine - 1].position.z;
-        //             }
-        //         }
-
-        //         this.add(invader);
-        //     }
-        // })
     }
 
     getPerLine() {

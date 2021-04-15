@@ -15,6 +15,7 @@ import { LevelManager } from './levels/levelManager.js';
 import { Grid } from './placements/grid.js';
 import { ShieldManager } from './Mechanics/shieldManager.js';
 import { CustomPlacement } from './placements/custom.js';
+import { Boss } from './Characters/boss.js';
 
 const gameEvent = new EventEmitter();
 
@@ -167,7 +168,6 @@ class Game {
                 this.levelsNumber++;
                 let level = await levelJson.json();
 
-                console.log(level.invaders)
                 // Injection dans tableau #recapPoints
                 let textHtml = `<table><thead><tr><th colspan="2">Niveau ${level.id}<br>${level.name}</th></tr></thead><tbody>`;
                 level.invaders.types.forEach(invadersType => {
@@ -178,6 +178,14 @@ class Game {
 
                     textHtml += `<tr><td>${iconeHtml} ${invadersType.name}</td><td>${invadersType.points}pts</td></tr>`;
                 });
+
+                let bossIconeHtml = '';
+                if(level.boss.icon) {
+                    bossIconeHtml = `<img src="${invadersType.icon}" alt="icone boss">`;
+                }
+
+                textHtml += `<tr><td>${bossIconeHtml} Boss</td><td>${level.boss.points}pts</td></tr>`;
+
                 textHtml += `</tbody></table>`
                 recapPoints.innerHTML += textHtml;
             }
@@ -453,10 +461,12 @@ class Game {
 
             // Parcourt les descendant visible de la scène et les met à jour si besoin
             scene.traverseVisible((child) => {
-                if(child instanceof THREE.SkeletonHelper) return;
+                if(child instanceof THREE.SkeletonHelper || child instanceof Boss) return;
                 if(child.update?.length && !(child instanceof THREE.BoxHelper)) child.update(this.delta)
-                else if(child.update) child.update();
+                else if(child.update) child.update(this.delta);
             });
+
+            if(this.boss?.loop) this.boss.update(this.delta);
         }
 
         stats.end();
@@ -520,11 +530,15 @@ class Game {
         this.shields.createShield();
 
         // Cameras
-        this.currentCamera.setInvadersConfig(file.invaders.padding, file.invaders.size, this.invadersGroup.getNbInvaders(), this.invadersGroup.getPerLine(), file.turnBeforeDeath)
+        this.currentCamera.setInvadersConfig(file.invaders.padding, file.invaders.size, this.invadersGroup.getNbInvaders(), this.invadersGroup.getPerLine(), file.turnBeforeDeath);
+
+        // Boss
+        this.boss = new Boss(file.boss.size, file.boss, (file.invaders.size + file.invaders.padding) * ((this.invadersGroup.getNbInvaders() / this.invadersGroup.getPerLine()) + file.turnBeforeDeath) * 1.5 / 2.1, this.defender);
 
         scene.add(this.invadersGroup);
         scene.add(this.walls);
         scene.add(this.shields);
+        scene.add(this.boss);
     }
 
     changeLevel() {
@@ -547,6 +561,7 @@ class Game {
                         scene.remove(this.invadersGroup);
                         scene.remove(this.walls);
                         scene.remove(this.shields);
+                        scene.remove(this.boss);
 
                         // Affiche l'interface de changement de niveau
                         this.interfaceLoader.show(this.interfaces.changeLevel);
@@ -561,7 +576,8 @@ class Game {
                         let defenderCollideGroup = [
                             ...this.invadersGroup.children,
                             scene.getObjectByName('backWall'),
-                            ...this.shields.children
+                            ...this.shields.children,
+                            this.boss
                         ];
 
                         this.defender.setCollideGroup(defenderCollideGroup);
@@ -575,6 +591,8 @@ class Game {
                         for(let i = 0; i < this.invadersGroup.children.length; i++) {
                             this.invadersGroup.children[i].setCollideGroup(invaderCollideGroup);
                         }
+
+                        this.boss.setCollideGroup(invaderCollideGroup);
 
                         this.resetGame();
 

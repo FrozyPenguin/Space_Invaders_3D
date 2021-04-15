@@ -5,6 +5,7 @@ import { Defender } from '../Characters/defender.js';
 import { Invader } from '../Characters/invaders.js';
 import { gameEvent } from '../game.js';
 import { Shield } from './shield.js';
+import { Boss } from '../Characters/boss.js';
 
 class Projectile extends GameObject {
     /**
@@ -72,19 +73,19 @@ class Projectile extends GameObject {
 
     // Quand on collide on le détruit
     collide() {
-        this.collideGroup = this.collideGroup.filter(element => element.visible);
-        for (let i = 0; i < this.collideGroup.length; i++) {
-            const elementBox = this.collideGroup[i].getBoundingBox();
-            const element = this.collideGroup[i];
+        let actualCollideGroup = this.collideGroup.filter(element => element.visible);
+        for (let i = 0; i < actualCollideGroup.length; i++) {
+            const elementBox = actualCollideGroup[i].getBoundingBox();
+            const element = actualCollideGroup[i];
 
             if(this.getBoundingBox().intersectsBox(elementBox)) {
                 this.visible = false;
 
-                if(this.sender instanceof Invader && element instanceof Defender) {
+                if((this.sender instanceof Invader || this.sender instanceof Boss) && element instanceof Defender) {
                     gameEvent.emit('onDefenderDamage');
                 }
 
-                if(element instanceof Invader && this.sender instanceof Defender) gameEvent.emit('onInvaderDeath', element);
+                if((element instanceof Invader || element instanceof Boss) && this.sender instanceof Defender) gameEvent.emit('onInvaderDeath', element);
 
                 if(element instanceof Shield) gameEvent.emit('onShieldDamage', element);
 

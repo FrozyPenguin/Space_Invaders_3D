@@ -165,13 +165,35 @@
         "padding": 50
     },
     "boss": {
-        "speed": 20,
-        "model": "",
+        "speed": {
+            "x": 60,
+            "z": 0
+        },
+        "size": 10,
+        "health": 1,
+        "models": [
+            {
+                "src": "/src/medias/models/Pokemons/evoli.obj",
+                "mtl": "/src/medias/models/Pokemons/evoli.mtl",
+                "scale": {
+                    "x": 10,
+                    "y": 10,
+                    "z": 10
+                },
+                "rotate": {
+                    "x": 0,
+                    "y": 180,
+                    "z": 0
+                }
+            }
+        ],
         "projectiles": {
             "speed": 200,
             "model": "",
-            "color": "",
+            "color": "0xffff00",
             "size": 2
-        }
+        },
+        "points": 100,
+        "icon": ""
     }
 }
