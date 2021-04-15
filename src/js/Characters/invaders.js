@@ -46,7 +46,7 @@ class Invader extends GameObject {
         this.probToShoot = shootProb;
         this.size = size;
 
-        this.localConfig = localConfig;
+        this.localConfig = JSON.parse(JSON.stringify(localConfig));
     }
 
     /**
@@ -84,7 +84,22 @@ class Invader extends GameObject {
      */
     shoot() {
         let projectile = new Projectile(this.localConfig.projectiles, this, this.collideGroup);
-        console.log("shoot")
+    }
+
+    /**
+     * Augmente la vitesse des projectiles tiré
+     * @param { Number } speed Valeur d'augmentation
+     */
+    increaseProjectilesSpeed(speed) {
+        this.localConfig.projectiles.speed += speed;
+    }
+
+    /**
+     * Augmente la précision des invaders
+     * @param { Number } value Valeur d'augmentation
+     */
+    increaseAccuracy(value) {
+        this.accuracy += value;
     }
 
     /**
@@ -112,11 +127,9 @@ class Invader extends GameObject {
         //const haveToShoot = Math.random();
         if(Math.random() < this.probToShoot) this.shoot();
 
-        // Si un invader rentre en collision avec le defender, alors il prend des dégats
+        // Si un invader rentre en collision avec le defender, alors la partie est terminé même si on est invincible
         if(this.isCollidingDefender()) {
-            if(takeDamage() == 0) {
-                gameEvent.emit('onDefenderDamage');
-            };
+            gameEvent.emit('onEndGame');
         }
 
         this.isCollidingShields();

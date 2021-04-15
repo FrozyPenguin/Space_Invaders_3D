@@ -3,6 +3,10 @@
     "id": 1,
     "turnBeforeDeath": 10,
     "invaders": {
+        "timeBetweenMoveSpeedIncreasing": 2500,
+        "timeBetweenProjectilesSpeedIncreasing": 2500,
+        "projectilesSpeedIncreasingValue": 0.2,
+        "moveSpeedIncreasingValue": 5,
         "speed": {
             "x": 30,
             "z": 0
@@ -157,6 +161,9 @@
         "padding": 50
     },
     "boss": {
+        "timeBeforeFirstMove": 5000,
+        "maxTimeBeforeReapearing": 10000,
+        "maxTimeBeforeRevive": 30000,
         "speed": {
             "x": 60,
             "z": 0

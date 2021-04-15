@@ -53,7 +53,7 @@ class Game {
         this.delta = 0;
 
         // Game general
-        this.isStop = false;
+        this.isStop = true;
         this.drawId = 0;
 
         // InterfaceLoader
@@ -123,6 +123,9 @@ class Game {
         this.hitBoxes = new THREE.Group();
         this.hitBoxes.name = "Hit Boxes";
         scene.add(this.hitBoxes);
+
+        // Intervales d'augmentation de vitesse
+        this.intervales = [];
     }
 
     async loadInterfaces() {
@@ -239,6 +242,7 @@ class Game {
         setTimeout(() => {
             // Attente avant de lancer le niveau pour laisser le temps d'observer la configuration et de se préparer
             if(!userPaused) this.clock.start();
+            this.isStop = false;
 
             // Si quand on lance on a perdu le focus de la fenetre alors on met en pause
             if(!document.hasFocus()) pause();
@@ -249,6 +253,7 @@ class Game {
         // https://stackoverflow.com/questions/50454680/three-js-pausing-animation-when-not-in-use
         // https://stackoverflow.com/questions/38034787/three-js-and-buttons-for-start-and-pause-animation
         this.clock.stop();
+        this.isStop = true;
         // this.toPaused = true;
         // cancelAnimationFrame(this.drawId);
         console.log('pause')
@@ -495,7 +500,20 @@ class Game {
     }
 
     clearScene() {
-        scene.remove(...scene.children);
+        this.invadersGroup?.remove?.(...this.invadersGroup.children);
+        this.projectiles.remove(...this.projectiles.children);
+        this.skeletons.remove(...this.skeletons.children);
+        this.hitBoxes.remove(...this.hitBoxes.children);
+        this.boxesEnabled = false;
+        this.skeletonEnabled = false;
+        scene.remove(this.invadersGroup);
+        scene.remove(this.walls);
+        scene.remove(this.shields);
+        scene.remove(this.boss);
+
+        this.intervales.forEach(id => {
+            clearInterval(id);
+        })
     }
 
     parseLevelFile(file) {
@@ -539,10 +557,36 @@ class Game {
         scene.add(this.walls);
         scene.add(this.shields);
         scene.add(this.boss);
+
+        // Intervales
+        if(!(file.invaders.timeBetweenMoveSpeedIncreasing
+        && file.invaders.timeBetweenProjectilesSpeedIncreasing
+        && file.invaders.projectilesSpeedIncreasingValue
+        && file.invaders.moveSpeedIncreasingValue)) {
+            throw 'Config des invaders invalide !';
+        }
+
+        // Augmentation progessive de la vitesse des invaders
+        this.intervales.push(setInterval(() => {
+            if(!this.isStop) this.invadersGroup.increaseSpeed(file.invaders.moveSpeedIncreasingValue);
+        }, file.invaders.timeBetweenMoveSpeedIncreasing));
+
+        // Augmentation progessive de la vitesse des projectiles
+        this.intervales.push(setInterval(() => {
+            if(!this.isStop) this.invadersGroup.children.forEach(invader => {
+                invader.increaseProjectilesSpeed(file.invaders.projectilesSpeedIncreasingValue);
+            });
+        }, file.invaders.timeBetweenProjectilesSpeedIncreasing));
+
+        // TODO: ici
+        // Augmentation progressive de la precision
+
     }
 
     changeLevel() {
         return new Promise((resolve, reject) => {
+            this.clearScene();
+
             this.level.nextLevel(this.levelsNumber)
             .then(level => {
                 if (level.status == 404 && level != 200) {
@@ -552,16 +596,6 @@ class Game {
                 if(level.ok) {
                     level.json()
                     .then(json => {
-                        this.invadersGroup?.remove?.(...this.invadersGroup.children);
-                        this.projectiles.remove(...this.projectiles.children);
-                        this.skeletons.remove(...this.skeletons.children);
-                        this.hitBoxes.remove(...this.hitBoxes.children);
-                        this.boxesEnabled = false;
-                        this.skeletonEnabled = false;
-                        scene.remove(this.invadersGroup);
-                        scene.remove(this.walls);
-                        scene.remove(this.shields);
-                        scene.remove(this.boss);
 
                         // Affiche l'interface de changement de niveau
                         this.interfaceLoader.show(this.interfaces.changeLevel);

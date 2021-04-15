@@ -48,8 +48,8 @@ class Boss extends Invader {
                         this.canMove = true;
                         this.loop = true;
                         this.visible = true;
-                    }, Math.random() * 10 * 1000);
-                }, 5000);
+                    }, Math.random() * this.localConfig.maxTimeBeforeReapearing);
+                }, this.localConfig.timeBeforeFirstMove);
             }
         }
     }
@@ -61,7 +61,7 @@ class Boss extends Invader {
             console.log('%cAlive', 'color: orange; font-weight: bold');
             this.visible = true;
             this.reset();
-        }, Math.random() * 30 * 1000);
+        }, Math.random() *  this.localConfig.maxTimeBeforeRevive);
 
         return super.death();
     }

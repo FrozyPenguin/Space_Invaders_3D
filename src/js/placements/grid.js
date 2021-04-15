@@ -85,4 +85,10 @@ export class Grid extends THREE.Group {
     getPerLine() {
         return this.invadersConfig.perLine;
     }
+
+    increaseSpeed(speed) {
+        let newSpeed = (Math.abs(this.speed.x) + speed) * Math.sign(this.speed.x);
+        this.speed.x = newSpeed;
+        console.log(this.speed)
+    }
 }
