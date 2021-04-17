@@ -1,6 +1,6 @@
 import { gameEvent } from '../game.js';
 import THREEx from '../../lib/Threex/threex.keyboardstate.js';
-import { changeMute } from '../domEvent/controls.js';
+import { changeMute, changePause } from '../domEvent/controls.js';
 
 export class Keyboard {
     constructor() {
@@ -45,6 +45,16 @@ export class Keyboard {
 
             if(this.state.eventMatches(event, 'h')) {
                 gameEvent.emit('onShowShortcuts');
+            }
+
+            if(this.state.eventMatches(event, 'p')) {
+                if(document.querySelector('#controls').style.display != "none") {
+                    changePause();
+                }
+            }
+
+            if(this.state.eventMatches(event, 't')) {
+                gameEvent.emit('onActivatePostProcessing');
             }
         }.bind(this))
     }

@@ -16,6 +16,7 @@ import { Grid } from './placements/grid.js';
 import { ShieldManager } from './Mechanics/shieldManager.js';
 import { CustomPlacement } from './placements/custom.js';
 import { Boss } from './Characters/boss.js';
+import { PixelsPostProcessing } from './postprocessing/ppPixels.js';
 
 const gameEvent = new EventEmitter();
 
@@ -126,6 +127,13 @@ class Game {
 
         // Intervales d'augmentation de vitesse
         this.intervales = [];
+
+        this.postProcessing();
+    }
+
+    postProcessing() {
+        this.processing = false;
+        this.pixelsPostProcessing = new PixelsPostProcessing(renderer, scene, this.currentCamera, 3);
     }
 
     async loadInterfaces() {
@@ -357,6 +365,7 @@ class Game {
             this.currentCamera.aspect = window.innerWidth / window.innerHeight;
             this.currentCamera.updateProjectionMatrix();
             renderer.render(scene, this.currentCamera);
+            this.pixelsPostProcessing?.resize();
         });
 
         gameEvent.on('onShieldDamage', data => {
@@ -384,6 +393,7 @@ class Game {
 
         gameEvent.on('onToggleGodMode', () => {
             this.godMode = !this.godMode;
+            document.querySelector('#godModeState').innerHTML = this.godMode ? 'On' : 'Off';
         })
 
         gameEvent.on('onKillAll', () => {
@@ -434,6 +444,10 @@ class Game {
             if(shortcutsInterface.style.display == 'none') shortcutsInterface.style.display = 'block';
             else shortcutsInterface.style.display = 'none';
         });
+
+        gameEvent.on('onActivatePostProcessing', () => {
+            this.processing = !this.processing;
+        })
     }
 
     /**
@@ -448,7 +462,8 @@ class Game {
 
         this.currentCamera.update(this.delta);
 
-        renderer.render(scene, this.currentCamera);
+        if(this.processing) this.pixelsPostProcessing.update();
+        else renderer.render(scene, this.currentCamera);
         //this.defender.handleKeyboardLoop(this.delta);
 
         /*global.updateList.forEach(element => {
@@ -483,6 +498,9 @@ class Game {
      * Démarre une partie
      */
     startGame() {
+        this.godMode = false;
+        document.querySelector('#godModeState').innerHTML = 'Off';
+
         this.level.resetLevel();
 
         this.changeLevel()

@@ -124,6 +124,17 @@ function changeMute() {
     }
 }
 
+function changePause() {
+    if(pauseBtn.style.display != 'none') {
+        userPaused = true;
+        pause();
+    }
+    else {
+        userPaused = false;
+        play();
+    }
+}
+
 export {
     initDomControls,
     pause,
@@ -133,6 +144,7 @@ export {
     focus,
     blur,
     changeMute,
+    changePause,
     userMuted,
     userPaused
 }

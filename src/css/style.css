@@ -37,6 +37,10 @@
     right: 5px;
 }
 
+#controls div {
+    cursor: pointer;
+}
+
 #controls div svg {
     stroke: white;
 }
@@ -179,4 +183,14 @@ tbody, thead {
 
 #shortcuts p {
     font-family: Arial, Helvetica, sans-serif !important;
+}
+
+#gameInfo {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    border-radius: 1em;
+    background-color: darkblue;
+    color: white;
+    padding: 10px;
 }
