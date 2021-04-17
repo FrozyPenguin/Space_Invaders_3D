@@ -5,15 +5,19 @@
     "invaders": {
         "timeBetweenMoveSpeedIncreasing": 2500,
         "timeBetweenProjectilesSpeedIncreasing": 2500,
+        "timeBetweenAccuracyIncreasing": 1000,
+        "timeBetweenShootProbIncreasing": 1000,
         "projectilesSpeedIncreasingValue": 0.2,
         "moveSpeedIncreasingValue": 5,
+        "accuracyIncreasingValue": 0.2,
+        "shootProbIncreasingValue": 0.00002,
         "speed": {
             "x": 30,
             "z": 0
         },
         "placement": "grid",
         "perLine": 11,
-        "shootProb": 0.0005,
+        "shootProb": 0.00005,
         "size": 10,
         "padding": 5,
         "types": [
@@ -33,7 +37,8 @@
                     "color": "0x00ffff",
                     "size": 2
                 },
-                "icon": "https://icons.iconarchive.com/icons/goodstuff-no-nonsense/free-space/1024/space-invader-icon.png"
+                "icon": "https://icons.iconarchive.com/icons/goodstuff-no-nonsense/free-space/1024/space-invader-icon.png",
+                "accuracy": 0
             },
             {
                 "name": "les moyens",
@@ -67,7 +72,8 @@
                     "color": "0xffff00",
                     "size": 2
                 },
-                "icon": ""
+                "icon": "",
+                "accuracy": 0
             },
             {
                 "name": "les forts",
@@ -101,7 +107,8 @@
                     "color": "0x00ff00",
                     "size": 2
                 },
-                "icon": ""
+                "icon": "",
+                "accuracy": 0
             }
         ]
     },
@@ -187,7 +194,7 @@
             }
         ],
         "projectiles": {
-            "speed": 200,
+            "speed": 400,
             "model": "",
             "color": "0xffff00",
             "size": 2

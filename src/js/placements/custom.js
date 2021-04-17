@@ -24,7 +24,7 @@ export class CustomPlacement extends Grid {
 
                 if(type.length) {
                     type = type[0];
-                    const invader = new Invader(this.invadersConfig.size, this.invadersConfig.shootProb, type)
+                    const invader = new Invader(this.invadersConfig.size, this.invadersConfig.shootProb, type, this.target);
 
                     invader.position.x = -i * (this.invadersConfig.size + this.invadersConfig.padding);
                     invader.position.z = -lineIndex * (this.invadersConfig.size + this.invadersConfig.padding);
@@ -33,6 +33,8 @@ export class CustomPlacement extends Grid {
                 }
             }
         })
+
+        this.configIa();
     }
 
     getPerLine() {

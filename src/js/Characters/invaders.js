@@ -2,8 +2,8 @@ import * as THREE from '../../lib/Three.js/build/three.module.js';
 import { GameObject } from '../StaticElements/gameObject.js';
 import { scene } from '../scene.js';
 import { Projectile } from '../Mechanics/projectile.js';
-import { takeDamage } from '../Mechanics/health.js';
 import { gameEvent } from '../game.js';
+import { distanceX } from '../Utils/distance.js';
 
 // TODO: Faire l'intelligence artificielle progressive au fil des niveau avec en fonction de l'id du niveau courant on augmente la précision
 class Invader extends GameObject {
@@ -14,7 +14,7 @@ class Invader extends GameObject {
      * @param { typeInvader } type type de l'invader
      * @param { Number } point point distribué lors de l'élimination de l'invader
      */
-    constructor(size, shootProb, localConfig) {
+    constructor(size, shootProb, localConfig, target) {
         if(!localConfig.projectiles) throw "Config de l'invader invalide ! : Aucun projectile";
 
         if(localConfig.models?.length && localConfig.models instanceof Array) {
@@ -47,6 +47,22 @@ class Invader extends GameObject {
         this.size = size;
 
         this.localConfig = JSON.parse(JSON.stringify(localConfig));
+
+        this.accuracy = this.localConfig.accuracy ? this.localConfig.accuracy : 0;
+
+        this.target = target;
+
+        this.boardSize = 0;
+
+        this.shootDelayEnded = true;
+    }
+
+    /**
+     * Définie la taille du plateau de jeu pour les besoins de la pseudo IA
+     * @param { Number } size Taille du plateau de jeu
+     */
+    setBoardSize(size) {
+        this.boardSize = size;
     }
 
     /**
@@ -84,6 +100,11 @@ class Invader extends GameObject {
      */
     shoot() {
         let projectile = new Projectile(this.localConfig.projectiles, this, this.collideGroup);
+
+        this.shootDelayEnded = false;
+        setTimeout(() => {
+            this.shootDelayEnded = true;
+        }, 100)
     }
 
     /**
@@ -100,13 +121,22 @@ class Invader extends GameObject {
      */
     increaseAccuracy(value) {
         this.accuracy += value;
+        if(this.accuracy > 100) this.accuracy = 100;
+    }
+
+    /**
+     * Augmente la probabilité de tire
+     * @param { Number } value Valeur d'augmentation
+     */
+     increaseShootProb(value) {
+        this.probToShoot += value;
     }
 
     /**
      * Detecte si un invader rentre en collision avec le defender
      */
     isCollidingDefender() {
-        let defender = scene.getObjectByName(`Defender`);
+        let defender = this.target;
         if(defender) return this.getBoundingBox().intersectsBox(defender.getBoundingBox());
         return false;
     }
@@ -114,7 +144,7 @@ class Invader extends GameObject {
     /**
      * Detecte si un invader rentre en collision avec un shield
      */
-     isCollidingShields() {
+    isCollidingShields() {
         let shields = scene.getObjectByName(`Shields`);
         shields?.children?.forEach(shield => {
             if(this.getBoundingBox().intersectsBox(shield.getBoundingBox())) {
@@ -123,9 +153,26 @@ class Invader extends GameObject {
         })
     }
 
+    /**
+     * Définie si un invader peut tirer ou non
+     * @returns { Boolean }
+     */
+    canShoot() {
+        let currentObjectPosition = new THREE.Vector3();
+        this.getWorldPosition(currentObjectPosition);
+        return distanceX(currentObjectPosition, this.target.position) <= (100 - this.accuracy) / 100 * (this.boardSize / 2) + 1 && this.shootDelayEnded;
+    }
+
+    /**
+     * Boucle d'animation des invaders
+     * @param {*} delta
+     */
     update(delta) {
-        //const haveToShoot = Math.random();
-        if(Math.random() < this.probToShoot) this.shoot();
+        if(this.canShoot()) {
+            if(Math.random() < this.probToShoot) {
+                this.shoot();
+            }
+        }
 
         // Si un invader rentre en collision avec le defender, alors la partie est terminé même si on est invincible
         if(this.isCollidingDefender()) {
@@ -135,8 +182,11 @@ class Invader extends GameObject {
         this.isCollidingShields();
     }
 
+    /**
+     * @returns une copie de l'objey actuel
+     */
     clone() {
-        return this;
+        return JSON.parse(JSON.stringify(this));
     }
 }
 

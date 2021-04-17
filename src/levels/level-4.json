@@ -3,6 +3,14 @@
     "id": 4,
     "turnBeforeDeath": 15,
     "invaders": {
+        "timeBetweenMoveSpeedIncreasing": 2500,
+        "timeBetweenProjectilesSpeedIncreasing": 2500,
+        "timeBetweenAccuracyIncreasing": 1000,
+        "timeBetweenShootProbIncreasing": 1000,
+        "projectilesSpeedIncreasingValue": 0.2,
+        "moveSpeedIncreasingValue": 5,
+        "accuracyIncreasingValue": 0.2,
+        "shootProbIncreasingValue": 0.00002,
         "speed": {
             "x": 30,
             "z": 0
@@ -48,7 +56,8 @@
                     "color": "0xFF0000",
                     "size": 2
                 },
-                "alias": "O"
+                "alias": "O",
+                "accuracy": 0
             },
             {
                 "name": "le noir",
@@ -64,7 +73,8 @@
                     "color": "0xFF0000",
                     "size": 2
                 },
-                "alias": "N"
+                "alias": "N",
+                "accuracy": 0
             },
             {
                 "name": "Jaune",
@@ -81,7 +91,8 @@
                     "color": "0xFF0000",
                     "size": 2
                 },
-                "alias": "J"
+                "alias": "J",
+                "accuracy": 0
             },
             {
                 "name": "le rouge",
@@ -99,7 +110,8 @@
                     "color": "0xFF0000",
                     "size": 2
                 },
-                "alias": "R"
+                "alias": "R",
+                "accuracy": 0
             },
             {
                 "name": "le blanc",
@@ -118,7 +130,8 @@
                     "color": "0xFF0000",
                     "size": 2
                 },
-                "alias": "B"
+                "alias": "B",
+                "accuracy": 0
             }
         ]
     },
@@ -165,6 +178,9 @@
         "padding": 50
     },
     "boss": {
+        "timeBeforeFirstMove": 5000,
+        "maxTimeBeforeReapearing": 10000,
+        "maxTimeBeforeRevive": 30000,
         "speed": {
             "x": 60,
             "z": 0
@@ -188,7 +204,7 @@
             }
         ],
         "projectiles": {
-            "speed": 200,
+            "speed": 400,
             "model": "",
             "color": "0xffff00",
             "size": 2

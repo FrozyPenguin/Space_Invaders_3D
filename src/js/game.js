@@ -526,14 +526,13 @@ class Game {
 
         // Creation des invaders du niveau actuel
         if(file.invaders.placement == "grid") {
-            this.invadersGroup = new Grid(`Les Envahisseurs du level ${file.id}`, file.invaders, file.turnBeforeDeath);
-            this.invadersGroup.createGrid();
+            this.invadersGroup = new Grid(`Les Envahisseurs du level ${file.id}`, file.invaders, file.turnBeforeDeath, this.defender);
         }
         else if(file.invaders.placement == "custom") {
-            this.invadersGroup = new CustomPlacement(`Les Envahisseurs du level ${file.id}`, file.invaders, file.turnBeforeDeath);
-            this.invadersGroup.createGrid();
+            this.invadersGroup = new CustomPlacement(`Les Envahisseurs du level ${file.id}`, file.invaders, file.turnBeforeDeath, this.defender);
         }
         else throw 'Configuration de placement invalide ou inexistante !';
+        this.invadersGroup.createGrid();
 
         this.defender.setZPosition(-(file.invaders.size + file.invaders.padding) * ((this.invadersGroup.getNbInvaders() / this.invadersGroup.getPerLine()) + file.turnBeforeDeath));
 
@@ -559,10 +558,14 @@ class Game {
         scene.add(this.boss);
 
         // Intervales
-        if(!(file.invaders.timeBetweenMoveSpeedIncreasing
-        && file.invaders.timeBetweenProjectilesSpeedIncreasing
-        && file.invaders.projectilesSpeedIncreasingValue
-        && file.invaders.moveSpeedIncreasingValue)) {
+        if(!(file.invaders.timeBetweenMoveSpeedIncreasing &&
+            file.invaders.timeBetweenProjectilesSpeedIncreasing &&
+            file.invaders.timeBetweenAccuracyIncreasing &&
+            file.invaders.timeBetweenShootProbIncreasing &&
+            file.invaders.projectilesSpeedIncreasingValue &&
+            file.invaders.moveSpeedIncreasingValue &&
+            file.invaders.accuracyIncreasingValue &&
+            file.invaders.shootProbIncreasingValue)) {
             throw 'Config des invaders invalide !';
         }
 
@@ -578,9 +581,19 @@ class Game {
             });
         }, file.invaders.timeBetweenProjectilesSpeedIncreasing));
 
-        // TODO: ici
         // Augmentation progressive de la precision
+        this.intervales.push(setInterval(() => {
+            if(!this.isStop) this.invadersGroup.children.forEach(invader => {
+                invader.increaseAccuracy(file.invaders.accuracyIncreasingValue);
+            });
+        }, file.invaders.timeBetweenAccuracyIncreasing));
 
+        // Augmentation progressive de la probabilité de tire
+        this.intervales.push(setInterval(() => {
+            if(!this.isStop) this.invadersGroup.children.forEach(invader => {
+                invader.increaseShootProb(file.invaders.shootProbIncreasingValue);
+            });
+        }, file.invaders.timeBetweenShootProbIncreasing));
     }
 
     changeLevel() {

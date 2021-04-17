@@ -2,12 +2,14 @@ import * as THREE from '../../lib/Three.js/build/three.module.js';
 import { Invader } from '../Characters/invaders.js';
 
 export class Grid extends THREE.Group {
-    constructor(name, invadersConfig, turnBeforeDeath) {
+    constructor(name, invadersConfig, turnBeforeDeath, target) {
         super();
         this.invadersConfig = invadersConfig;
         this.name = name;
         this.speed = this.invadersConfig.speed;
         this.turnBeforeDeath = turnBeforeDeath;
+        this.target = target;
+        this.boardSize = 0;
     }
 
     /**
@@ -34,7 +36,7 @@ export class Grid extends THREE.Group {
 
             let nbInvaders = type.lineCount * this.invadersConfig.perLine;
             for(let i = 0; i < nbInvaders; i++) {
-                let invader = new Invader(this.invadersConfig.size, this.invadersConfig.shootProb, type);
+                let invader = new Invader(this.invadersConfig.size, this.invadersConfig.shootProb, type, this.target);
 
                 if(this.children.length != 0) {
                     if(i  % this.invadersConfig.perLine == 0) {
@@ -51,8 +53,20 @@ export class Grid extends THREE.Group {
                 this.add(invader);
             }
         })
+
+        this.configIa();
     }
 
+    /**
+     * Définie la taille du tableau de jeu sur les invaders pour configurer l'IA
+     */
+    configIa() {
+        this.boardSize = (this.invadersConfig.size + this.invadersConfig.padding) * ((this.children.length / this.getPerLine()) + this.turnBeforeDeath);
+
+        this.children.forEach(invader => {
+            invader.setBoardSize(this.boardSize * 1.5);
+        });
+    }
 
     /**
      * Créer le mouvement des invaders
@@ -64,11 +78,11 @@ export class Grid extends THREE.Group {
             if(invader.isCollidingWall('left')) {
                 this.speed.x = this.speed.x > 0 ? this.speed.x * -1 : this.speed.x;
 
-                this.speed.z = -(this.invadersConfig.size + this.invadersConfig.padding) * ((this.children.length / this.getPerLine()) + this.turnBeforeDeath) / this.turnBeforeDeath;
+                this.speed.z = -this.boardSize / this.turnBeforeDeath;
             }
             else if(invader.isCollidingWall('right')) {
                 this.speed.x = this.speed.x < 0 ? this.speed.x * -1 : this.speed.x;
-                this.speed.z = -(this.invadersConfig.size + this.invadersConfig.padding) * ((this.children.length / this.getPerLine()) + this.turnBeforeDeath) / this.turnBeforeDeath;
+                this.speed.z = -this.boardSize / this.turnBeforeDeath;
             }
         })
 
@@ -89,6 +103,5 @@ export class Grid extends THREE.Group {
     increaseSpeed(speed) {
         let newSpeed = (Math.abs(this.speed.x) + speed) * Math.sign(this.speed.x);
         this.speed.x = newSpeed;
-        console.log(this.speed)
     }
 }

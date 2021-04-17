@@ -6,14 +6,15 @@ class Boss extends Invader {
     // Soit on fait une bounding box sur le defender et le boss et on compare le min et le max de la box3 en ajoutant des offsets et si on est dedans alors on tire
 
     constructor(size, localConfig, initPos, target) {
-        super(size, 0, localConfig);
+        super(size, 0, localConfig, target);
         this.name = "Boss";
-        this.target = target;
         this.canMove = false;
         this.initPos = initPos;
         this.speed = localConfig.speed;
         this.loop = true;
         this.reset();
+        this.probToShoot = 1;
+        this.accuracy = 100;
     }
 
     reset() {
@@ -39,7 +40,7 @@ class Boss extends Invader {
 
                 this.position.x += delta * this.speed.x;
 
-                // TODO: IA de tire
+                super.update(delta);
             }
             else {
                 this.loop = false;
