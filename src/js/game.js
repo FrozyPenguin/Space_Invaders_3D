@@ -22,15 +22,6 @@ const gameEvent = new EventEmitter();
 
 class Game {
 
-    // TODO: Faire le comportement du jeu :
-        // - les invaders bougent (à faire dans invaderMovement) - fait
-        // - ils peuvent mourir (à faire dans invaders.js) - fait
-        // - s'ils touchent le joueur il a perdu (à faire ici) - fait
-        // - s'il les tue tous il a gagné (à faire ici) - Fait
-        // - les invaders deviennent de plus en plus précis au cours de la partie - A faire
-        // (à faire ici)
-    //
-
     // TODO : Implémenter la manette si j'ai le temps
     // Idée jeu a la manette : https://gamepad-tester.com/for-developers
     // https://samiare.github.io/Controller.js/
