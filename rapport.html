@@ -1,1 +1,83 @@
-Il marche pas 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <title>Rapport Space Invaders</title>
+</head>
+<body>
+    <!-- Trucs qui doivent figurer sur cette page :
+        - Mettre en valeur les choix d'implémentation sur les aspects précisés dans le sujet et sur tout autre ajout "valorisable"
+        - Fond mais surtout forme évalués
+        - Le rapport doit reprendre toutes les sections du sujet donc :
+            - Déroulement du jeu
+                - Les règles du jeu sont classiques pour un space invaders :
+                    - le joueur tire, les ennemis se blessent
+                    - les ennemis avancent vers le joueur à chaque fois qu'ils touchent un des murs de droite ou de gauche
+                    - le joueur à 3 vies au départ puis en gagne 1 à chaque niveau réussi (peut dépasser 3)
+                    - les ennemis peuvent avoir plusieurs vies
+                    - 3 boucliers pour protéger le joueur, 5 vies chacun
+                    - 4 niveaux différents
+                    - 1 boss
+            - Technologies logicielles
+                - ThreeJs pour le rendu 3D,
+                - ThreeX keyboardstate, utilisé ici pour les évènements clavier
+                - Dépendance dev : StatsJs, pour vérifier la fluidité du jeu lors du développement
+            - Architecture logicielle
+                - Reprise de l'arborescence proposée dans le sujet
+                - Fichiers .js triés par fonctionnalité
+            - Graphisme
+                - les ennemis qui ont plusieurs vies on également plusieurs sprites en fonction des dégâts infligés
+                - Modèles 3D tirés de Pokémon, tirés de plusieurs des versions 3D (https://www.models-resource.com/3ds/pokemonxy/)
+                - Décor : Arène "Super Training Stadium" du jeu Pokémon X et Y (https://www.models-resource.com/3ds/pokemonxy/model/12117/)
+                - Les projectiles sont des modèles de "Mémoire ball"
+                - Un postProcessing qui donne un effect "pixélisé" au jeu pour rappeler les vieilles versions de pokemons
+            - Dialogues avec l'utilisateur
+            - Points de vue caméra
+                4 positions de caméra
+                - Classique de dessus
+                - Vue mouvante (point de vue du defender)
+                - Vue de derriere le defender
+                - Vue du coté droit de l'arène (vue gradins)
+            - Gestion des collisions
+                - Les collisions sont géré avec des groupes de collision
+                on vient générer une Box3 (hit box) pour chaque élement du groupe et on check si la box de notre element collide avec une de celle du groupe
+            - Dynamisme (augmentation de la difficulté des ennemis au cours du combat et des niveaux)
+                - vitesse de déplacement des ennemis augmente au cours de la partie
+                - précision ennemie ++
+                - vitesse de tir ennemie ++
+                - vitesse des projectiles ennemis ++
+            - Intelligence artificielle de l'adversaire avec "dextérité" qui devrai augmenter en fonction des niveaux
+                - En fonction de la précision qu'ils ont, les ennemis vont tenter de tirer au mieux sur le joueur sachat que leurs projectiles vont tout droit
+                ( avec une précision de 100%, un ennemi va uniquement tirer s'il est en face du joueur ) (inclure extrait de code IA)
+            - Musique et sons
+                - Thème principal : https://www.youtube.com/watch?v=sxSqpreOBu0
+            - Triche (touches pour gagner à tous les coups)
+            - Les petits plus
+                - Les niveaux sont créés à partir de fichier JSON présent dans le répertoire src/levels. Ces fichiers contiennent l'intégralité des configuration des niveaux.
+                    On peut ainsi configuré la position des invaders suivant deux modèle (grid : placement en rectangle, custom : Placement personalisé en fonction des alias inspiré par le système d'ajout de craft lors du développement d'un mod ou plugin du jeu Minecraft)
+                    On peut également choisir le nom, nombre, modeles des invaders présent dans le niveau
+                    Il est possible pour les invaders :
+                        - d'ajouter des invaders tres facilement
+                        - de configurer les projectile tiré par les invaders
+                        - de configurer les caractéristique des invaders (précision, vitesse de déplacement, probabilité de tire, vie, taille, icons sur le menu de départ, le nombre de point rapporté)
+                    Pour le boss, en plus des aspects des invaders, le temps avant le premier mouvement, le temps avant le prochain passage ainsi que le temps avant de revivre est configurable
+                    Pour le defender la vitesse de deplacement, les projectiles, le model, le delai avant le prochain tire, la taille
+                    Bouclier
+
+                    Mettre un modele d'objet de type model, defender, invader, boss, shields, global (nom du niveau, id, tour avant la mort)
+
+                - La position du defender est defini en fonction du nombre d'invader, leurs tailles et le nombre de tour avant la mort
+                - Pour ajouter un niveau, il suffit d'ajouter un fichier JSON correcte dans le dossier levels et il sera automatique ajouté
+                - Tout les interfaces sont insérées dans des fichier HTML et chargé ensuite dans la page principale rendant plus simple la modification lors du développement et permettant de mieux organiser le projet
+                - Le jeu est géré par des évenement javascript issue de la classe eventEmitter inspiré de celle disponible sur nodeJS (trouvé sur github et modifié par mes soins)
+                - Le meilleur score est sauvagardé dans le localStorage du navigateur permettant ainsi de retrouver son meilleur score à travers les parties même après fermeture de la page ou du navigateur pour partager et comparer son score avec ses amis
+                - Des Bonus ont également été ajouté (bonus de vie representait par un coeur rouge) il a 0.01% de chance d'apparaitre à la mort d'un invader
+    -->
+    On est insane trust me
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</body>
+</html>

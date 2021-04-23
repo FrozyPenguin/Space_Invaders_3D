@@ -72,11 +72,10 @@ class Invader extends GameObject {
         if(this.health <= 0) {
             this.visible = false;
 
-            // TODO: Génération aléatoire de bonus
-            // Plus on est au level, moins on a de proba
-            let level = 1;
             const bonus = Math.random();
-            if(bonus < 0.01 * level) gameEvent.emit('onBonus', { pos: this.position });
+            const pos = new THREE.Vector3();
+            this.getWorldPosition(pos);
+            if(bonus < 0.01) gameEvent.emit('onBonus', { pos });
             return true;
         }
         else {
@@ -127,7 +126,7 @@ class Invader extends GameObject {
      * Augmente la probabilité de tire
      * @param { Number } value Valeur d'augmentation
      */
-     increaseShootProb(value) {
+    increaseShootProb(value) {
         this.probToShoot += value;
     }
 

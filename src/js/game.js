@@ -17,6 +17,7 @@ import { ShieldManager } from './Mechanics/shieldManager.js';
 import { CustomPlacement } from './placements/custom.js';
 import { Boss } from './Characters/boss.js';
 import { PixelsPostProcessing } from './postprocessing/ppPixels.js';
+import { healthBonus } from './bonus/healthBonus.js';
 
 const gameEvent = new EventEmitter();
 
@@ -120,6 +121,8 @@ class Game {
         this.intervales = [];
 
         this.postProcessing();
+
+        this.possibleBonus = [ healthBonus ];
     }
 
     postProcessing() {
@@ -196,6 +199,7 @@ class Game {
 
         this.displayBestScore();
         this.interfaceLoader.show(this.interfaces.menu);
+        if(this.bestScore) document.querySelector('#bestScore').innerHTML = `Meilleur score : ${this.bestScore}`;
         document.title = "Space Invaders 3D";
     }
 
@@ -326,9 +330,8 @@ class Game {
         });
 
         gameEvent.on('onBonus', data => {
-            console.log('Bonus');
-            // Position de l'invader a sa mort
-            console.log(data.pos);
+            const bonus = new this.possibleBonus[Math.floor(Math.random() * this.possibleBonus.length)](data.pos)
+            bonus.setCollideGroup([ this.defender ]);
         });
 
         gameEvent.on('onPause', levelChange => {
@@ -349,6 +352,10 @@ class Game {
 
         gameEvent.on('onChangeCamera', data => {
             this.changeCamera(data.code);
+        });
+
+        gameEvent.on('onGiveHealth', () => {
+            giveHealth();
         });
 
         gameEvent.on('onResize', data => {
@@ -379,6 +386,7 @@ class Game {
         gameEvent.on('onMenu', () => {
             this.displayBestScore();
             this.interfaceLoader.show(this.interfaces.menu);
+            if(this.bestScore) document.querySelector('#bestScore').innerHTML = `Meilleur score : ${this.bestScore}`;
             document.title = "Space Invaders 3D";
         })
 
