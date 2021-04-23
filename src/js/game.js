@@ -18,21 +18,11 @@ import { CustomPlacement } from './placements/custom.js';
 import { Boss } from './Characters/boss.js';
 import { PixelsPostProcessing } from './postprocessing/ppPixels.js';
 import { healthBonus } from './bonus/healthBonus.js';
+import { Gamepad } from './Mechanics/gamepad.js';
 
 const gameEvent = new EventEmitter();
 
 class Game {
-
-    // TODO : Implémenter la manette si j'ai le temps
-    // Idée jeu a la manette : https://gamepad-tester.com/for-developers
-    // https://samiare.github.io/Controller.js/
-    // Idée jeu jojo avec le defender c'est un rageux qui veut exterminer les jojo poses
-    // Idée model invaders : https://www.youtube.com/watch?v=Pavv_E2Uss8
-    // Idée start : https://www.youtube.com/watch?v=_eL3-6YYWYE
-    // Idée fond sonore : https://www.youtube.com/watch?v=2MtOpB5LlUA
-
-    // Déplacer tout les inputs dans une classe keyboard
-
     /**
      * Constructeur de la class Game
      */
@@ -41,6 +31,7 @@ class Game {
         this.clock = new THREE.Clock(false);
         this.keyboard = new Keyboard();
         this.level = new LevelManager();
+        this.gamepad = new Gamepad();
 
         // Clock
         this.delta = 0;
@@ -474,6 +465,7 @@ class Game {
         // par contre l'inconvénient c'est que la boucle d'animation continu de tourner
         if(this.clock.running) {
             this.keyboard.loop(this.delta);
+            this.gamepad.update(this.delta);
 
             const elementToRemove = scene.remove(scene.getObjectByProperty('toRemove', true));
             if(elementToRemove) scene.remove(elementToRemove);
