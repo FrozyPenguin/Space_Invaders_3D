@@ -6,15 +6,14 @@ class healthBonus extends Bonus {
         super(position);
 
         this.loadModel({
-            src: "/src/medias/models/bonus/heart.obj",
-            mtl: "/src/medias/models/bonus/heart.mtl",
+            src: "/src/medias/models/bonus/heart.gltf",
             scale: {
-                x: 20,
-                y: 20,
-                z: 20
+                x: 1000,
+                y: 1000,
+                z: 1000
             },
             rotate: {
-                x: 0,
+                x: 90,
                 y: 180,
                 z: 0
             }

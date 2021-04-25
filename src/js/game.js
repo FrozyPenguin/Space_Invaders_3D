@@ -51,10 +51,6 @@ class Game {
         }
         else this.bestScore = 0;
 
-        // Murs
-        // this.walls = initWalls();
-        // scene.add(this.walls);
-
         // Camera
         this.currentCamera = new GameCamera(renderer);
         //this.currentCamera.addControls();
@@ -70,11 +66,6 @@ class Game {
         this.projectiles.name = "Projectiles";
         scene.add(this.projectiles);
 
-        // Invaders
-        // this.invadersGroup = new Grid('Les envahisseurs 2.0');
-        // scene.add(this.invadersGroup);
-
-        // TODO: sound design
         // Chargement de la musique et des effets sonores
         const listener = new THREE.AudioListener();
         //this.currentCamera.add(listener);
@@ -82,12 +73,44 @@ class Game {
         // create a global audio source
         this.music = new THREE.Audio(listener);
 
+        this.soundInvaderDeath = new THREE.Audio(listener);
+
+        this.soundShoot = new THREE.Audio(listener);
+
+        this.soundWin = new THREE.Audio(listener);
+
+        this.soundButton = new THREE.Audio(listener);
+
         // load a sound and set it as the Audio object's buffer
         const audioLoader = new THREE.AudioLoader();
         audioLoader.load('/src/medias/sounds/laMusique.mp3', buffer => {
             this.music.setBuffer(buffer);
             this.music.setLoop(true);
-            this.music.setVolume(0.5);
+            this.music.setVolume(0.3);
+        });
+
+        audioLoader.load('/src/medias/sounds/shoot.mp3', buffer => {
+            this.soundShoot.setBuffer(buffer);
+            this.soundShoot.setLoop(false);
+            this.soundShoot.setVolume(0.2);
+        });
+
+        audioLoader.load('/src/medias/sounds/invaderDeath.mp3', buffer => {
+            this.soundInvaderDeath.setBuffer(buffer);
+            this.soundInvaderDeath.setLoop(false);
+            this.soundInvaderDeath.setVolume(0.2);
+        });
+
+        audioLoader.load('/src/medias/sounds/win.mp3', buffer => {
+            this.soundWin.setBuffer(buffer);
+            this.soundWin.setLoop(false);
+            this.soundWin.setVolume(0.2);
+        });
+
+        audioLoader.load('/src/medias/sounds/buttonClicked.mp3', buffer => {
+            this.soundButton.setBuffer(buffer);
+            this.soundButton.setLoop(false);
+            this.soundButton.setVolume(0.2);
         });
 
         // Chargement des interfaces
@@ -146,6 +169,12 @@ class Game {
                 // Afficher menu
                 this.displayMenuInterface();
                 // this.startGame();
+
+                document.querySelectorAll('button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        this.soundButton.play();
+                    });
+                })
             }, 1000)
         })
         .catch(error => {
@@ -260,24 +289,12 @@ class Game {
     }
 
     unMute() {
-        console.log("oui")
         // Lancer la musique
         if(!this.music.isPlaying) this.music.play();
     }
 
     receiveEvent() {
         // Liste d'event
-        /**
-         * X onInvaderDeath qui prend un invader en param
-         * X onPause
-         * X onResume
-         * X onMute
-         * X onUnmute
-         * X onStart
-         * X onChangeLevel qui prend level + 1
-         * X onDefenderMove qui prend la direction (du coup dans defender on aura juste une methode move et c'est plus lui qui gerera le clavier)
-         * X onDefenderShoot
-         */
 
         gameEvent.on('onDefenderMove', data => {
             this.defender.move(data.direction, data.delta);
@@ -287,6 +304,9 @@ class Game {
             // Ne peut tirer que si l'horloge tourne et que donc le jeu n'est pas en pause
             if(!this.clock.running) return;
             this.defender.shoot();
+
+            // Joue le son de tire
+            if(!this.soundShoot.isPlaying) this.soundShoot.play();
         });
 
         gameEvent.on('onDefenderDamage', () => {
@@ -299,6 +319,8 @@ class Game {
         gameEvent.on('onInvaderDeath', data => {
             if(data.death()) {
                 this.score += data.points;
+
+                if(!this.soundInvaderDeath.isPlaying) this.soundInvaderDeath.play();
 
                 document.querySelector('#score #actual').innerHTML = this.score;
 
@@ -474,7 +496,7 @@ class Game {
             scene.traverseVisible((child) => {
                 if(child instanceof THREE.SkeletonHelper || child instanceof Boss) return;
                 if(child.update?.length && !(child instanceof THREE.BoxHelper)) child.update(this.delta)
-                else if(child.update) child.update(this.delta);
+                else if(child.update) child.update();
             });
 
             if(this.boss?.loop) this.boss.update(this.delta);
@@ -700,6 +722,8 @@ class Game {
             // Afficher ecran de win
             this.interfaceLoader.show(this.interfaces.win);
             document.title = "Bravo !";
+
+            this.soundWin.play();
         }
 
         // Afficher recap des scores

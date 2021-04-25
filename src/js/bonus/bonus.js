@@ -58,6 +58,7 @@ class Bonus extends GameObject {
      * @param { Number } delta temps écoulé depuis la dérniere période d'horloge
      */
     update(delta) {
+        super.update(delta);
         this.position.z -= this.vel * delta;
         this.collide();
     }

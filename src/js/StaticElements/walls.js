@@ -41,18 +41,14 @@ function initWalls(nbCharacters, characterSize, characterPadding, characterPerLi
     let bottomWall = new Wall('bottomWall', size, size, {x: 0, y: 5, z: -offset/2}, {x: 0, y: 0, z: 0});
     bottomWall.remove(...bottomWall.children)
     bottomWall.loadModel({
-        src: "/src/medias/models/terrain/Super_Training_Stage.obj",
-        mtl: "/src/medias/models/terrain/Super_Training_Stage.mtl",
+        src: "/src/medias/models/terrain/Super_Training_Stage.gltf",
         scale: {
             x: size/5,
             y: size/5,
             z: size/5
         }
     })
-    .then(() => {
-        let addedModel = bottomWall.children[0];
-        addedModel.children.splice(addedModel.children.findIndex(element => element.name == 'flag_3_flag_3_spa_prop00.png'), 1);
-    });
+
     planeGroup.add(bottomWall);
 
     // Gauche

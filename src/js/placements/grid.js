@@ -77,7 +77,6 @@ export class Grid extends THREE.Group {
 
             if(invader.isCollidingWall('left')) {
                 this.speed.x = this.speed.x > 0 ? this.speed.x * -1 : this.speed.x;
-
                 this.speed.z = -this.boardSize / this.turnBeforeDeath;
             }
             else if(invader.isCollidingWall('right')) {

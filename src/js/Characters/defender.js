@@ -59,6 +59,8 @@ class Defender extends GameObject {
         this.width = localConfig.width;
 
         this.localConfig = localConfig;
+
+        this.projectile = new Projectile(this.localConfig.projectiles, this.collideGroup, false, this);
     }
 
     /**
@@ -67,12 +69,29 @@ class Defender extends GameObject {
      * @param { Number } delta temps écoulé depuis la derniere période d'horloge
      */
     move(dir, delta) {
+        if(this.moveEndedTimeout) {
+            clearTimeout(this.moveEndedTimeout);
+        }
+        else {
+            this.startAnimation('action');
+        }
+
         if(dir === 'right' && !this.isCollidingWall('right')) {
             this.position.x -= this.xSpeed * delta;
+            let wall = scene.getObjectByName(`rightWall`);
+            this.lookAt(wall.position.x, this.position.y, this.position.z);
         }
         else if(dir === 'left' && !this.isCollidingWall('left')) {
             this.position.x += this.xSpeed * delta;
+            let wall = scene.getObjectByName(`leftWall`);
+            this.lookAt(wall.position.x, this.position.y, this.position.z);
         }
+
+        this.moveEndedTimeout = setTimeout(() => {
+            this.startAnimation('idle');
+            this.moveEndedTimeout = null;
+            this.lookAt(0, 0, 0);
+        }, 100);
     }
 
     /**
@@ -82,7 +101,12 @@ class Defender extends GameObject {
         if(this.readyToShoot) {
             this.readyToShoot = false;
 
-            let projectile = new Projectile(this.localConfig.projectiles, this, this.collideGroup);
+            const center = new THREE.Vector3(0, 0, 0);
+            //let projectile = new Projectile(this.localConfig.projectiles, this, this.collideGroup);
+            let projectile = new Projectile(this.localConfig.projectiles, this.collideGroup, true, this).copy(this.projectile, true);
+            projectile.position.x = this.getWorldPosition(center).x;
+            projectile.position.z = this.getWorldPosition(center).z;
+            scene.getObjectByName('Projectiles').add(projectile);
 
             setTimeout(() => this.readyToShoot = true, this.shootDelay);
         }

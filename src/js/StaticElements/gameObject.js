@@ -1,6 +1,5 @@
 import * as THREE from '../../lib/Three.js/build/three.module.js';
-import { OBJLoader } from '../../lib/Three.js/examples/jsm/loaders/OBJLoader.js';
-import { MTLLoader } from '../../lib/Three.js/examples/jsm/loaders/MTLLoader.js';
+import { GLTFLoader } from '../../lib/Three.js/examples/jsm/loaders/GLTFLoader.js';
 import { scene } from '../scene.js';
 
 export class GameObject extends THREE.Group {
@@ -23,38 +22,63 @@ export class GameObject extends THREE.Group {
 
     loadModel(model) {
         return new Promise((resolse, reject) => {
+            const loader = new GLTFLoader()
 
-            const loader = new OBJLoader();
-            const mtlLoader = new MTLLoader();
+            loader.load(model.src,
+                (obj) => {
+                    if(!(model.scale && model.scale != {})) model.scale ={ x: 1, y: 1, z: 1 };
+                    if(!(model.rotate && model.rotate != {})) model.rotate = { x: 0, y: 0, z: 0 };
 
-            mtlLoader.load(model.mtl, (texture) => {
-                texture.preload();
-                loader.setMaterials(texture);
+                    obj.scene.scale.x *= model.scale.x;
+                    obj.scene.scale.y *= model.scale.y;
+                    obj.scene.scale.z *= model.scale.z;
+                    obj.scene.rotation.x = THREE.Math.degToRad(model.rotate.x);
+                    obj.scene.rotation.y = THREE.Math.degToRad(model.rotate.y);
+                    obj.scene.rotation.z = THREE.Math.degToRad(model.rotate.z);
 
-                loader.load(model.src,
-                    (obj) => {
-                        if(!(model.scale && model.scale != {})) model.scale ={ x: 1, y: 1, z: 1 };
-                        if(!(model.rotate && model.rotate != {})) model.rotate = { x: 0, y: 0, z: 0 };
+                    if(model.animated) {
+                        this.animated = true;
+                        const animations = obj.animations;
+                        this.mixer = new THREE.AnimationMixer(obj.scene);
 
-                        obj.scale.x *= model.scale.x;
-                        obj.scale.y *= model.scale.y;
-                        obj.scale.z *= model.scale.z;
-                        obj.rotation.x = THREE.Math.degToRad(model.rotate.x);
-                        obj.rotation.y = THREE.Math.degToRad(model.rotate.y);
-                        obj.rotation.z = THREE.Math.degToRad(model.rotate.z);
+                        const [ idleAnim ] = animations.filter(animation => animation.name == 'Idle');
+                        const [ actionAnim ] = animations.filter(animation => animation.name == 'Action');
 
-                        this.add(obj);
-                        resolse();
-                    },
-                    (xhr) => { // onProgress
-                        console.log((xhr.loaded / xhr.total * 100 ) + '% loaded');
-                    },
-                    (error) => { // onError
-                        reject(error);
+                        let idle = idleAnim ? this.mixer.clipAction(idleAnim) : null;
+                        let action = actionAnim ? this.mixer.clipAction(actionAnim) : null;
+
+                        this.actions = { idle, action };
+
+                        this.startAnimation('idle');
                     }
-                );
-            });
+
+                    this.add(obj.scene);
+                    resolse();
+                },
+                (xhr) => { // onProgress
+                    // console.log((xhr.loaded / xhr.total * 100 ) + '% loaded');
+                },
+                (error) => { // onError
+                    reject(error);
+                }
+            );
         });
+    }
+
+    startAnimation(name) {
+        if(!this.animated) return;
+
+        this.mixer.stopAllAction();
+
+        const [ running ] = Object.values(this.actions).filter(action => action?.isRunning());
+
+        const action = this.actions[name];
+        action.reset();
+
+        if(!action) throw 'Animation not exist';
+
+        if(!running) action.play();
+        else action.crossFadeFrom(running, 1);
     }
 
     loadAllModels() {
@@ -126,5 +150,17 @@ export class GameObject extends THREE.Group {
             const boxHelper = new THREE.BoxHelper(this, new THREE.Color(0xFF0000));
             boxGroup.add(boxHelper);
         }
+    }
+
+    update(delta) {
+        if(this.animated) this.mixer.update(delta);
+    }
+
+    /**
+     * @returns une copie de l'objey actuel
+     */
+    clone() {
+        let copied = Object.assign(Object.getPrototypeOf(this), this);
+        return copied;
     }
 }

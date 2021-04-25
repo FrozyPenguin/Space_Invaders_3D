@@ -19,11 +19,27 @@
         "perLine": 11,
         "shootProb": 0.00005,
         "size": 10,
-        "padding": 5,
+        "padding": 10,
         "types": [
             {
                 "name": "les faibles",
-                "health": 3,
+                "health": 1,
+                "models": [
+                    {
+                        "src": "/src/medias/models/Pokemons/evoli.gltf",
+                        "scale": {
+                            "x": 4,
+                            "y": 4,
+                            "z": 4
+                        },
+                        "rotate": {
+                            "x": 0,
+                            "y": 90,
+                            "z": 0
+                        },
+                        "animated": true
+                    }
+                ],
                 "colors": [
                     "0xffffff",
                     "0xff0000",
@@ -45,18 +61,18 @@
                 "health": 1,
                 "models": [
                     {
-                        "src": "/src/medias/models/Pokemons/carapuce.obj",
-                        "mtl": "/src/medias/models/Pokemons/carapuce.mtl",
+                        "src": "/src/medias/models/Pokemons/pikachu.gltf",
                         "scale": {
-                            "x": 10,
-                            "y": 10,
-                            "z": 10
+                            "x": 0.35,
+                            "y": 0.35,
+                            "z": 0.35
                         },
                         "rotate": {
                             "x": 0,
                             "y": 180,
                             "z": 0
-                        }
+                        },
+                        "animated": true
                     }
                 ],
                 "colors": [
@@ -64,7 +80,7 @@
                     "0xff0000",
                     "0x00ff00"
                 ],
-                "lineCount": 1,
+                "lineCount": 2,
                 "points": 20,
                 "projectiles": {
                     "speed": 200,
@@ -80,18 +96,18 @@
                 "health": 1,
                 "models": [
                     {
-                        "src": "/src/medias/models/Pokemons/evoli.obj",
-                        "mtl": "/src/medias/models/Pokemons/evoli.mtl",
+                        "src": "/src/medias/models/Pokemons/carapuce.gltf",
                         "scale": {
-                            "x": 10,
-                            "y": 10,
-                            "z": 10
+                            "x": 4,
+                            "y": 4,
+                            "z": 4
                         },
                         "rotate": {
                             "x": 0,
-                            "y": 180,
+                            "y": 90,
                             "z": 0
-                        }
+                        },
+                        "animated": true
                     }
                 ],
                 "colors": [
@@ -116,15 +132,14 @@
         "speed": 100,
         "shotDelay": 0,
         "model": {
-            "src": "/src/medias/models/defender.obj",
-            "mtl": "/src/medias/models/defender.mtl",
+            "src": "/src/medias/models/zinnia.gltf",
             "scale": {
                 "x": 1,
                 "y": 1,
                 "z": 1
             },
             "rotate": {
-                "x": 0,
+                "x": 90,
                 "y": 0,
                 "z": 0
             }
@@ -135,15 +150,14 @@
         "projectiles": {
             "speed": 200,
             "model": {
-                "src": "/src/medias/models/PokeBalls/CherishBall.obj",
-                "mtl": "/src/medias/models/PokeBalls/CherishBall.mtl",
+                "src": "/src/medias/models/PokeBalls/CherishBall.gltf",
                 "scale": {
-                    "x": 50,
-                    "y": 50,
-                    "z": 50
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
                 },
                 "rotate": {
-                    "x": 0,
+                    "x": 90,
                     "y": 0,
                     "z": 0
                 }
@@ -179,18 +193,18 @@
         "health": 1,
         "models": [
             {
-                "src": "/src/medias/models/Pokemons/evoli.obj",
-                "mtl": "/src/medias/models/Pokemons/evoli.mtl",
+                "src": "/src/medias/models/Pokemons/leviator.gltf",
                 "scale": {
-                    "x": 10,
-                    "y": 10,
-                    "z": 10
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
                 },
                 "rotate": {
                     "x": 0,
-                    "y": 180,
+                    "y": 90,
                     "z": 0
-                }
+                },
+                "animated": true
             }
         ],
         "projectiles": {

@@ -107,7 +107,20 @@
     "defender": {
         "speed": 100,
         "shotDelay": 0,
-        "model": "",
+        "model": {
+            "src": "/src/medias/models/defender.obj",
+            "mtl": "/src/medias/models/defender.mtl",
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+            "rotate": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        },
         "color": "0xff0000",
         "width": 10,
         "height": 10,

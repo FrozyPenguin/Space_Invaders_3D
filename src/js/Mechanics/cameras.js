@@ -37,7 +37,7 @@ class GameCamera extends PerspectiveCamera {
     }
 
     changeView(code) {
-        if(code > this.viewsArray.length) return;
+        if(code > this.viewsArray.length || code <= 0) return;
 
         const view = this.viewsArray[code - 1]
 

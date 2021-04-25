@@ -54,6 +54,8 @@ class Invader extends GameObject {
         this.boardSize = 0;
 
         this.shootDelayEnded = true;
+
+        this.projectile = new Projectile(this.localConfig.projectiles, this.collideGroup, false, this);
     }
 
     /**
@@ -97,12 +99,19 @@ class Invader extends GameObject {
      * Tire un projectile
      */
     shoot() {
-        let projectile = new Projectile(this.localConfig.projectiles, this, this.collideGroup);
+        if(this.shootDelayEnded) {
+            const center = new THREE.Vector3(0, 0, 0);
+            //let projectile = new Projectile(this.localConfig.projectiles, this, this.collideGroup);
+            let projectile = new Projectile(this.localConfig.projectiles, this.collideGroup, true, this).copy(this.projectile, true);
+            projectile.position.x = this.getWorldPosition(center).x;
+            projectile.position.z = this.getWorldPosition(center).z;
+            scene.getObjectByName('Projectiles').add(projectile);
 
-        this.shootDelayEnded = false;
-        setTimeout(() => {
-            this.shootDelayEnded = true;
-        }, 100)
+            this.shootDelayEnded = false;
+            setTimeout(() => {
+                this.shootDelayEnded = true;
+            }, 100)
+        }
     }
 
     /**
@@ -111,6 +120,7 @@ class Invader extends GameObject {
      */
     increaseProjectilesSpeed(speed) {
         this.localConfig.projectiles.speed += speed;
+        this.projectile.setVelocity(this.localConfig.projectiles.speed);
     }
 
     /**
@@ -146,7 +156,7 @@ class Invader extends GameObject {
         let shields = scene.getObjectByName(`Shields`);
         shields?.children?.forEach(shield => {
             if(this.getBoundingBox().intersectsBox(shield.getBoundingBox())) {
-                gameEvent.emit('onShieldDamage', shield)
+                gameEvent.emit('onShieldDamage', shield);
             };
         })
     }
@@ -166,6 +176,7 @@ class Invader extends GameObject {
      * @param {*} delta
      */
     update(delta) {
+        super.update(delta);
         if(this.canShoot()) {
             if(Math.random() < this.probToShoot) {
                 this.shoot();
@@ -178,13 +189,6 @@ class Invader extends GameObject {
         }
 
         this.isCollidingShields();
-    }
-
-    /**
-     * @returns une copie de l'objey actuel
-     */
-    clone() {
-        return JSON.parse(JSON.stringify(this));
     }
 }
 

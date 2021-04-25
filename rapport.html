@@ -76,8 +76,152 @@
                 - Le meilleur score est sauvagardé dans le localStorage du navigateur permettant ainsi de retrouver son meilleur score à travers les parties même après fermeture de la page ou du navigateur pour partager et comparer son score avec ses amis
                 - Des Bonus ont également été ajouté (bonus de vie representait par un coeur rouge) il a 0.01% de chance d'apparaitre à la mort d'un invader
                 - Support partiel de la manette bouton start (pause), bouton A (tire), fleche gauche et droite (déplacement)
+                - Plusieurs touche de raccourci en +
     -->
-    On est insane trust me
+
+    <header>
+
+    </header>
+    <section>
+        <h1>Projet SIA 2021 - Space Invaders</h1>
+        <sub>TISON Florian</sub>
+
+        <div>
+            <h2>Présentation</h2>
+            <p>
+                Il nous a été demandé, dans le cadre de l'UE Synthèse d'image avancé, de réaliser un clone du jeu emblématique Space Invader tourant sur un navigateur.
+                J'ai chosis, pour la réalisation de ce projet, de faire un Space Invader sur le thème du jeu vidéo Pokémon.
+            </p>
+        </div>
+
+        <div>
+            <h2>Déroulement du jeu</h2>
+            <p>
+                Le jeu reprend la base d'un space invader classique. Le joueur commence la partie avec 3 vies et son objectif est de tirer sur les ennemies qui se déplacent devant lui et rapporte des points une fois élliminés. Une fois tout les ennemies élliminés, le joueur passe au niveau suivant. Pour rendre la tache du joueur moins facile, les ennemies lui tirent dessus et essaie eux aussi de l'éliminer. Pour se défendre des structures sont positionné devant le joueur. Ces structures peuvent être détruite par les ennemies mais également par le joueur. Un boss, rapportant plus de points, se déplace de temps à autre au dessus des ennemies et tire sur le joueur. Il n'est pas nécessaire de tuer le boss pour pouvoir passer au nivau suivant. une fois que le joeur à perdu toute ses vie ou qu'il a terminé tous les niveaux, le partie s'arrête et affiche au joeurs ses résultats.
+                Cependant quelques ajouts ont été effectué. Parmis ces ajouts, on retrouve la possibilité pour les ennemies d'avoir plusieurs vie, la possibilité pour les ennemies de lacher un objet bonus à destination du joueur et le gain d'une vie à chaque passage de niveau. De plus, chaque niveau est indépendant, ce qui a pour effet pour les ennemies de rapporter plus au moins de points suivant les niveaux. En effet, un même ennemie pourra, par exemple, rapporter 10 points au niveau 1 et 20 points au niveau 2.
+
+                En accord avec le cahier des charges proposé, le jeu comporte un écran titre récapitulant les points données par chaque ennemies suivant le niveau ainsi qu'un bouton permettant de lancer la partie. On retrouve également sur cette écran le meilleur score enregistré lorsqu'une partie à déjà été joué auparavant.
+
+                Le jeu se compose de quatres niveau différents. Le premier niveau est basé sur le placement des ennemies du jeu Space Invader Original. On retrouve donc :
+                <ul>
+                    <li>2 Lignes d'ennemies faibles</li>
+                    <li>2 Lignes d'ennemies moyen</li>
+                    <li>1 Lignes d'ennemies fort</li>
+                </ul>
+
+                Le niveau 3 et 4 comportent un placement personnalisé dessinant un pixel art de pokemons. Ces niveaux ont pour but de montrer les possibilité de placement du système développé détaillé dans la partie "Les petits plus".
+            </p>
+        </div>
+
+        <div>
+            <h2>Technologie logicielle</h2>
+            <p>
+                Le jeu est construit autout de la librairie Javascript ThreeJs. Cette librairie permettant de créer des scenes 3D dans un navigateur internet.
+                La librairie ThreeX.keystate est également présente. Cette librarie à pour but de gérer les évenements au clavier.
+
+                Ce projet, repose sur le système de class et de module introduit dans la spécification Javascript ECMAScript 6. Ainsi que sur un système évenementielle inspiré de l'EventEmitter du runtime Javascript NodeJS.
+                Ce système évenementielle est tiré d'une discussion github trouvable <a href="https://gist.github.com/mudge/5830382">ici</a>, et a ensuite été légérement agrémenté par mes soins.
+                L'avantage d'un tel système est l'indépendance des module entre eux. Ainsi une class coordinatrice gère l'ensemble de la partie et ses évènements.
+
+                Au niveau du développement la librairie Stat.js à été utilisé pour afficher les performances du jeu.
+            </p>
+        </div>
+
+        <div>
+            <h2>Architecture logicielle</h2>
+            <p>
+                Le projet reprend l'architecture de base proposé dans le sujet. La seul différence se fait au niveau du dossier js dans lequel les fichiers sont triés par fonctionnalité.
+            </p>
+        </div>
+
+        <div>
+            <h1>Graphisme</h1>
+            <p>
+                Lorsque qu'un énnemies ou un bouclier prend des dégats, sa texture change (au niveau de la couleur).
+                Les models du jeux sont tiré du jeu vidéo Pokémon. On retrouve une arène de combat pour la zone de jeu ainsi que plusieurs pokémons interprétant les ennemies. Certains niveau sans models prennent quand à eux la forme d'un pokémon.
+                Un effet de postprocessing a également été implémenté. Celui-ci, donne un effet pixélisé au jeu rappelant les ancienens version de Pokémon ainsi que le jeu Space Invader originel.
+            </p>
+        </div>
+
+        <div>
+            <h2>Dialogues avec l'utilisateur</h2>
+            <p>
+                Un message est afficher lors de la transition entre les niveaux. Ce message affiche le nom du niveau et son numéro.
+
+                Plusieurs raccourci sont disponible pour offir une meilleure expérience utilisateur.
+                <ul>
+                    <li>La touche "H" permettant d'afficher tout les raccourci disponible,</li>
+                    <li>La touche "B" permettant d'afficher les zones de collision, pour aider au développement,</li>
+                    <li>La touche "S" permettant d'afficher les squelettes des models, pour aider au développement,</li>
+                    <li>La touche "M" permettant de couper la musique ou bien de la remettre,</li>
+                    <li>La touche "P" permettant de mettre le jeu en pause ou de l'enlever,</li>
+                    <li>La touche "T" permettant d'activer l'effet de pixélisation.</li>
+                </ul>
+            </p>
+        </div>
+
+        <div>
+            <h2>Caméras</h2>
+            <p>
+                Le jeu dispose de différents points de vue :
+                <ul>
+                    <li>Une vue de dessus (comme le jeu original)</li>
+                    <li>Une vue mouvante (qui suit les mouvements du joueur)</li>
+                    <li>Une vue de derrière le joueur permettant de visualer l'effet 3D du jeu</li>
+                    <li>Une vue de coté positionné au niveau des gradins.</li>
+                </ul>
+
+                La vue de la caméra peut être changé via les touches 1 à 4 de la zone numérique du clavier ou bien via le pavé numérique.
+            </p>
+        </div>
+
+        <div>
+            <h2>Gestion des collisions</h2>
+            <p>
+                Les collisions sont gérés par le biais de groupe de collision au niveau des élements du jeu.
+                Ainsi chaque élement du jeu recoit un groupe d'éléments avec lequel il peut entrer en collision. Lors d'une mise à jour, un élément parcourt son groupe de collision et construit une Box3 autour de lui et des élements du groupe. Lorsque les Box3 se superpose, alors on a une collision.
+            </p>
+        </div>
+
+        <div>
+            <h2>Dynamisme</h2>
+            <p>
+                Pour rendre le jeu plus palpitant, la difficulté du jeu augmente au fil des niveaux et au cours des niveaux en eux même.
+                Entre le début et la fin d'un niveau, on retrouve donc une augmentation de :
+                <ul>
+                    <li>la vitesse de déplacement des ennemies,</li>
+                    <li>la vitesse des projectiles tiré par les ennemies,</li>
+                    <li>la précision des tires ennemies,</li>
+                    <li>le probabilité de tire des ennemies.</li>
+                </ul>
+            </p>
+        </div>
+
+        <div>
+            <h2>Intelligence artificielle</h2>
+            <p>
+                Pour gérer la précision des ennemies, une pseudo intelligence artificielle a été développé. Celle-ci se base sur la distance en X des ennemies par rapport au joueur. Ainsi plus l'ennemie sera précis et plus il tirera quand il sera proche du joueur. Un ennemie imprécis est donc un ennemie pouvant tirer peut importe la distance avec le joueur.
+            </p>
+        </div>
+
+        <div>
+            <h2>Musique et son</h2>
+            <p>
+                Le jeu dispose d'une musique de fond désactivable. Cette musique est un remix à la sauce Pokémon du theme de Jotaro dans l'anime Jojo's Bizarre Adventure.
+                Plusieurs son sont également présent. Nous avons donc un son au clique sur un bouton des menus du jeu, un son lors d'un tire du joueur et un son lors de la mort d'un ennemie.
+                Une musique est également déclenché lorsque le joueur arrive à terminer le jeu.
+            </p>
+        </div>
+
+        <div>
+            <h2>Triches</h2>
+            <p>
+                Plusieurs touches de triches sont disponible pour rendre l'évaluation plus simple pour vous.
+                Il y donc la touche I pour se rendre invincible vis à vis des projectiles des ennemies. Le status du mode invincible peut être visualiser en haut à gauche de la page.
+                Et la touche K permettant de passer au niveau suivant. Cependant aucun point ne sera gagné.
+            </p>
+        </div>
+    </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </body>

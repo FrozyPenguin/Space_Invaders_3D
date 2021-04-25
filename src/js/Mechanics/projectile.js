@@ -16,39 +16,43 @@ class Projectile extends GameObject {
      * @param { String } color couleur du projectile
      * @param { THREE.Mesh } sender émetteur du projectile
      */
-    constructor(localConfig, sender, collideGroup = []) {
-        if(localConfig.model && localConfig.model != {} && localConfig.model instanceof Object) {
-            super();
+    constructor(localConfig, collideGroup = [], copy = false, sender) {
+        if(!copy) {
+            if(localConfig.model && localConfig.model != {} && localConfig.model instanceof Object) {
+                super();
 
-            this.loadModel(localConfig.model)
-            .catch(err => {
-                console.error(err);
-            });
+                this.loadModel(localConfig.model)
+                .catch(err => {
+                    console.error(err);
+                });
+            }
+            else if(localConfig.color) {
+                // Create the defender object
+                const projectileGeometry = new THREE.BoxBufferGeometry(localConfig.size, localConfig.size, localConfig.size);
+                const projectileMaterial = new THREE.MeshBasicMaterial({ color: parseInt(localConfig.color) });
+                super(projectileGeometry, projectileMaterial);
+            }
+            else {
+                throw "Config du projectile invalide !";
+            }
         }
-        else if(localConfig.color) {
-            // Create the defender object
-            const projectileGeometry = new THREE.BoxBufferGeometry(localConfig.size, localConfig.size, localConfig.size);
-            const projectileMaterial = new THREE.MeshBasicMaterial({ color: parseInt(localConfig.color) });
-            super(projectileGeometry, projectileMaterial)
-        }
-        else {
-            throw "Config du projectile invalide !";
-        }
+        else super();
 
-        this.vel;
+        this.localConfig = JSON.parse(JSON.stringify(localConfig));
+
         const center = new THREE.Vector3(0, 0, 0);
 
         let yOffset = 0;
 
         if(!sender.getWorldPosition(center).y) {
-            yOffset = localConfig.size;
+            yOffset = this.localConfig.size;
         }
 
         this.position.set(sender.getWorldPosition(center).x, sender.getWorldPosition(center).y + yOffset, sender.getWorldPosition(center).z);
 
         this.sender = sender;
 
-        scene.getObjectByName('Projectiles').add(this);
+        // scene.getObjectByName('Projectiles').add(this);
 
         this.collideGroup = collideGroup;
 
@@ -56,7 +60,7 @@ class Projectile extends GameObject {
 
         this.name = 'Projectile';
 
-        this.vel = localConfig.speed;
+        this.vel = this.localConfig.speed;
 
         if(!(sender instanceof Defender)) {
             this.vel *= -1;
@@ -109,6 +113,7 @@ class Projectile extends GameObject {
      * @param { Number } delta temps écoulé depuis la dérniere période d'horloge
      */
     update(delta) {
+        super.update(delta);
         this.collide();
         this.position.z += this.vel * delta;
     }
