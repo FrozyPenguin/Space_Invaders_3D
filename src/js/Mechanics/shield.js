@@ -1,4 +1,4 @@
-import * as THREE from '../../lib/Three.js/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.module.js';
 import { GameObject } from '../StaticElements/gameObject.js';
 
 // Un shield prendra en parametre un position en Z, un espacement entre les murs et un nombre de mur à placer

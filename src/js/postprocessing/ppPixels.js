@@ -1,8 +1,8 @@
-import { Vector2 } from '../../lib/Three.js/build/three.module.js';
-import { EffectComposer } from '../../lib/Three.js/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from '../../lib/Three.js/examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass } from '../../lib/Three.js/examples/jsm/postprocessing/ShaderPass.js';
-import { PixelShader } from '../../lib/Three.js/examples/jsm/shaders/PixelShader.js';
+import { Vector2 } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.module.js';
+import { EffectComposer } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/postprocessing/ShaderPass.js';
+import { PixelShader } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/shaders/PixelShader.js';
 
 
 class PixelsPostProcessing {$

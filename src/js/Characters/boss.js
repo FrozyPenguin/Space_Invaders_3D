@@ -56,10 +56,8 @@ class Boss extends Invader {
     }
 
     death() {
-        console.log('%cdeath', 'color: orange; font-weight: bold');
 
         setTimeout(() => {
-            console.log('%cAlive', 'color: orange; font-weight: bold');
             this.live(this.maxModel);
             this.reset();
         }, Math.random() *  this.localConfig.maxTimeBeforeRevive);

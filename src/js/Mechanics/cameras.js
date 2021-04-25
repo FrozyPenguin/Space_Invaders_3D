@@ -1,6 +1,6 @@
-import { PerspectiveCamera, Vector3 } from '../../lib/Three.js/build/three.module.js';
+import { PerspectiveCamera, Vector3 } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.module.js';
 import { scene } from '../scene.js';
-import { OrbitControls } from '../../lib/Three.js/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/controls/OrbitControls.js';
 
 class GameCamera extends PerspectiveCamera {
     constructor(renderer) {

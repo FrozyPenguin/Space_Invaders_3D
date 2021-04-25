@@ -1,4 +1,4 @@
-import * as THREE from '../lib/Three.js/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.module.js';
 import global from './global.js';
 import { Defender } from './Characters/defender.js';
 import { initWalls } from './StaticElements/walls.js'
@@ -19,6 +19,7 @@ import { Boss } from './Characters/boss.js';
 import { PixelsPostProcessing } from './postprocessing/ppPixels.js';
 import { healthBonus } from './bonus/healthBonus.js';
 import { Gamepad } from './Mechanics/gamepad.js';
+import { Projectile } from './Mechanics/projectile.js';
 
 const gameEvent = new EventEmitter();
 
@@ -53,7 +54,7 @@ class Game {
 
         // Camera
         this.currentCamera = new GameCamera(renderer);
-        //this.currentCamera.addControls();
+        // this.currentCamera.addControls();
 
         // Clavier
         this.keyboard.unique();
@@ -68,7 +69,7 @@ class Game {
 
         // Chargement de la musique et des effets sonores
         const listener = new THREE.AudioListener();
-        //this.currentCamera.add(listener);
+        this.currentCamera.add(listener);
 
         // create a global audio source
         this.music = new THREE.Audio(listener);
@@ -206,7 +207,7 @@ class Game {
 
                 let bossIconeHtml = '';
                 if(level.boss.icon) {
-                    bossIconeHtml = `<img src="${invadersType.icon}" alt="icone boss">`;
+                    bossIconeHtml = `<img src="${level.boss.icon}" alt="icone boss">`;
                 }
 
                 textHtml += `<tr><td>${bossIconeHtml} Boss</td><td>${level.boss.points}pts</td></tr>`;
@@ -279,7 +280,6 @@ class Game {
         this.isStop = true;
         // this.toPaused = true;
         // cancelAnimationFrame(this.drawId);
-        console.log('pause')
         if(!changeLevel) mute();
     }
 
@@ -344,7 +344,7 @@ class Game {
 
         gameEvent.on('onBonus', data => {
             const bonus = new this.possibleBonus[Math.floor(Math.random() * this.possibleBonus.length)](data.pos)
-            bonus.setCollideGroup([ this.defender ]);
+            bonus.setCollideGroup([ this.defender, scene.getObjectByName('frontWall') ]);
         });
 
         gameEvent.on('onPause', levelChange => {
@@ -489,15 +489,22 @@ class Game {
             this.keyboard.loop(this.delta);
             this.gamepad.update(this.delta);
 
-            const elementToRemove = scene.remove(scene.getObjectByProperty('toRemove', true));
-            if(elementToRemove) scene.remove(elementToRemove);
+            const elementToRemove = scene.getObjectByProperty('toRemove', true);
+            if(elementToRemove) {
+                if(elementToRemove instanceof Projectile) this.projectiles.remove(elementToRemove);
+                else scene.remove(elementToRemove);
+            };
 
+            //let i = 0;
             // Parcourt les descendant visible de la scène et les met à jour si besoin
             scene.traverseVisible((child) => {
                 if(child instanceof THREE.SkeletonHelper || child instanceof Boss) return;
                 if(child.update?.length && !(child instanceof THREE.BoxHelper)) child.update(this.delta)
                 else if(child.update) child.update();
+
+                //if(child.update) i++
             });
+            //console.log(i)
 
             if(this.boss?.loop) this.boss.update(this.delta);
         }
@@ -691,7 +698,6 @@ class Game {
     }
 
     stopGame(win) {
-        console.log('fin du jeu');
 
         // Met en pause et donc arrête l'horloge
         pause();

@@ -1,5 +1,4 @@
-import * as THREE from '../../lib/Three.js/build/three.module.js';
-import { Defender } from '../Characters/defender.js';
+import * as THREE from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.module.js';
 import { Shield } from './shield.js';
 
 export class ShieldManager extends THREE.Group {

@@ -1,4 +1,4 @@
-import * as THREE from '../lib/Three.js/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.module.js';
 import global from './global.js';
 
 // Création de la scene 3D
@@ -6,7 +6,7 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x581845);
 
 // Création du canvas 3D et ajout de celui-ci à la page HTML
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: false });
 renderer.setSize(window.innerWidth, window.innerHeight);
 global.parent.appendChild(renderer.domElement);
 

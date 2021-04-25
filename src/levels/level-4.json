@@ -53,8 +53,8 @@
                 "projectiles": {
                     "speed": 200,
                     "model": "",
-                    "color": "0xFF0000",
-                    "size": 2
+                    "color": "0x0000ff",
+                    "size": 4
                 },
                 "alias": "O",
                 "accuracy": 0
@@ -70,8 +70,8 @@
                 "projectiles": {
                     "speed": 200,
                     "model": "",
-                    "color": "0xFF0000",
-                    "size": 2
+                    "color": "0x0000ff",
+                    "size": 4
                 },
                 "alias": "N",
                 "accuracy": 0
@@ -88,8 +88,8 @@
                 "projectiles": {
                     "speed": 150,
                     "model": "",
-                    "color": "0xFF0000",
-                    "size": 2
+                    "color": "0x0000ff",
+                    "size": 4
                 },
                 "alias": "J",
                 "accuracy": 0
@@ -107,8 +107,8 @@
                 "projectiles": {
                     "speed": 150,
                     "model": "",
-                    "color": "0xFF0000",
-                    "size": 2
+                    "color": "0x0000ff",
+                    "size": 4
                 },
                 "alias": "R",
                 "accuracy": 0
@@ -127,8 +127,8 @@
                 "projectiles": {
                     "speed": 200,
                     "model": "",
-                    "color": "0xFF0000",
-                    "size": 2
+                    "color": "0x0000ff",
+                    "size": 4
                 },
                 "alias": "B",
                 "accuracy": 0
@@ -139,18 +139,18 @@
         "speed": 100,
         "shotDelay": 0,
         "model": {
-            "src": "/src/medias/models/defender.obj",
-            "mtl": "/src/medias/models/defender.mtl",
+            "src": "/src/medias/models/zinnia.gltf",
             "scale": {
                 "x": 1,
                 "y": 1,
                 "z": 1
             },
             "rotate": {
-                "x": 0,
+                "x": 90,
                 "y": 0,
                 "z": 0
-            }
+            },
+            "animated": true
         },
         "color": "0xff0000",
         "width": 10,
@@ -158,8 +158,7 @@
         "projectiles": {
             "speed": 200,
             "model": {
-                "src": "/src/medias/models/PokeBalls/CherishBall.obj",
-                "mtl": "/src/medias/models/PokeBalls/CherishBall.mtl",
+                "src": "/src/medias/models/PokeBalls/CherishBall.gltf",
                 "scale": {
                     "x": 50,
                     "y": 50,
@@ -172,14 +171,14 @@
                 }
             },
             "color": "0xff00ff",
-            "size": 2
+            "size": 4
         }
     },
     "shields": {
         "count": 7,
         "models": [],
         "colors": [
-            "0x008000",
+            "0xffffff",
             "0xb38b6d",
             "0x00ffff",
             "0xfe01d3",
@@ -202,12 +201,11 @@
         "health": 1,
         "models": [
             {
-                "src": "/src/medias/models/Pokemons/evoli.obj",
-                "mtl": "/src/medias/models/Pokemons/evoli.mtl",
+                "src": "/src/medias/models/Pokemons/evoli.gltf",
                 "scale": {
-                    "x": 10,
-                    "y": 10,
-                    "z": 10
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
                 },
                 "rotate": {
                     "x": 0,
@@ -219,10 +217,10 @@
         "projectiles": {
             "speed": 400,
             "model": "",
-            "color": "0xffff00",
-            "size": 2
+            "color": "0x0000ff",
+            "size": 4
         },
         "points": 100,
-        "icon": ""
+        "icon": "/src/medias/images/dracaufeu.png"
     }
 }

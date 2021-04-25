@@ -1,5 +1,5 @@
-import * as THREE from '../../lib/Three.js/build/three.module.js';
-import { GLTFLoader } from '../../lib/Three.js/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.module.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/jsm/loaders/GLTFLoader.js';
 import { scene } from '../scene.js';
 
 export class GameObject extends THREE.Group {
@@ -8,6 +8,8 @@ export class GameObject extends THREE.Group {
 
         if(geometry && material)
             this.add(new THREE.Mesh(geometry, material));
+
+        this.loadedModel = [];
     }
 
     getBoundingBox() {
@@ -26,8 +28,8 @@ export class GameObject extends THREE.Group {
 
             loader.load(model.src,
                 (obj) => {
-                    if(!(model.scale && model.scale != {})) model.scale ={ x: 1, y: 1, z: 1 };
-                    if(!(model.rotate && model.rotate != {})) model.rotate = { x: 0, y: 0, z: 0 };
+                    if(!(model.scale && model.scale != {})) model.scale = { x: 1, y: 1, z: 1 };
+                    if(!(model.rotate && model.rotate != {})) model.rotate =  { x: 0, y: 0, z: 0 };
 
                     obj.scene.scale.x *= model.scale.x;
                     obj.scene.scale.y *= model.scale.y;
@@ -35,24 +37,8 @@ export class GameObject extends THREE.Group {
                     obj.scene.rotation.x = THREE.Math.degToRad(model.rotate.x);
                     obj.scene.rotation.y = THREE.Math.degToRad(model.rotate.y);
                     obj.scene.rotation.z = THREE.Math.degToRad(model.rotate.z);
-
-                    if(model.animated) {
-                        this.animated = true;
-                        const animations = obj.animations;
-                        this.mixer = new THREE.AnimationMixer(obj.scene);
-
-                        const [ idleAnim ] = animations.filter(animation => animation.name == 'Idle');
-                        const [ actionAnim ] = animations.filter(animation => animation.name == 'Action');
-
-                        let idle = idleAnim ? this.mixer.clipAction(idleAnim) : null;
-                        let action = actionAnim ? this.mixer.clipAction(actionAnim) : null;
-
-                        this.actions = { idle, action };
-
-                        this.startAnimation('idle');
-                    }
-
-                    this.add(obj.scene);
+                    obj.animated = model.animated;
+                    this.loadedModel.push(obj);
                     resolse();
                 },
                 (xhr) => { // onProgress
@@ -63,6 +49,24 @@ export class GameObject extends THREE.Group {
                 }
             );
         });
+    }
+
+    loadAnimation(obj) {
+        if(obj.animated) {
+            this.animated = true;
+            const animations = obj.animations;
+            this.mixer = new THREE.AnimationMixer(obj.scene);
+
+            const [ idleAnim ] = animations.filter(animation => animation.name == 'Idle');
+            const [ actionAnim ] = animations.filter(animation => animation.name == 'Action');
+
+            let idle = idleAnim ? this.mixer.clipAction(idleAnim) : null;
+            let action = actionAnim ? this.mixer.clipAction(actionAnim) : null;
+
+            this.actions = { idle, action };
+
+            this.startAnimation('idle');
+        }
     }
 
     startAnimation(name) {
@@ -91,11 +95,7 @@ export class GameObject extends THREE.Group {
 
             Promise.all(loadPromises)
             .then(() => {
-                this.children.forEach((child, index) => {
-                    // Ignore le premier model
-                    if(index) child.visible = false;
-                    resolse();
-                })
+                resolse();
             })
             .catch(error => {
                 reject(error);
@@ -112,14 +112,18 @@ export class GameObject extends THREE.Group {
         let indexToLoad = this.maxModel - this.health;
 
         if(this.models?.length) {
-            if(this.children.length) {
-                this.children.forEach((child, index) => {
-                    if(index == indexToLoad) child.visible = true;
-                    else child.visible = false;
-                })
+
+            this.remove(...this.children);
+            if(this.loadedModel?.length) {
+                this.add(this.loadedModel[indexToLoad].scene);
+                this.loadAnimation(this.loadedModel[indexToLoad]);
             }
             else {
                 this.loadAllModels()
+                .then(() => {
+                    this.add(this.loadedModel[0].scene);
+                    this.loadAnimation(this.loadedModel[0]);
+                })
                 .catch(error => {
                     throw error;
                 })
@@ -137,8 +141,7 @@ export class GameObject extends THREE.Group {
     showSkeleton() {
         let skeletonGroup = scene.getObjectByName('Skeletons');
         if(skeletonGroup) {
-            let actualModelIndex = this.models ? this.maxModel - this.health : 0;
-            const skeletonHelper = new THREE.SkeletonHelper(this.children[actualModelIndex]);
+            const skeletonHelper = new THREE.SkeletonHelper(this.children[0]);
             skeletonGroup.add(skeletonHelper);
         }
     }

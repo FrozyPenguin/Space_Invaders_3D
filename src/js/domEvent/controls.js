@@ -49,7 +49,6 @@ function initDomControls() {
         gameEvent.emit('onMenu');
     }));
 
-    // console.log()
     document.querySelector('#startGame').addEventListener('click', () => {
         gameEvent.emit('onStartGame');
     });

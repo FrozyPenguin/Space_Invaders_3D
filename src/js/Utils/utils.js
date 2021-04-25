@@ -1,4 +1,4 @@
-import { GridHelper, AxesHelper, Group } from '../../lib/Three.js/build/three.module.js';
+import { GridHelper, AxesHelper, Group } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.module.js';
 import { scene } from '../scene.js';
 
 const helperGroup = new Group();

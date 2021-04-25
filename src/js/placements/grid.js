@@ -1,4 +1,4 @@
-import * as THREE from '../../lib/Three.js/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.module.js';
 import { Invader } from '../Characters/invaders.js';
 
 export class Grid extends THREE.Group {

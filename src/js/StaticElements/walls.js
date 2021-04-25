@@ -1,4 +1,4 @@
-import * as THREE from '../../lib/Three.js/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/build/three.module.js';
 import { GameObject } from './gameObject.js';
 
 class Wall extends GameObject {
@@ -48,6 +48,10 @@ function initWalls(nbCharacters, characterSize, characterPadding, characterPerLi
             z: size/5
         }
     })
+    .then(function() {
+        bottomWall.add(bottomWall.loadedModel[0].scene);
+        bottomWall.loadAnimation(bottomWall.loadedModel[0]);
+    })
 
     planeGroup.add(bottomWall);
 
@@ -58,10 +62,10 @@ function initWalls(nbCharacters, characterSize, characterPadding, characterPerLi
     planeGroup.add(new Wall('rightWall', size, size, {x: -offset, y: offset, z: -offset/2}, {x: 0, y: -90, z: 0}, 0x222222));
 
     // Derriere
-    planeGroup.add(new Wall('backWall', size, size, {x: 0, y: offset, z: offset/2}, {x: 0, y: 0, z: 0}));
+    planeGroup.add(new Wall('backWall', size, size, {x: 0, y: offset, z: offset/2}, {x: 0, y: 0, z: 0}, 0x00ff00));
 
     // Devant
-    planeGroup.add(new Wall('frontWall', size, size, {x: 0, y: offset, z: -size*0.75}, {x: 0, y: 180, z: 0}));
+    planeGroup.add(new Wall('frontWall', size, size, {x: 0, y: offset, z: -size*0.75}, {x: 0, y: 180, z: 0}, 0xff0000));
 
     planeGroup.children.forEach((child, index) => {
         let mesh = child.children[0];
