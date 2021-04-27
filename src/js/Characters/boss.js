@@ -60,7 +60,7 @@ class Boss extends Invader {
         setTimeout(() => {
             this.live(this.maxModel);
             this.reset();
-        }, Math.random() *  this.localConfig.maxTimeBeforeRevive);
+        }, Math.random() * this.localConfig.maxTimeBeforeRevive);
 
         return super.death();
     }

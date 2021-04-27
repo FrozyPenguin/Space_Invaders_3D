@@ -95,7 +95,7 @@
                 <a href="#deroulement">Déroulement du jeu</a>
               </li>
               <li>
-                <a href="#techno">Technologie logicielle</a>
+                <a href="#techno">Technologies logicielle</a>
               </li>
               <li>
                 <a href="#archi">Architecture logicielle</a>
@@ -165,7 +165,7 @@
             <div id="deroulement">
                 <h2>Déroulement du jeu</h2>
                 <p>
-                    Le jeu reprend la base d'un space invader classique. Le joueur commence la partie avec 3 vies (configurable dans le fichier global.js) et son objectif est de tirer sur les ennemies qui se déplacent devant lui et lui rapporte des points une fois élliminés. Une fois tout les ennemies élliminés, le joueur passe au niveau suivant. Pour rendre la tache du joueur moins facile, les ennemies lui tirent dessus et essaie eux aussi de l'éliminer. Pour se défendre des structures sont positionné devant le joueur. Ces structures peuvent être détruite par les ennemies mais également par le joueur. Un boss, rapportant plus de points, se déplace de temps à autre au dessus des ennemies et tire sur le joueur. Il n'est pas nécessaire de tuer le boss pour pouvoir passer au nivau suivant. une fois que le joeur à perdu toute ses vie ou qu'il a terminé tous les niveaux, le partie s'arrête et affiche au joeurs ses résultats.
+                    Le jeu reprend la base d'un space invader classique. Le joueur commence la partie avec 3 vies (configurable dans le fichier global.js) et son objectif est de tirer sur les ennemies qui se déplacent devant lui et lui rapporte des points une fois élliminés. Une fois tout les ennemies élliminés, le joueur passe au niveau suivant. Pour rendre la tache du joueur moins facile, les ennemies lui tirent dessus et essaie eux aussi de l'éliminer. Pour se défendre des structures sont positionné devant le joueur. Ces structures peuvent être détruite par les ennemies mais également par le joueur. Un boss, rapportant plus de points, se déplace de temps à autre au dessus des ennemies et tire sur le joueur. Il n'est pas nécessaire de tuer le boss pour pouvoir passer au nivau suivant. une fois que le joueur à perdu toute ses vie ou qu'il a terminé tous les niveaux, le partie s'arrête et affiche au joueurs ses résultats.
                     Cependant quelques ajouts ont été effectué. Parmis ces ajouts, on retrouve la possibilité pour les ennemies d'avoir plusieurs vie, la possibilité pour les ennemies de lacher un objet bonus à destination du joueur et le gain d'une vie à chaque passage de niveau. De plus, chaque niveau est indépendant, ce qui a pour effet pour les ennemies de rapporter plus au moins de points suivant les niveaux. En effet, un même ennemie pourra, par exemple, rapporter 10 points au niveau 1 et 20 points au niveau 2.
 
                     En accord avec le cahier des charges proposé, le jeu comporte un écran titre récapitulant les points données par chaque ennemies suivant le niveau ainsi qu'un bouton permettant de lancer la partie. On retrouve également sur cette écran le meilleur score enregistré lorsqu'une partie à déjà été joué auparavant.
@@ -184,7 +184,7 @@
             </div>
 
             <div id="techno">
-                <h2>Technologie logicielle</h2>
+                <h2>Technologies logicielle</h2>
                 <p>
                     Le jeu est construit autout de la librairie Javascript ThreeJs. Cette librairie permettant de créer des scenes 3D dans un navigateur internet.
                     La librairie ThreeX.keystate est également présente. Cette librarie à pour but de gérer les évenements au clavier.
@@ -219,7 +219,7 @@
             <div id="dialogue">
                 <h2>Dialogues avec l'utilisateur</h2>
                 <p>
-                    Un message est afficher lors de la transition entre les niveaux. Ce message affiche le nom du niveau et son numéro.
+                    Un message est afficher lors de la transition entre les niveaux. Ce message affiche le nom du niveau et son numéro. Lors de l'arrivé sur le niveau suivant, une attente de une seconde est lancé pour laissé au joueur le temps d'observer le niveau.
 
                     Plusieurs raccourci sont disponible pour offir une meilleure expérience utilisateur.
                     <ul>
@@ -1133,7 +1133,7 @@ if(this.canShoot()) {
                 "accuracy": 0
             },
             {
-                "name": "Pokachu",
+                "name": "Pikachu",
                 "health": 1,
                 "models": [
                     {
@@ -1411,7 +1411,8 @@ if(this.canShoot()) {
 
     <button id="scrollTop"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg></button>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.7.2/build/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
 

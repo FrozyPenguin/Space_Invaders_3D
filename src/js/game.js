@@ -267,6 +267,7 @@ class Game {
             // Attente avant de lancer le niveau pour laisser le temps d'observer la configuration et de se préparer
             if(!userPaused) this.clock.start();
             this.isStop = false;
+            // this.draw();
 
             // Si quand on lance on a perdu le focus de la fenetre alors on met en pause
             if(!document.hasFocus()) pause();
@@ -278,8 +279,12 @@ class Game {
         // https://stackoverflow.com/questions/38034787/three-js-and-buttons-for-start-and-pause-animation
         this.clock.stop();
         this.isStop = true;
+
+        console.log('bonjour')
+        console.log(this.clock.running)
         // this.toPaused = true;
         // cancelAnimationFrame(this.drawId);
+
         if(!changeLevel) mute();
     }
 
@@ -329,16 +334,7 @@ class Game {
                     if(this.invadersGroup.children[i].visible) return;
                 }
 
-                pause(null, true);
-
-                this.changeLevel()
-                .then(() => {
-                    play();
-                    giveHealth();
-                })
-                .catch(error => {
-                    throw error;
-                });
+                gameEvent.emit('onKillAll');
             }
         });
 
@@ -466,50 +462,49 @@ class Game {
      * Boucle d'animation
      */
     draw() {
-        if(this.toStop) return;
-
-        stats.begin();
-
-        this.delta = this.clock.getDelta();
-
-        this.currentCamera.update(this.delta);
-
         if(this.processing) this.pixelsPostProcessing.update();
         else renderer.render(scene, this.currentCamera);
-        //this.defender.handleKeyboardLoop(this.delta);
 
-        /*global.updateList.forEach(element => {
-            element.update(this.delta);
-        });*/
+        if(!this.isStop) {
+            stats.begin();
 
-        // Met à jour les élements seulement si l'horloge est en route
-        // Cette façon de faire offre la possibilité de laisser le stat tourner ainsi que orbit controls
-        // par contre l'inconvénient c'est que la boucle d'animation continu de tourner
-        if(this.clock.running) {
-            this.keyboard.loop(this.delta);
-            this.gamepad.update(this.delta);
+            this.delta = this.clock.getDelta();
 
-            const elementToRemove = scene.getObjectByProperty('toRemove', true);
-            if(elementToRemove) {
-                if(elementToRemove instanceof Projectile) this.projectiles.remove(elementToRemove);
-                else scene.remove(elementToRemove);
-            };
+            this.currentCamera.update(this.delta);
 
-            //let i = 0;
-            // Parcourt les descendant visible de la scène et les met à jour si besoin
-            scene.traverseVisible((child) => {
-                if(child instanceof THREE.SkeletonHelper || child instanceof Boss) return;
-                if(child.update?.length && !(child instanceof THREE.BoxHelper)) child.update(this.delta)
-                else if(child.update) child.update();
+            // Met à jour les élements seulement si l'horloge est en route
+            // Cette façon de faire offre la possibilité de laisser le stat tourner ainsi que orbit controls
+            // par contre l'inconvénient c'est que la boucle d'animation continu de tourner
+            if(this.clock.running) {
+                this.keyboard.loop(this.delta);
+                this.gamepad.update(this.delta);
 
-                //if(child.update) i++
-            });
-            //console.log(i)
+                const elementToRemove = scene.getObjectByProperty('toRemove', true);
+                if(elementToRemove) {
+                    if(elementToRemove instanceof Projectile) this.projectiles.remove(elementToRemove);
+                    else scene.remove(elementToRemove);
+                };
 
-            if(this.boss?.loop) this.boss.update(this.delta);
+                //let i = 0;
+                // Parcourt les descendant visible de la scène et les met à jour si besoin
+                try{
+                    scene.traverseVisible((child) => {
+                        if(!child) return;
+                        if(child instanceof THREE.SkeletonHelper || child instanceof Boss) return;
+                        if(child.update?.length && !(child instanceof THREE.BoxHelper)) child.update(this.delta)
+                        else if(child.update) child.update();
+                        //if(child.update) i++
+                    });
+                }
+                catch(error) {
+                    if(!(this.isStop || !this.clock.running)) throw error;
+                }
+                //console.log(i)
+
+                if(this.boss?.loop) this.boss.update(this.delta);
+            }
+            stats.end();
         }
-
-        stats.end();
 
         this.drawId = requestAnimationFrame(() => this.draw());
     }
@@ -528,7 +523,7 @@ class Game {
             // Reinitialise la vie
             initHealth(global.lifeCount);
 
-            this.toStop = false;
+            this.isStop = false;
             this.draw();
 
             // Lance la boucle d'animation
@@ -702,7 +697,7 @@ class Game {
         // Met en pause et donc arrête l'horloge
         pause();
         this.music.stop();
-        this.toStop = true;
+        this.isStop = true;
         cancelAnimationFrame(this.drawId);
 
         // Arrete la boucle d'animation

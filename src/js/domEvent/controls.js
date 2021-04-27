@@ -18,11 +18,13 @@ function initDomControls() {
 
     pauseBtn.addEventListener('click', (event) => {
         userPaused = true;
+        console.log(userPaused)
         pause(event);
     });
 
     playBtn.addEventListener('click', (event) => {
         userPaused = false;
+        console.log(userPaused)
         play(event);
     });
 

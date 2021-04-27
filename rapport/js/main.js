@@ -1,8 +1,10 @@
 const scrollTopBtn = document.querySelector('#scrollTop');
 scrollTopBtn.style.opacity = 0;
+scrollTopBtn.style.zIndex = -1;
+const content = document.querySelector('section.content');
 
-window.addEventListener('scroll', (event) => {
-    if(document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+content.addEventListener('scroll', function(event) {
+    if(this.scrollTop > 20) {
         scrollTopBtn.style.opacity = 1;
         scrollTopBtn.style.zIndex = 1;
     }
@@ -13,8 +15,7 @@ window.addEventListener('scroll', (event) => {
 })
 
 scrollTopBtn.addEventListener('click', (event) => {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    content.scrollTop = 0;
 })
 
 /**

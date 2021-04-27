@@ -201,11 +201,11 @@
         "health": 1,
         "models": [
             {
-                "src": "/src/medias/models/Pokemons/evoli.gltf",
+                "src": "/src/medias/models/Pokemons/charizard.gltf",
                 "scale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "x": 0.1,
+                    "y": 0.1,
+                    "z": 0.1
                 },
                 "rotate": {
                     "x": 0,

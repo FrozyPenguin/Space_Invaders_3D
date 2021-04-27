@@ -19,7 +19,7 @@ html, body {
 
 ::-webkit-scrollbar-thumb {
     background-color: #42b983;
-    border-radius: 2px;
+    border-radius: 4px;
 }
 
 .sub {
@@ -44,7 +44,7 @@ section div p {
     border-radius: 100%;
     position: fixed;
     bottom: 1vw;
-    right: 1vw;
+    right: calc(1vw + 8px);
     transition: opacity .3s ease-in-out;
 }
 

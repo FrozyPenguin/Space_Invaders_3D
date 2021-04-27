@@ -168,7 +168,7 @@ class Invader extends GameObject {
     canShoot() {
         let currentObjectPosition = new THREE.Vector3();
         this.getWorldPosition(currentObjectPosition);
-        return distanceX(currentObjectPosition, this.target.position) <= (100 - this.accuracy) / 100 * (this.boardSize / 2) + 1 && this.shootDelayEnded;
+        return distanceX(currentObjectPosition, this.target.position) <= (100 - this.accuracy) / 100 * (this.boardSize / 2) + 1 && this.shootDelayEnded && this.visible;
     }
 
     /**
