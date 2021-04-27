@@ -7,8 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <title>Rapport Space Invaders</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.7.2/build/styles/vs2015.min.css">
+    <link rel="stylesheet" href="rapport/css/style.css">
 </head>
-<body>
+<body class="wrapper">
     <!-- Trucs qui doivent figurer sur cette page :
         - Mettre en valeur les choix d'implémentation sur les aspects précisés dans le sujet et sur tout autre ajout "valorisable"
         - Fond mais surtout forme évalués
@@ -78,166 +79,235 @@
                 - Des Bonus ont également été ajouté (bonus de vie representait par un coeur rouge) il a 0.01% de chance d'apparaitre à la mort d'un invader
                 - Support partiel de la manette bouton start (pause), bouton A (tire), fleche gauche et droite (déplacement)
                 - Plusieurs touche de raccourci en +
+                - Taille du niveau change en fonction du contenu
     -->
 
     <header>
+        <nav id="sidebar">
+            <div class="sidebar-header">
+              <h3>Menu</h3>
+            </div>
+            <ul class="list-unstyled components">
+              <li>
+                <a href="#presentation">Présentation</a>
+              </li>
+              <li>
+                <a href="#deroulement">Déroulement du jeu</a>
+              </li>
+              <li>
+                <a href="#techno">Technologie logicielle</a>
+              </li>
+              <li>
+                <a href="#archi">Architecture logicielle</a>
+              </li>
+              <li>
+                <a href="#graphisme">Graphisme</a>
+              </li>
+              <li>
+                <a href="#dialogue">Dialogues avec l'utilisateur</a>
+              </li>
+              <li>
+                <a href="#camera">Caméras</a>
+              </li>
+              <li>
+                <a href="#collision">Gestion des collisions</a>
+              </li>
+              <li>
+                <a href="#dynamisme">Dynamisme</a>
+              </li>
+              <li>
+                <a href="#ia">Intelligence artificielle</a>
+              </li>
+              <li>
+                <a href="#son">Musique et son</a>
+              </li>
+              <li>
+                <a href="#triches">Triches</a>
+              </li>
+              <li>
+                <a href="#petitPlus" data-bs-toggle="collapse" aria-expanded="false" aria-controls="petitPlus" class="dropdown-toggle">Les petits plus</a>
+                <ul class="collapse list-unstyled" id="petitPlus">
+                  <li><a href="#levels">Création de niveaux</a></li>
+                  <li><a href="#plateau">Taille du plateau</a></li>
+                  <li><a href="#positionementJoueur">Positionnement du joueur</a></li>
+                  <li><a href="#interfaces">Gestion des interfaces utilisateur du jeu</a></li>
+                  <li><a href="#evenements">Système d'évenement</a></li>
+                  <li><a href="#sauvegarde">Sauvegarde du score</a></li>
+                  <li><a href="#bonus">Bonus</a></li>
+                  <li><a href="#manette">Support de la manette de jeu</a></li>
+                </ul>
+              </li>
+            </ul>
+        </nav>
 
+        <button type="button" id="sidebarCollapse" class="btn btn-dark">
+            <div id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
     </header>
-    <section>
-        <h1>Projet SIA 2021 - Space Invaders</h1>
-        <sub>TISON Florian</sub>
+    <section id="top" class="content">
+        <div class="container">
+            <h1>Projet SIA 2021 - Space Invaders</h1>
+            <span class="sub">TISON Florian</span>
 
-        <div>
-            <h2>Présentation</h2>
-            <p>
-                Il nous a été demandé, dans le cadre de l'UE Synthèse d'image avancé, de réaliser un clone du jeu emblématique Space Invader tourant sur un navigateur.
-                J'ai chosis, pour la réalisation de ce projet, de faire un Space Invader sur le thème du jeu vidéo Pokémon.
-            </p>
-        </div>
+            <div id="presentation">
+                <h2>Présentation</h2>
+                <p>
+                    Il nous a été demandé, dans le cadre de l'UE Synthèse d'image avancé, de réaliser un clone du jeu emblématique Space Invader tourant sur un navigateur.
+                    J'ai chosis, pour la réalisation de ce projet, de faire un Space Invader sur le thème du jeu vidéo Pokémon.
+                </p>
+            </div>
 
-        <div>
-            <h2>Déroulement du jeu</h2>
-            <p>
-                Le jeu reprend la base d'un space invader classique. Le joueur commence la partie avec 3 vies et son objectif est de tirer sur les ennemies qui se déplacent devant lui et rapporte des points une fois élliminés. Une fois tout les ennemies élliminés, le joueur passe au niveau suivant. Pour rendre la tache du joueur moins facile, les ennemies lui tirent dessus et essaie eux aussi de l'éliminer. Pour se défendre des structures sont positionné devant le joueur. Ces structures peuvent être détruite par les ennemies mais également par le joueur. Un boss, rapportant plus de points, se déplace de temps à autre au dessus des ennemies et tire sur le joueur. Il n'est pas nécessaire de tuer le boss pour pouvoir passer au nivau suivant. une fois que le joeur à perdu toute ses vie ou qu'il a terminé tous les niveaux, le partie s'arrête et affiche au joeurs ses résultats.
-                Cependant quelques ajouts ont été effectué. Parmis ces ajouts, on retrouve la possibilité pour les ennemies d'avoir plusieurs vie, la possibilité pour les ennemies de lacher un objet bonus à destination du joueur et le gain d'une vie à chaque passage de niveau. De plus, chaque niveau est indépendant, ce qui a pour effet pour les ennemies de rapporter plus au moins de points suivant les niveaux. En effet, un même ennemie pourra, par exemple, rapporter 10 points au niveau 1 et 20 points au niveau 2.
+            <div id="deroulement">
+                <h2>Déroulement du jeu</h2>
+                <p>
+                    Le jeu reprend la base d'un space invader classique. Le joueur commence la partie avec 3 vies (configurable dans le fichier global.js) et son objectif est de tirer sur les ennemies qui se déplacent devant lui et lui rapporte des points une fois élliminés. Une fois tout les ennemies élliminés, le joueur passe au niveau suivant. Pour rendre la tache du joueur moins facile, les ennemies lui tirent dessus et essaie eux aussi de l'éliminer. Pour se défendre des structures sont positionné devant le joueur. Ces structures peuvent être détruite par les ennemies mais également par le joueur. Un boss, rapportant plus de points, se déplace de temps à autre au dessus des ennemies et tire sur le joueur. Il n'est pas nécessaire de tuer le boss pour pouvoir passer au nivau suivant. une fois que le joeur à perdu toute ses vie ou qu'il a terminé tous les niveaux, le partie s'arrête et affiche au joeurs ses résultats.
+                    Cependant quelques ajouts ont été effectué. Parmis ces ajouts, on retrouve la possibilité pour les ennemies d'avoir plusieurs vie, la possibilité pour les ennemies de lacher un objet bonus à destination du joueur et le gain d'une vie à chaque passage de niveau. De plus, chaque niveau est indépendant, ce qui a pour effet pour les ennemies de rapporter plus au moins de points suivant les niveaux. En effet, un même ennemie pourra, par exemple, rapporter 10 points au niveau 1 et 20 points au niveau 2.
 
-                En accord avec le cahier des charges proposé, le jeu comporte un écran titre récapitulant les points données par chaque ennemies suivant le niveau ainsi qu'un bouton permettant de lancer la partie. On retrouve également sur cette écran le meilleur score enregistré lorsqu'une partie à déjà été joué auparavant.
+                    En accord avec le cahier des charges proposé, le jeu comporte un écran titre récapitulant les points données par chaque ennemies suivant le niveau ainsi qu'un bouton permettant de lancer la partie. On retrouve également sur cette écran le meilleur score enregistré lorsqu'une partie à déjà été joué auparavant.
 
-                Le jeu se compose de quatres niveau différents. Le premier niveau est basé sur le placement des ennemies du jeu Space Invader Original. On retrouve donc :
-                <ul>
-                    <li>1 Lignes d'ennemies faibles</li>
-                    <li>2 Lignes d'ennemies moyen</li>
-                    <li>1 Lignes d'ennemies fort</li>
-                </ul>
+                    Le jeu se compose de quatres niveau différents. Le premier niveau est basé sur le placement des ennemies du jeu Space Invader Original. On retrouve donc :
+                    <ul>
+                        <li>1 Lignes d'ennemies faibles</li>
+                        <li>2 Lignes d'ennemies moyen</li>
+                        <li>1 Lignes d'ennemies fort</li>
+                    </ul>
 
-                Le niveau deux se compose d'un coeur en pixel art sur lequel les pixel sont remplacer par des pokemons.
+                    Le niveau deux se compose d'un coeur en pixel art sur lequel les pixel sont remplacer par des pokemons.
 
-                Le niveau 3 et 4 comportent un placement personnalisé dessinant un pixel art de pokemons. Ces niveaux ont pour but de montrer les possibilité de placement du système développé détaillé dans la partie "Les petits plus".
-            </p>
-        </div>
+                    Le niveau 3 et 4 comportent un placement personnalisé dessinant un pixel art de pokemons. Ces niveaux ont pour but de montrer les possibilité de placement du système développé détaillé dans la partie "Les petits plus".
+                </p>
+            </div>
 
-        <div>
-            <h2>Technologie logicielle</h2>
-            <p>
-                Le jeu est construit autout de la librairie Javascript ThreeJs. Cette librairie permettant de créer des scenes 3D dans un navigateur internet.
-                La librairie ThreeX.keystate est également présente. Cette librarie à pour but de gérer les évenements au clavier.
+            <div id="techno">
+                <h2>Technologie logicielle</h2>
+                <p>
+                    Le jeu est construit autout de la librairie Javascript ThreeJs. Cette librairie permettant de créer des scenes 3D dans un navigateur internet.
+                    La librairie ThreeX.keystate est également présente. Cette librarie à pour but de gérer les évenements au clavier.
 
-                Ce projet, repose sur le système de class et de module introduit dans la spécification Javascript ECMAScript 6. Ainsi que sur un système évenementielle inspiré de l'EventEmitter du runtime Javascript NodeJS.
-                Ce système évenementielle est tiré d'une discussion github trouvable <a href="https://gist.github.com/mudge/5830382">ici</a>, et a ensuite été légérement agrémenté par mes soins.
-                L'avantage d'un tel système est l'indépendance des module entre eux. Ainsi une class coordinatrice gère l'ensemble de la partie et ses évènements.
+                    Ce projet, repose sur le système de class et de module introduit dans la spécification Javascript ECMAScript 6. Ainsi que sur un système évenementielle inspiré de l'EventEmitter du runtime Javascript NodeJS.
+                    Ce système évenementielle est tiré d'une discussion github trouvable <a href="https://gist.github.com/mudge/5830382">ici</a>, et a ensuite été légérement agrémenté par mes soins.
+                    L'avantage d'un tel système est l'indépendance des module entre eux. Ainsi une class coordinatrice gère l'ensemble de la partie et ses évènements.
 
-                Au niveau du développement la librairie Stat.js à été utilisé pour afficher les performances du jeu.
-            </p>
-        </div>
+                    Au niveau du développement la librairie Stat.js à été utilisé pour afficher les performances du jeu.
 
-        <div>
-            <h2>Architecture logicielle</h2>
-            <p>
-                Le projet reprend l'architecture de base proposé dans le sujet. La seul différence se fait au niveau du dossier js dans lequel les fichiers sont triés par fonctionnalité.
-            </p>
-        </div>
+                    <img class="rounded mx-auto d-block" src="rapport/images/threejs.png" alt="Logo de threejs">
+                </p>
+            </div>
 
-        <div>
-            <h1>Graphisme</h1>
-            <p>
-                Lorsque qu'un énnemies ou un bouclier prend des dégats, sa texture change (au niveau de la couleur).
-                Les models du jeux sont tiré du jeu vidéo Pokémon. On retrouve une arène de combat pour la zone de jeu ainsi que plusieurs pokémons interprétant les ennemies. Certains niveau sans models prennent quand à eux la forme d'un pokémon.
-                Un effet de postprocessing a également été implémenté. Celui-ci, donne un effet pixélisé au jeu rappelant les ancienens version de Pokémon ainsi que le jeu Space Invader originel.
-            </p>
-        </div>
+            <div id="archi">
+                <h2>Architecture logicielle</h2>
+                <p>
+                    Le projet reprend l'architecture de base proposé dans le sujet en structurant les fichier Javascript dans des dossiers décrivant leurs fonctionnalité. Un dossier html a été ajouté pour contenir les différentes interfaces graphique du jeu et un dossier levels pour contenir les différents fichiers de configuration des niveaux (détaillé plus bas dans le rapport).
+                </p>
+            </div>
 
-        <div>
-            <h2>Dialogues avec l'utilisateur</h2>
-            <p>
-                Un message est afficher lors de la transition entre les niveaux. Ce message affiche le nom du niveau et son numéro.
+            <div id="graphisme">
+                <h2>Graphisme</h2>
+                <p>
+                    Lorsque qu'un énnemies ou un bouclier prend des dégats, sa texture change (au niveau de la couleur).
+                    Les models du jeux sont tiré du jeu vidéo Pokémon. On retrouve une arène de combat pour la zone de jeu ainsi que plusieurs pokémons interprétant les ennemies. Certains niveau sans models prennent quand à eux la forme d'un pokémon. De plus, tout les modeles de pokemons possèdent une lègère animation qui leurs est unique.
+                    Lors d'un déplacement, le joueur se tourne vers sa direction de déplacement et lance une animation de course. En plus d'une animation de repos lorsque le joueur ne bouge pas, une animation caché à été faites lorsque le joueur ne bouge pas pendant un petit moment.
+                    Un effet de postprocessing a également été implémenté. Celui-ci, donne un effet pixélisé au jeu rappelant les ancienens version de Pokémon ainsi que le jeu Space Invader originel.
+                </p>
+            </div>
 
-                Plusieurs raccourci sont disponible pour offir une meilleure expérience utilisateur.
-                <ul>
-                    <li>La touche "H" permettant d'afficher tout les raccourci disponible,</li>
-                    <li>La touche "B" permettant d'afficher les zones de collision, pour aider au développement,</li>
-                    <li>La touche "S" permettant d'afficher les squelettes des models, pour aider au développement,</li>
-                    <li>La touche "M" permettant de couper la musique ou bien de la remettre,</li>
-                    <li>La touche "P" permettant de mettre le jeu en pause ou de l'enlever,</li>
-                    <li>La touche "T" permettant d'activer l'effet de pixélisation.</li>
-                </ul>
-            </p>
-        </div>
+            <div id="dialogue">
+                <h2>Dialogues avec l'utilisateur</h2>
+                <p>
+                    Un message est afficher lors de la transition entre les niveaux. Ce message affiche le nom du niveau et son numéro.
 
-        <div>
-            <h2>Caméras</h2>
-            <p>
-                Le jeu dispose de différents points de vue :
-                <ul>
-                    <li>Une vue de dessus (comme le jeu original)</li>
-                    <li>Une vue mouvante (qui suit les mouvements du joueur)</li>
-                    <li>Une vue de derrière le joueur permettant de visualer l'effet 3D du jeu</li>
-                    <li>Une vue de coté positionné au niveau des gradins.</li>
-                </ul>
+                    Plusieurs raccourci sont disponible pour offir une meilleure expérience utilisateur.
+                    <ul>
+                        <li>La touche "H" permettant d'afficher tout les raccourci disponible,</li>
+                        <li>La touche "B" permettant d'afficher les zones de collision, pour aider au développement,</li>
+                        <li>La touche "S" permettant d'afficher les squelettes des models, pour aider au développement,</li>
+                        <li>La touche "M" permettant de couper la musique ou bien de la remettre,</li>
+                        <li>La touche "P" permettant de mettre le jeu en pause ou de l'enlever,</li>
+                        <li>La touche "T" permettant d'activer l'effet de pixélisation.</li>
+                    </ul>
+                </p>
+            </div>
 
-                La vue de la caméra peut être changé via les touches 1 à 4 de la zone numérique du clavier ou bien via le pavé numérique.
-            </p>
-        </div>
+            <div id="camera">
+                <h2>Caméras</h2>
+                <p>
+                    Le jeu dispose de différents points de vue :
+                    <ul>
+                        <li>Une vue de dessus (comme le jeu original)</li>
+                        <li>Une vue mouvante (qui suit les mouvements du joueur)</li>
+                        <li>Une vue de derrière le joueur permettant de visualer l'effet 3D du jeu</li>
+                        <li>Une vue de coté positionné au niveau des gradins.</li>
+                    </ul>
 
-        <div>
-            <h2>Gestion des collisions</h2>
-            <p>
-                Les collisions sont gérés par le biais de groupe de collision au niveau des élements du jeu.
-                Ainsi chaque élement du jeu recoit un groupe d'éléments avec lequel il peut entrer en collision. Lors d'une mise à jour, un élément parcourt son groupe de collision et construit une Box3 autour de lui et des élements du groupe. Lorsque les Box3 se superpose, alors on a une collision.
-            </p>
+                    La vue de la caméra peut être changé via les touches 1 à 4 de la zone numérique du clavier ou bien via le pavé numérique.
+                </p>
+            </div>
 
-            <p>A titre d'exemple, l'extrait de code ci-dessous, montre la mise en place des collison entre les envahisseurs et le joueur.</p>
+            <div id="collision">
+                <h2>Gestion des collisions</h2>
+                <p>
+                    Les collisions sont gérés par le biais de groupe de collision au niveau des élements du jeu.
+                    Ainsi chaque élement du jeu recoit un groupe d'éléments avec lequel il peut entrer en collision. Lors d'une mise à jour, un élément parcourt son groupe de collision et construit une Box3 autour de lui et des élements du groupe. Lorsque les Box3 se superpose, alors on a une collision.
+                </p>
 
-            <pre>
-                <code class="lang-javascript">
+                <p>A titre d'exemple, l'extrait de code ci-dessous, montre la mise en place des collison entre les envahisseurs et le joueur.</p>
+
+                <pre>
+                    <code class="lang-javascript">
 getBoundingBox() {
     return new THREE.Box3().setFromObject(this);
 }
 
 /**
- * Detecte si un invader rentre en collision avec le defender
- */
+    * Detecte si un invader rentre en collision avec le defender
+    */
 isCollidingDefender() {
     let defender = this.target;
     if(defender) return this.getBoundingBox().intersectsBox(defender.getBoundingBox());
     return false;
 }
-                </code>
-            </pre>
-        </div>
+                    </code>
+                </pre>
+            </div>
 
-        <div>
-            <h2>Dynamisme</h2>
-            <p>
-                Pour rendre le jeu plus palpitant, la difficulté du jeu augmente au fil des niveaux et au cours des niveaux en eux même.
-                Entre le début et la fin d'un niveau, on retrouve donc une augmentation de :
-                <ul>
-                    <li>la vitesse de déplacement des ennemies,</li>
-                    <li>la vitesse des projectiles tiré par les ennemies,</li>
-                    <li>la précision des tires ennemies,</li>
-                    <li>le probabilité de tire des ennemies.</li>
-                </ul>
-            </p>
-        </div>
+            <div id="dynamisme">
+                <h2>Dynamisme</h2>
+                <p>
+                    Pour rendre le jeu plus palpitant, la difficulté du jeu augmente au fil des niveaux et au cours des niveaux en eux même.
+                    Entre le début et la fin d'un niveau, on retrouve donc une augmentation de :
+                    <ul>
+                        <li>la vitesse de déplacement des ennemies,</li>
+                        <li>la vitesse des projectiles tiré par les ennemies,</li>
+                        <li>la précision des tires ennemies,</li>
+                        <li>le probabilité de tire des ennemies.</li>
+                    </ul>
+                </p>
+            </div>
 
-        <div>
-            <h2>Intelligence artificielle</h2>
-            <p>
-                Pour gérer la précision des ennemies, une pseudo intelligence artificielle a été développé. Celle-ci se base sur la distance en X des ennemies par rapport au joueur. Ainsi plus l'ennemie sera précis et plus il tirera quand il sera proche du joueur. Un ennemie imprécis est donc un ennemie pouvant tirer peut importe la distance avec le joueur.
-            </p>
+            <div id="ia">
+                <h2>Intelligence artificielle</h2>
+                <p>
+                    Pour gérer la précision des ennemies, une pseudo intelligence artificielle a été développé. Celle-ci se base sur la distance en X des ennemies par rapport au joueur. Ainsi plus l'ennemie sera précis et plus il tirera quand il sera proche du joueur. Un ennemie imprécis est donc un ennemie pouvant tirer peut importe la distance avec le joueur.
+                </p>
 
-            <p>L'extrait de code ci-dessous décrit la séquence de tire d'un invader.</p>
+                <p>L'extrait de code ci-dessous décrit la séquence de tire d'un invader.</p>
 
-            <pre>
-                <code class="lang-javascript">
+                <pre>
+                    <code class="lang-javascript">
 function distanceX(v1, v2) {
     var dx = v1.x - v2.x;
     return Math.sqrt(dx*dx);
 }
 
 /**
- * Définie si un invader peut tirer ou non
- * @returns { Boolean }
- */
+    * Définie si un invader peut tirer ou non
+    * @returns { Boolean }
+    */
 canShoot() {
     let currentObjectPosition = new THREE.Vector3();
     this.getWorldPosition(currentObjectPosition);
@@ -248,31 +318,1103 @@ if(this.canShoot()) {
     // l'invader peut tirer et décide donc de tirer ou non
     if(Math.random() < this.probToShoot) this.shoot();
 }
-                </code>
-            </pre>
-        </div>
+                    </code>
+                </pre>
+            </div>
 
-        <div>
-            <h2>Musique et son</h2>
-            <p>
-                Le jeu dispose d'une musique de fond désactivable. Cette musique est un remix à la sauce Pokémon du theme de Jotaro dans l'anime Jojo's Bizarre Adventure.
-                Plusieurs son sont également présent. Nous avons donc un son au clique sur un bouton des menus du jeu, un son lors d'un tire du joueur et un son lors de la mort d'un ennemie.
-                Une musique est également déclenché lorsque le joueur arrive à terminer le jeu.
-            </p>
-        </div>
+            <div id="son">
+                <h2>Musique et son</h2>
+                <p>
+                    Le jeu dispose d'une musique de fond désactivable. Cette musique est un remix à la sauce Pokémon du theme de Jotaro dans l'anime Jojo's Bizarre Adventure.
+                    Plusieurs son sont également présent. Nous avons donc un son au clique sur un bouton des menus du jeu, un son lors d'un tire du joueur et un son lors de la mort d'un ennemie.
+                    Une musique est également déclenché lorsque le joueur arrive à terminer le jeu.
+                </p>
+            </div>
 
-        <div>
-            <h2>Triches</h2>
-            <p>
-                Plusieurs touches de triches sont disponible pour rendre l'évaluation plus simple pour vous.
-                Il y donc la touche I pour se rendre invincible vis à vis des projectiles des ennemies. Le status du mode invincible peut être visualiser en haut à gauche de la page.
-                Et la touche K permettant de passer au niveau suivant. Cependant aucun point ne sera gagné.
-            </p>
+            <div id="triches">
+                <h2>Triches</h2>
+                <p>
+                    Plusieurs touches de triches sont disponible pour rendre l'évaluation plus simple pour vous.
+                    Il y donc la touche I pour se rendre invincible vis à vis des projectiles des ennemies. Le status du mode invincible peut être visualiser en haut à gauche de la page.
+                    Et la touche K permettant de passer au niveau suivant. Cependant aucun point ne sera gagné.
+                </p>
+            </div>
+
+            <div id="plus">
+                <h2>Les petits plus</h2>
+                <p>
+                    <div id="levels">
+                        <h3>Création de niveaux</h3>
+                        <p>
+                            Le gros ajout sur ma version du jeu est modularité et la configurer libre des niveaux. En effet, tout les niveaux du jeu sont enregistré dans des fichiers JSON présent dans le dossier src/levels.
+                            Il est donc possible, dans ces fichiers, de choisir le mode de placement des envahisseurs suivant deux mode :
+                            <ul>
+                                <li>Grid : les envahisseurs se disposent en rectangle (comme dans le jeu originel)</li>
+                                <li>Custom : les envahisseurs se disposent suivant la configuration inscrite dans le fichier</li>
+                            </ul>
+                            Il est également possible de configurer entièrement les envahisseurs et leurs projectile ainsi que le joueur. Bien évidement, les données relative à la globalité du niveau sont eux aussi configurable.
+
+                            De plus, il est très facile d'ajouter un niveau car il suffit seulement d'ajouter un fichier JSON de niveau dans le dossier /src/levels avec le nom level-{id}.json et celui-ci sera automatiquement jouable en jeu à condition que la configuration soit bonne.
+
+                            <h4>Configuration générale du niveau :</h4>
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Données</th>
+                                        <th>Description des données</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            name
+                                        </td>
+                                        <td>
+                                            Type : String
+                                            Description : Le nom du niveau apparaissant au moment du changement de niveau et dans le titre de la page.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            id
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : Le numéro du niveau apparaissant lors de la transition.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            turnBeforeDeath
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : Le nombre de tour minimum avant que les envahisseurs n'atteigne le joueur.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            invaders
+                                        </td>
+                                        <td>
+                                            Type : Invaders
+                                            Description : La configuration des envahisseurs.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            defender
+                                        </td>
+                                        <td>
+                                            Type : Defender
+                                            Description : La configuration des envahisseurs.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            shields
+                                        </td>
+                                        <td>
+                                            Type : Shields
+                                            Description : La configuration des boucliers.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Boss
+                                        </td>
+                                        <td>
+                                            Type : Boss
+                                            Description : La configuration du boss du niveau.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Type Invaders :</h4>
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Données</th>
+                                        <th>Description des données</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            timeBetweenMoveSpeedIncreasing
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Temps (en milliseconde) nécéssaire entre les augmentations de vitesse de déplacement des envahisseurs.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            timeBetweenProjectilesSpeedIncreasing
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Temps (en milliseconde) nécéssaire entre les augmentations de vitesse des projectiles des envahisseurs.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            timeBetweenAccuracyIncreasing
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Temps (en milliseconde) nécéssaire entre les augmentations de précision des envahisseurs.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            timeBetweenShootProbIncreasing
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Temps (en milliseconde) nécéssaire entre les augmentations de probabilité de tire des envahisseurs.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            projectilesSpeedIncreasingValue
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Valeur à ajouter à la vitesse précédente des projectiles lors de l'augmentation.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            moveSpeedIncreasingValue
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Valeur à ajouter à la vitesse précédente de déplacement lors de l'augmentation.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            accuracyIncreasingValue
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Valeur à ajouter à la précision précédente lors de l'augmentation.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            shootProbIncreasingValue
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Valeur à ajouter à la probabilité de tire précédente lors de l'augmentation.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            speed
+                                        </td>
+                                        <td>
+                                            Type : Object {
+                                                x: Value
+                                            }
+                                            Description : Vitesse de déplacement horizontale initiale du groupe d'envahisseurs.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            placement
+                                        </td>
+                                        <td>
+                                            Type : Enum { "grid", "custom" }
+                                            Description : Type de placement des envahisseurs.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            perLine
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : (Utiliser seulement par le placement "grid") Définie combien d'envahisseurs sont présent sur chaque ligne.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            lines
+                                        </td>
+                                        <td>
+                                            Type : Array
+                                            Description : (Utiliser seulement par le placement "custom") Définie la configuration de placement du niveau.
+                                            Contient un ensemble de tableau de lignes contenant chacun un ensemble d'alias.
+                                            Les alias contenu correspondent à ceux configurer dans la configuration des envahisseurs.
+                                            Un alias vide ou inconnu résultera à un espace sur la grille.
+                                            Le résultat d'une configuration est détaillé plus bas sur cette page.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            shootProb
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Probabilité de tire par défaut des envahisseurs.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            size
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Taille des envahisseurs. Utilisé principalement pour la construction des envahisseurs sans models mais également pour le positionnement sur la grille de jeu.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            padding
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Espacement entre envahisseurs. Utilisé conjointement avec la taille pour le positionnement sur la grille de jeu.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            types
+                                        </td>
+                                        <td>
+                                            Type : Array&#60;Invader&#62;
+                                            Description : Espacement entre envahisseurs. Utilisé conjointement avec la taille pour le positionnement sur la grille de jeu.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Type Invader :</h4>
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Données</th>
+                                        <th>Description des données</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            name
+                                        </td>
+                                        <td>
+                                            Type : String
+                                            Description : Nom du type d'envahisseur.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            health
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : Nombre de vie du type d'envahisseur.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            models
+                                        </td>
+                                        <td>
+                                            Type : Array&#60;Model&#62;
+                                            Description : Ensemble de models du type d'envahisseur.
+                                            Il est nécéssaire d'avoir au minimum autant de models que de vie du type d'envahisseur.
+                                            Par exemple, un type d'envahisseur avec 2 vies devra avoir au minimum deux models. Cela permet de facilement gérer l'apparition de dégats au moment où l'envahisseur est touché.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            colors
+                                        </td>
+                                        <td>
+                                            Type : Array&#60;String&#62;
+                                            Description : Ensemble de couleurs du type d'envahisseur (Nécessaire seulement si l'envahisseur n'a pas de models).
+                                            Il est nécéssaire d'avoir au minimum autant de couleur que de vie du type d'envahisseur.
+                                            Par exemple, un type d'envahisseur avec 2 vies sans models devra avoir au minimum deux couleurs. Cela permet de facilement gérer l'apparition de dégats au moment où l'envahisseur est touché.
+                                            Une couleur est sous la forme héxadécimal (0xffffff);
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            lineCount
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : (Nécessaire seulement sur le placement "grid") Nombre de ligne de ce type d'envahisseur.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            points
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Nombre de points rapporté lors de l'élimination d'un envahisseur de ce type.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            projectiles
+                                        </td>
+                                        <td>
+                                            Type : Projectile
+                                            Description : Configuration des projectiles du type d'envahisseur.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            icon
+                                        </td>
+                                        <td>
+                                            Type : String
+                                            Description : URI de l'icon de l'envahisseur. Utilisé sur l'écran d'accueil.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            accuracy
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Valeur de précision initial. Valeur comprise en 0 (tire aléatoire) et 100 (tire exactement sur le joueur).
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            alias
+                                        </td>
+                                        <td>
+                                            Type : String
+                                            Description : (Optionnel) (Utilisé seulement par le placement "custom") Alias du type d'envahisseur seulement pour facilité la configuration de placement. Si l'alias n'est pas spécifié, le nom de l'envahisseur est utilisé a la place de l'alias dans la configuration.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Type Defender :</h4>
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Données</th>
+                                        <th>Description des données</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            speed
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Vitesse de déplacement horizontale du joueur.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            shotDelay
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Temps entre les tires du joueur.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            model
+                                        </td>
+                                        <td>
+                                            Type : Model
+                                            Description : Model du joueur.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            color
+                                        </td>
+                                        <td>
+                                            Type : String
+                                            Description : Couleur du joueur si aucun model n'est spécifié.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            width
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Largeur du joueur si aucun model n'est spécifié.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            height
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Profondeur du joueur si aucun model n'est spécifié.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            projectiles
+                                        </td>
+                                        <td>
+                                            Type : Projectile
+                                            Description : Configuration des projectiles du type d'envahisseur.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Type Boss :</h4>
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Données</th>
+                                        <th>Description des données</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            timeBeforeFirstMove
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Temps (en milliseconde) minimum avant la première apparition du boss.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            maxTimeBeforeReapearing
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Temps (en milliseconde) minimum avant que le boss ne réaparraise apres sa disparition sur un coin de l'écran.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            maxTimeBeforeRevive
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Temps (en milliseconde) minimum avant que le boss ne revive une fois tué.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            speed
+                                        </td>
+                                        <td>
+                                            Type : Object {
+                                                x: Value
+                                            }
+                                            Description : Vitesse de déplacement horizontale du boss.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            size
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Taille du boss. Utilisé principalement pour la construction du boss sans models.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            health
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : Nombre de vie du boss.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            models
+                                        </td>
+                                        <td>
+                                            Type : Array&#60;Model&#62;
+                                            Description : Ensemble de models du boss.
+                                            Il est nécéssaire d'avoir au minimum autant de models que de vie du boss.
+                                            Par exemple, un boss avec 2 vies devra avoir au minimum deux models. Cela permet de facilement gérer l'apparition de dégats au moment où le boss est touché.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            colors
+                                        </td>
+                                        <td>
+                                            Type : Array&#60;String&#62;
+                                            Description : Ensemble de couleurs du boss (Nécessaire seulement si le boss n'a pas de models).
+                                            Il est nécéssaire d'avoir au minimum autant de couleur que de vie du boss.
+                                            Par exemple, un boss avec 2 vies sans models devra avoir au minimum deux couleurs. Cela permet de facilement gérer l'apparition de dégats au moment où le boss est touché.
+                                            Une couleur est sous la forme héxadécimal (0xffffff);
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            points
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Nombre de points rapporté lors de l'élimination du boss.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            projectiles
+                                        </td>
+                                        <td>
+                                            Type : Projectile
+                                            Description : Configuration des projectiles du boss.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            icon
+                                        </td>
+                                        <td>
+                                            Type : String
+                                            Description : URI de l'icon du boss. Utilisé sur l'écran d'accueil.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Type Shields :</h4>
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Données</th>
+                                        <th>Description des données</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            count
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : Nombre de bouclier dans le niveau.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            height
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Profondeur du bouclier. Utilisé principalement pour la construction d'un bouclier sans models.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            width
+                                        </td>
+                                        <td>
+                                            Type : Number
+                                            Description : Largeur du bouclier. Utilisé principalement pour la construction d'un bouclier sans models.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            health
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : Nombre de vie des boucliers.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            models
+                                        </td>
+                                        <td>
+                                            Type : Array&#60;Model&#62;
+                                            Description : Ensemble de models des boucliers.
+                                            Il est nécéssaire d'avoir au minimum autant de models que de vie des boucliers.
+                                            Par exemple, un bouclier avec 2 vies devra avoir au minimum deux models. Cela permet de facilement gérer l'apparition de dégats au moment où un bouclier est touché.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            colors
+                                        </td>
+                                        <td>
+                                            Type : Array&#60;String&#62;
+                                            Description : Ensemble de couleurs des boucliers (Nécessaire seulement si les boucliers n'ont pas de models).
+                                            Il est nécéssaire d'avoir au minimum autant de couleur que de vie des boucliers.
+                                            Par exemple, un bouclier avec 2 vies sans models devra avoir au minimum deux couleurs. Cela permet de facilement gérer l'apparition de dégats au moment où un bouclier est touché.
+                                            Une couleur est sous la forme héxadécimal (0xffffff);
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            padding
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : Espacement entre les boucliers.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Type Projectile :</h4>
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Données</th>
+                                        <th>Description des données</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            speed
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : Vitesse de déplacement du projectile.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            model
+                                        </td>
+                                        <td>
+                                            Type : Model
+                                            Description : Model du projectile.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            color
+                                        </td>
+                                        <td>
+                                            Type : String
+                                            Description : Couleur du projectile si il n'a pas de model.
+                                            Une couleur est sous la forme héxadécimal (0xffffff);
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            size
+                                        </td>
+                                        <td>
+                                            Type : Integer
+                                            Description : Taille du projectile. Utilisé si le projectile n'a pas de model pour dessiner le projectile.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Type Model :</h4>
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Données</th>
+                                        <th>Description des données</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            src
+                                        </td>
+                                        <td>
+                                            Type : String
+                                            Description : URI du model GLTF à charger.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            scale
+                                        </td>
+                                        <td>
+                                            Type : Vector3
+                                            Description : Vecteur de redimensionner.
+                                            De la forme : {
+                                                x: 1,
+                                                y: 1,
+                                                z: 1
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            rotate
+                                        </td>
+                                        <td>
+                                            Type : Vector3
+                                            Description : Vecteur de rotation.
+                                            De la forme : {
+                                                x: 0,
+                                                y: 0,
+                                                z: 0
+                                            }
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            Un exemple de configuration de niveau est donné si dessous (configuration du niveau 1) :
+                            <pre>
+                                <code class="lang-json">
+{
+    "name": "Nostalgie",
+    "id": 1,
+    "turnBeforeDeath": 10,
+    "invaders": {
+        "timeBetweenMoveSpeedIncreasing": 2500,
+        "timeBetweenProjectilesSpeedIncreasing": 2500,
+        "timeBetweenAccuracyIncreasing": 1000,
+        "timeBetweenShootProbIncreasing": 1000,
+        "projectilesSpeedIncreasingValue": 0.2,
+        "moveSpeedIncreasingValue": 5,
+        "accuracyIncreasingValue": 0.2,
+        "shootProbIncreasingValue": 0.00002,
+        "speed": {
+            "x": 30,
+            "z": 0
+        },
+        "placement": "grid",
+        "perLine": 11,
+        "shootProb": 0.00005,
+        "size": 10,
+        "padding": 10,
+        "types": [
+            {
+                "name": "Evoli",
+                "health": 1,
+                "models": [
+                    {
+                        "src": "/src/medias/models/Pokemons/evoli.gltf",
+                        "scale": {
+                            "x": 4,
+                            "y": 4,
+                            "z": 4
+                        },
+                        "rotate": {
+                            "x": 0,
+                            "y": 90,
+                            "z": 0
+                        },
+                        "animated": true
+                    }
+                ],
+                "colors": [
+                    "0xffffff",
+                    "0xff0000",
+                    "0x00ff00"
+                ],
+                "lineCount": 1,
+                "points": 10,
+                "projectiles": {
+                    "speed": 200,
+                    "models": [],
+                    "color": "0x0000ff",
+                    "size": 4
+                },
+                "icon": "/src/medias/images/evoli.png",
+                "accuracy": 0
+            },
+            {
+                "name": "Pokachu",
+                "health": 1,
+                "models": [
+                    {
+                        "src": "/src/medias/models/Pokemons/pikachu.gltf",
+                        "scale": {
+                            "x": 0.35,
+                            "y": 0.35,
+                            "z": 0.35
+                        },
+                        "rotate": {
+                            "x": 0,
+                            "y": 180,
+                            "z": 0
+                        },
+                        "animated": true
+                    }
+                ],
+                "colors": [
+                    "0xffffff",
+                    "0xff0000",
+                    "0x00ff00"
+                ],
+                "lineCount": 2,
+                "points": 20,
+                "projectiles": {
+                    "speed": 200,
+                    "models": [],
+                    "color": "0x0000ff",
+                    "size": 4
+                },
+                "icon": "/src/medias/images/pikachu.png",
+                "accuracy": 0
+            },
+            {
+                "name": "Carapuce",
+                "health": 2,
+                "models": [
+                    {
+                        "src": "/src/medias/models/Pokemons/carapuce.gltf",
+                        "scale": {
+                            "x": 4,
+                            "y": 4,
+                            "z": 4
+                        },
+                        "rotate": {
+                            "x": 0,
+                            "y": 90,
+                            "z": 0
+                        },
+                        "animated": true
+                    },
+                    {
+                        "src": "/src/medias/models/Pokemons/carapuceHited.gltf",
+                        "scale": {
+                            "x": 4,
+                            "y": 4,
+                            "z": 4
+                        },
+                        "rotate": {
+                            "x": 0,
+                            "y": 90,
+                            "z": 0
+                        },
+                        "animated": true
+                    }
+                ],
+                "colors": [
+                    "0xffffff",
+                    "0xff0000",
+                    "0x00ff00"
+                ],
+                "lineCount": 1,
+                "points": 50,
+                "projectiles": {
+                    "speed": 200,
+                    "models": [],
+                    "color": "0x0000ff",
+                    "size": 4
+                },
+                "icon": "/src/medias/images/carapuce.png",
+                "accuracy": 0
+            }
+        ]
+    },
+    "defender": {
+        "speed": 100,
+        "shotDelay": 0,
+        "model": {
+            "src": "/src/medias/models/zinnia.gltf",
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+            "rotate": {
+                "x": 90,
+                "y": 0,
+                "z": 0
+            },
+            "animated": true
+        },
+        "color": "0xff0000",
+        "width": 10,
+        "height": 10,
+        "projectiles": {
+            "speed": 200,
+            "model": {
+                "src": "/src/medias/models/PokeBalls/CherishBall.gltf",
+                "scale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                },
+                "rotate": {
+                    "x": 90,
+                    "y": 0,
+                    "z": 0
+                }
+            },
+            "color": "0xff00ff",
+            "size": 4
+        }
+    },
+    "shields": {
+        "count": 3,
+        "models": [],
+        "colors": [
+            "0xffffff",
+            "0xb38b6d",
+            "0x00ffff",
+            "0xfe01d3",
+            "0xeb7549"
+        ],
+        "width": 20,
+        "height": 10,
+        "health": 5,
+        "padding": 50
+    },
+    "boss": {
+        "timeBeforeFirstMove": 5000,
+        "maxTimeBeforeReapearing": 10000,
+        "maxTimeBeforeRevive": 30000,
+        "speed": {
+            "x": 60,
+            "z": 0
+        },
+        "size": 10,
+        "health": 1,
+        "models": [
+            {
+                "src": "/src/medias/models/Pokemons/leviator.gltf",
+                "scale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                },
+                "rotate": {
+                    "x": 0,
+                    "y": 90,
+                    "z": 0
+                },
+                "animated": true
+            }
+        ],
+        "projectiles": {
+            "speed": 400,
+            "models": [],
+            "color": "0xffff00",
+            "size": 4
+        },
+        "points": 100,
+        "icon": "/src/medias/images/leviator.png"
+    }
+}
+                                </code>
+                            </pre>
+                            <div>
+                                <h4>Placement "grid"</h4>
+                                <p>
+                                    La position en grille est spécifié d'après les données spécifié ci-dessus.
+                                    De ce fait, en prenant en compte 3 types d'envahisseur, le premier constituer de 1 lignes, le second de 2 lignes et le troisième de 1 ligne, avec 11 envahisseurs par ligne, nous obtenons donc le placement suivant :
+                                    <img class="rounded mx-auto d-block" src="rapport/images/gridPlacement.jpg" class="img-fluid" alt="Exemple de placement en grille">
+                                </p>
+                            </div>
+                            <div>
+                                <h4>Placement "custom"</h4>
+                                <p>
+                                    Le placement custom est le placement le plus personnalisable. En effet, il est possible de positioner les envahisseurs comme on le souhaite sur une grille.
+                                    Il est grandement inspiré du système d'ajout de craft du jeu populaire Minecraft disponible lors de la création d'un mod ou plugin dans le langage Java.
+                                    Ainsi si l'on défini 3 types d'envahisseurs avec un alias B, T et S et qu'on définie le tableau lines comme suit :
+                                    <pre>
+                                        <code class="lang-json">
+"placement": "custom",
+"lines": [
+    ["E", "B", "B", "E", "E", "E", "B", "B", "E"],
+    ["B", "T", "T", "B", "E", "B", "T", "T", "B"],
+    ["B", "T", "T", "T", "B", "T", "T", "T", "B"],
+    ["E", "B", "T", "S", "T", "S", "T", "B", "E"],
+    ["E", "E", "B", "T", "S", "T", "B", "E", "E"],
+    ["E", "E", "E", "B", "T", "B", "E", "E", "E"],
+    ["E", "E", "E", "E", "B", "E", "E", "E", "E"]
+]
+                                        </code>
+                                    </pre>
+                                    On obtient par exemple pour la première ligne :
+                                    <ul>
+                                        <li>Un espace (car E n'est pas définie dans les alias ou dans les noms des types d'envahisseurs)</li>
+                                        <li>Deux envahisseur d'alias B</li>
+                                        <li>Trois espaces</li>
+                                        <li>Deux envahisseur d'alias B</li>
+                                        <li>Puis un espace</li>
+                                    </ul>
+
+                                    Cette exemple nous donne le placement en coeur suivant :
+                                    <img class="rounded mx-auto d-block" src="rapport/images/customPlacement.jpg" alt="Exemple de placement custom">
+                                </p>
+                            </div>
+                        </p>
+                    </div>
+
+                    <div id="plateau">
+                        <h3>Taille du plateau</h3>
+                        <p>
+                            La taille du plateau de jeu est également dimensionner automatiquement en fonction des éléments présent dans le niveau.
+                            Cela permet donc de mettre autant d'ennemie souhaiter sans que le jeu deviennent injouable.
+                        </p>
+                    </div>
+
+                    <div id="positionementJoueur">
+                        <h3>Positionnement du joueur</h3>
+                        <p>
+                            Tout comme la taille du plateau, le positionnelment du joueur est entièrement automatique. Il est définie en fonction du nombre de ligne d'envahisseur et du nombre de tour avant que les envahisseur nous atteignent.
+                        </p>
+                    </div>
+
+                    <div id="interfaces">
+                        <h3>Gestion des interfaces utilisateur du jeu</h3>
+                        <p>
+                            Toute les interfaces sont inséré dans des fichiers html qui sont ensuite chargé sur la page de jeu. Cela permet au code d'être plus clair et lors du développement de pouvoir facilement construire l'interface.
+                        </p>
+                    </div>
+
+                    <div id="evenements">
+                        <h3>Système d'évenement</h3>
+                        <p>
+                            Le jeu est constuit autour d'évenement Javascript. Cela permet donc d'avoir une seul class coordinatrice et de pouvoir avoir des module totalement indépendant de la scene. La communication entre les instances de class se fait donc de manière totalement asynchrone ce qui est idéale pour un jeu vidéo.
+                        </p>
+                    </div>
+
+                    <div id="sauvegarde">
+                        <h3>Sauvegarde du score</h3>
+                        <p>
+                            Dans le but de pouvoir visualiser son meilleur score après avoir jouer ou de pouvoir partager son score avec ses amis, j'ai implémenter une sauvegarde du meilleur score dans le local storage du navigateur. Cela permet donc, même après fermeture du navigateur, de retrouver son meilleur score et ainsi, d'essayer de le battre.
+                        </p>
+                    </div>
+
+                    <div id="bonus">
+                        <h3>Bonus</h3>
+                        <p>
+                            Au cours de la partie, le joueur pourra être ammené à obtenir des Bonus lorsqu'il tue un envahisseur avec 1% de chance. Il n'y a actuellement qu'un seul bonus représenté par un model de coueur et donnant 1 vie supplémentaire au joueur lorsqu'il le ramasse.
+                            Les bonus sont issue d'une class abstraite et Bonus non instantiable. Il suffit donc pour créer un nouveau bonus d'hériter de cette classe et d'implémenter la méthode launchEffect(). Il faut bien entendu ajouter le nouveau bonus à la liste des bonus disponible dans la class Game, pour qu'il soit pris en compte.
+                        </p>
+                    </div>
+
+                    <div id="manette">
+                        <h3>Support de la manette de jeu</h3>
+                        <p>
+                            En plus des fleches directionnel du clavier, le joueur peut également brancher une manette de jeu (testé avec une manette de XBox) et se déplacer avec les fleches directionnel de la manette. Il pourra également tirer avec la touche A de la manette et mettre en pause avec la touche START.
+                        </p>
+                    </div>
+                </p>
+            </div>
         </div>
     </section>
+
+    <button id="scrollTop"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg></button>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.7.2/build/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
+
+    <script src="rapport/js/main.js"></script>
 </body>
 </html>

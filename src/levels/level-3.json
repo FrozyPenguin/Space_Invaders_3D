@@ -170,7 +170,7 @@
         "health": 1,
         "models": [
             {
-                "src": "/src/medias/models/Pokemons/evoli.gltf",
+                "src": "/src/medias/models/Pokemons/gangar.gltf",
                 "scale": {
                     "x": 1,
                     "y": 1,
@@ -178,7 +178,7 @@
                 },
                 "rotate": {
                     "x": 0,
-                    "y": 180,
+                    "y": 90,
                     "z": 0
                 }
             }
