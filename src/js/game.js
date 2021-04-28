@@ -279,9 +279,6 @@ class Game {
         // https://stackoverflow.com/questions/38034787/three-js-and-buttons-for-start-and-pause-animation
         this.clock.stop();
         this.isStop = true;
-
-        console.log('bonjour')
-        console.log(this.clock.running)
         // this.toPaused = true;
         // cancelAnimationFrame(this.drawId);
 
@@ -405,6 +402,7 @@ class Game {
         })
 
         gameEvent.on('onKillAll', () => {
+            if(this.isStop) return;
             pause(null, true);
 
             this.changeLevel()
@@ -570,7 +568,7 @@ class Game {
         this.defender.setZPosition(-(file.invaders.size + file.invaders.padding) * ((this.invadersGroup.getNbInvaders() / this.invadersGroup.getPerLine()) + file.turnBeforeDeath));
 
         // Helpers
-        this.addHelpers(file.invaders);
+        // this.addHelpers(file.invaders);
 
         // Ajustement de la taille de la zone de jeu
         this.walls = initWalls(this.invadersGroup.getNbInvaders(), file.invaders.size, file.invaders.padding, this.invadersGroup.getPerLine(), file.turnBeforeDeath);

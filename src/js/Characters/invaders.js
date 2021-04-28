@@ -184,7 +184,7 @@ class Invader extends GameObject {
         }
 
         // Si un invader rentre en collision avec le defender, alors la partie est terminé même si on est invincible
-        if(this.isCollidingDefender()) {
+        if(this.isCollidingDefender() || this.isCollidingWall('front')) {
             gameEvent.emit('onEndGame');
         }
 

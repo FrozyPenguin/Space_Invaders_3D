@@ -20,7 +20,7 @@ class Boss extends Invader {
     reset() {
         this.visible = false;
         this.position.z = this.initPos / 2;
-        this.position.x = this.initPos;
+        this.position.x = this.initPos - 20;
         this.speed.x = -Math.abs(this.speed.x);
     }
 
@@ -56,7 +56,6 @@ class Boss extends Invader {
     }
 
     death() {
-
         setTimeout(() => {
             this.live(this.maxModel);
             this.reset();

@@ -32,10 +32,10 @@
                 - Fichiers .js triés par fonctionnalité
             - Graphisme
                 - les ennemis qui ont plusieurs vies on également plusieurs sprites en fonction des dégâts infligés
-                - Modèles 3D tirés de Pokémon, tirés de plusieurs des versions 3D (https://www.models-resource.com/3ds/pokemonxy/)
-                - Décor : Arène "Super Training Stadium" du jeu Pokémon X et Y (https://www.models-resource.com/3ds/pokemonxy/model/12117/)
+                - Modèles 3D tirés de Pokémon, tirés de plusieurs des versions 3D (https://www.modèles-resource.com/3ds/pokemonxy/)
+                - Décor : Arène "Super Training Stadium" du jeu Pokémon X et Y (https://www.modèles-resource.com/3ds/pokemonxy/model/12117/)
                 - Les projectiles sont des modèles de "Mémoire ball"
-                - Un postProcessing qui donne un effect "pixélisé" au jeu pour rappeler les vieilles versions de pokemons
+                - Un postProcessing qui donne un effect "pixélisé" au jeu pour rappeler les vieilles versions de Pokémons
             - Dialogues avec l'utilisateur
             - Points de vue caméra
                 4 positions de caméra
@@ -131,7 +131,7 @@
                   <li><a href="#plateau">Taille du plateau</a></li>
                   <li><a href="#positionementJoueur">Positionnement du joueur</a></li>
                   <li><a href="#interfaces">Gestion des interfaces utilisateur du jeu</a></li>
-                  <li><a href="#evenements">Système d'évenement</a></li>
+                  <li><a href="#evenements">Système d'évènement</a></li>
                   <li><a href="#sauvegarde">Sauvegarde du score</a></li>
                   <li><a href="#bonus">Bonus</a></li>
                   <li><a href="#manette">Support de la manette de jeu</a></li>
@@ -157,40 +157,40 @@
             <div id="presentation">
                 <h2>Présentation</h2>
                 <p>
-                    Il nous a été demandé, dans le cadre de l'UE Synthèse d'image avancé, de réaliser un clone du jeu emblématique Space Invader tourant sur un navigateur.
-                    J'ai chosis, pour la réalisation de ce projet, de faire un Space Invader sur le thème du jeu vidéo Pokémon.
+                    Il nous a été demandé, dans le cadre de l'UE Synthèse d'image avancé, de réaliser un clone du jeu emblématique Space Invader tournant sur un navigateur.
+                    J'ai choisis, pour la réalisation de ce projet, de faire un Space Invader sur le thème du jeu vidéo Pokémon.
                 </p>
             </div>
 
             <div id="deroulement">
                 <h2>Déroulement du jeu</h2>
                 <p>
-                    Le jeu reprend la base d'un space invader classique. Le joueur commence la partie avec 3 vies (configurable dans le fichier global.js) et son objectif est de tirer sur les ennemies qui se déplacent devant lui et lui rapporte des points une fois élliminés. Une fois tout les ennemies élliminés, le joueur passe au niveau suivant. Pour rendre la tache du joueur moins facile, les ennemies lui tirent dessus et essaie eux aussi de l'éliminer. Pour se défendre des structures sont positionné devant le joueur. Ces structures peuvent être détruite par les ennemies mais également par le joueur. Un boss, rapportant plus de points, se déplace de temps à autre au dessus des ennemies et tire sur le joueur. Il n'est pas nécessaire de tuer le boss pour pouvoir passer au nivau suivant. une fois que le joueur à perdu toute ses vie ou qu'il a terminé tous les niveaux, le partie s'arrête et affiche au joueurs ses résultats.
-                    Cependant quelques ajouts ont été effectué. Parmis ces ajouts, on retrouve la possibilité pour les ennemies d'avoir plusieurs vie, la possibilité pour les ennemies de lacher un objet bonus à destination du joueur et le gain d'une vie à chaque passage de niveau. De plus, chaque niveau est indépendant, ce qui a pour effet pour les ennemies de rapporter plus au moins de points suivant les niveaux. En effet, un même ennemie pourra, par exemple, rapporter 10 points au niveau 1 et 20 points au niveau 2.
+                    Le jeu reprend la base d'un Space Invader classique. Le joueur commence la partie avec 3 vies (configurable dans le fichier global.js) et son objectif est de tirer sur les ennemies qui se déplacent devant lui et lui rapporte des points une fois éliminés. Une fois tout les ennemies éliminés, le joueur passe au niveau suivant. Pour rendre la tache du joueur moins facile, les ennemies lui tirent dessus et essaie eux aussi de l'éliminer. Pour se défendre des structures sont positionné devant le joueur. Ces structures peuvent être détruite par les ennemies mais également par le joueur. Un boss, rapportant plus de points, se déplace de temps à autre au dessus des ennemies et tire sur le joueur. Il n'est pas nécessaire de tuer le boss pour pouvoir passer au niveau suivant. une fois que le joueur à perdu toute ses vie ou qu'il a terminé tous les niveaux, le partie s'arrête et affiche au joueurs ses résultats.
+                    Cependant quelques ajouts ont été effectué. Parmi ces ajouts, on retrouve la possibilité pour les ennemies d'avoir plusieurs vie, la possibilité pour les ennemies de lâcher un objet bonus à destination du joueur et le gain d'une vie à chaque passage de niveau. De plus, chaque niveau est indépendant, ce qui a pour effet pour les ennemies de rapporter plus au moins de points suivant les niveaux. En effet, un même ennemie pourra, par exemple, rapporter 10 points au niveau 1 et 20 points au niveau 2.
 
                     En accord avec le cahier des charges proposé, le jeu comporte un écran titre récapitulant les points données par chaque ennemies suivant le niveau ainsi qu'un bouton permettant de lancer la partie. On retrouve également sur cette écran le meilleur score enregistré lorsqu'une partie à déjà été joué auparavant.
 
-                    Le jeu se compose de quatres niveau différents. Le premier niveau est basé sur le placement des ennemies du jeu Space Invader Original. On retrouve donc :
+                    Le jeu se compose de quatre niveau différents. Le premier niveau est basé sur le placement des ennemies du jeu Space Invader Original. On retrouve donc :
                     <ul>
                         <li>1 Lignes d'ennemies faibles</li>
                         <li>2 Lignes d'ennemies moyen</li>
                         <li>1 Lignes d'ennemies fort</li>
                     </ul>
 
-                    Le niveau deux se compose d'un coeur en pixel art sur lequel les pixel sont remplacer par des pokemons.
+                    Le niveau deux se compose d'un cœur en pixel art sur lequel les pixel sont remplacer par des Pokémons.
 
-                    Le niveau 3 et 4 comportent un placement personnalisé dessinant un pixel art de pokemons. Ces niveaux ont pour but de montrer les possibilité de placement du système développé détaillé dans la partie "Les petits plus".
+                    Le niveau 3 et 4 comportent un placement personnalisé dessinant un pixel art de Pokémons. Ces niveaux ont pour but de montrer les possibilité de placement du système développé détaillé dans la partie "Les petits plus".
                 </p>
             </div>
 
             <div id="techno">
                 <h2>Technologies logicielle</h2>
                 <p>
-                    Le jeu est construit autout de la librairie Javascript ThreeJs. Cette librairie permettant de créer des scenes 3D dans un navigateur internet.
-                    La librairie ThreeX.keystate est également présente. Cette librarie à pour but de gérer les évenements au clavier.
+                    Le jeu est construit autour de la librairie Javascript "ThreeJs". Cette librairie permettant de créer des scènes 3D dans un navigateur internet.
+                    La librairie "ThreeX.keystate" est également présente. Cette librairie à pour but de gérer les évènements au clavier.
 
-                    Ce projet, repose sur le système de class et de module introduit dans la spécification Javascript ECMAScript 6. Ainsi que sur un système évenementielle inspiré de l'EventEmitter du runtime Javascript NodeJS.
-                    Ce système évenementielle est tiré d'une discussion github trouvable <a href="https://gist.github.com/mudge/5830382">ici</a>, et a ensuite été légérement agrémenté par mes soins.
+                    Ce projet, repose sur le système de class et de module introduit dans la spécification Javascript ECMAScript 6. Ainsi que sur un système évènementielle inspiré de la class EventEmitter du runtime Javascript NodeJS.
+                    Ce système évènementielle est tiré d'une discussion GitHub trouvable <a href="https://gist.github.com/mudge/5830382">ici</a>, et a ensuite été légèrement agrémenté par mes soins.
                     L'avantage d'un tel système est l'indépendance des module entre eux. Ainsi une class coordinatrice gère l'ensemble de la partie et ses évènements.
 
                     Au niveau du développement la librairie Stat.js à été utilisé pour afficher les performances du jeu.
@@ -202,17 +202,17 @@
             <div id="archi">
                 <h2>Architecture logicielle</h2>
                 <p>
-                    Le projet reprend l'architecture de base proposé dans le sujet en structurant les fichier Javascript dans des dossiers décrivant leurs fonctionnalité. Un dossier html a été ajouté pour contenir les différentes interfaces graphique du jeu et un dossier levels pour contenir les différents fichiers de configuration des niveaux (détaillé plus bas dans le rapport).
+                    Le projet reprend l'architecture de base proposé dans le sujet en structurant les fichier Javascript dans des dossiers décrivant leurs fonctionnalité. Un dossier <i>html</i> a été ajouté pour contenir les différentes interfaces graphique du jeu et un dossier <i>levels</i> pour contenir les différents fichiers de configuration des niveaux (détaillé plus bas dans le rapport).
                 </p>
             </div>
 
             <div id="graphisme">
                 <h2>Graphisme</h2>
                 <p>
-                    Lorsque qu'un énnemies ou un bouclier prend des dégats, sa texture change (au niveau de la couleur).
-                    Les models du jeux sont tiré du jeu vidéo Pokémon. On retrouve une arène de combat pour la zone de jeu ainsi que plusieurs pokémons interprétant les ennemies. Certains niveau sans models prennent quand à eux la forme d'un pokémon. De plus, tout les modeles de pokemons possèdent une lègère animation qui leurs est unique.
+                    Lorsque qu'un ennemies ou un bouclier prend des dégâts, sa texture change (au niveau de la couleur).
+                    Les modèles du jeux sont tiré du jeu vidéo Pokémon. On retrouve une arène de combat pour la zone de jeu ainsi que plusieurs Pokémons interprétant les ennemies. Certains niveau sans modèles prennent quand à eux la forme d'un Pokémon. De plus, tout les modèles de Pokémons possèdent une légère animation qui leurs est unique.
                     Lors d'un déplacement, le joueur se tourne vers sa direction de déplacement et lance une animation de course. En plus d'une animation de repos lorsque le joueur ne bouge pas, une animation caché à été faites lorsque le joueur ne bouge pas pendant un petit moment.
-                    Un effet de postprocessing a également été implémenté. Celui-ci, donne un effet pixélisé au jeu rappelant les ancienens version de Pokémon ainsi que le jeu Space Invader originel.
+                    Un effet de postprocessing a également été implémenté. Celui-ci, donne un effet pixélisé au jeu rappelant les anciennes version de Pokémon ainsi que le jeu Space Invader originel.
                 </p>
             </div>
 
@@ -221,14 +221,14 @@
                 <p>
                     Un message est afficher lors de la transition entre les niveaux. Ce message affiche le nom du niveau et son numéro. Lors de l'arrivé sur le niveau suivant, une attente de une seconde est lancé pour laissé au joueur le temps d'observer le niveau.
 
-                    Plusieurs raccourci sont disponible pour offir une meilleure expérience utilisateur.
+                    Plusieurs raccourci sont disponible pour offrir une meilleure expérience utilisateur.
                     <ul>
                         <li>La touche "H" permettant d'afficher tout les raccourci disponible,</li>
                         <li>La touche "B" permettant d'afficher les zones de collision, pour aider au développement,</li>
-                        <li>La touche "S" permettant d'afficher les squelettes des models, pour aider au développement,</li>
+                        <li>La touche "S" permettant d'afficher les squelettes des modèles, pour aider au développement,</li>
                         <li>La touche "M" permettant de couper la musique ou bien de la remettre,</li>
                         <li>La touche "P" permettant de mettre le jeu en pause ou de l'enlever,</li>
-                        <li>La touche "T" permettant d'activer l'effet de pixélisation.</li>
+                        <li>La touche "T" permettant d'activer l'effet de pixellisation.</li>
                     </ul>
                 </p>
             </div>
@@ -240,7 +240,7 @@
                     <ul>
                         <li>Une vue de dessus (comme le jeu original)</li>
                         <li>Une vue mouvante (qui suit les mouvements du joueur)</li>
-                        <li>Une vue de derrière le joueur permettant de visualer l'effet 3D du jeu</li>
+                        <li>Une vue de derrière le joueur permettant de visualiser l'effet 3D du jeu</li>
                         <li>Une vue de coté positionné au niveau des gradins.</li>
                     </ul>
 
@@ -251,11 +251,11 @@
             <div id="collision">
                 <h2>Gestion des collisions</h2>
                 <p>
-                    Les collisions sont gérés par le biais de groupe de collision au niveau des élements du jeu.
-                    Ainsi chaque élement du jeu recoit un groupe d'éléments avec lequel il peut entrer en collision. Lors d'une mise à jour, un élément parcourt son groupe de collision et construit une Box3 autour de lui et des élements du groupe. Lorsque les Box3 se superpose, alors on a une collision.
+                    Les collisions sont gérés par le biais de groupe de collision au niveau des éléments du jeu.
+                    Ainsi chaque élément du jeu reçoit un groupe d'éléments avec lequel il peut entrer en collision. Lors d'une mise à jour, un élément parcourt son groupe de collision et construit une Box3 autour de lui et des éléments du groupe. Lorsque les Box3 se superpose, alors on a une collision.
                 </p>
 
-                <p>A titre d'exemple, l'extrait de code ci-dessous, montre la mise en place des collison entre les envahisseurs et le joueur.</p>
+                <p>A titre d'exemple, l'extrait de code ci-dessous, montre la mise en place des collision entre les envahisseurs et le joueur.</p>
 
                 <pre>
                     <code class="lang-javascript">
@@ -295,7 +295,7 @@ isCollidingDefender() {
                     Pour gérer la précision des ennemies, une pseudo intelligence artificielle a été développé. Celle-ci se base sur la distance en X des ennemies par rapport au joueur. Ainsi plus l'ennemie sera précis et plus il tirera quand il sera proche du joueur. Un ennemie imprécis est donc un ennemie pouvant tirer peut importe la distance avec le joueur.
                 </p>
 
-                <p>L'extrait de code ci-dessous décrit la séquence de tire d'un invader.</p>
+                <p>L'extrait de code ci-dessous décrit la séquence de tire d'un envahisseur.</p>
 
                 <pre>
                     <code class="lang-javascript">
@@ -325,7 +325,7 @@ if(this.canShoot()) {
             <div id="son">
                 <h2>Musique et son</h2>
                 <p>
-                    Le jeu dispose d'une musique de fond désactivable. Cette musique est un remix à la sauce Pokémon du theme de Jotaro dans l'anime Jojo's Bizarre Adventure.
+                    Le jeu dispose d'une musique de fond désactivable. Cette musique est un remix à la sauce Pokémon du thème de Jotaro dans l'anime Jojo's Bizarre Adventure.
                     Plusieurs son sont également présent. Nous avons donc un son au clique sur un bouton des menus du jeu, un son lors d'un tire du joueur et un son lors de la mort d'un ennemie.
                     Une musique est également déclenché lorsque le joueur arrive à terminer le jeu.
                 </p>
@@ -335,7 +335,7 @@ if(this.canShoot()) {
                 <h2>Triches</h2>
                 <p>
                     Plusieurs touches de triches sont disponible pour rendre l'évaluation plus simple pour vous.
-                    Il y donc la touche I pour se rendre invincible vis à vis des projectiles des ennemies. Le status du mode invincible peut être visualiser en haut à gauche de la page.
+                    Il y donc la touche I pour se rendre invincible vis à vis des projectiles des ennemies. Le statue du mode invincible peut être visualiser en haut à gauche de la page.
                     Et la touche K permettant de passer au niveau suivant. Cependant aucun point ne sera gagné.
                 </p>
             </div>
@@ -346,15 +346,15 @@ if(this.canShoot()) {
                     <div id="levels">
                         <h3>Création de niveaux</h3>
                         <p>
-                            Le gros ajout sur ma version du jeu est modularité et la configurer libre des niveaux. En effet, tout les niveaux du jeu sont enregistré dans des fichiers JSON présent dans le dossier src/levels.
-                            Il est donc possible, dans ces fichiers, de choisir le mode de placement des envahisseurs suivant deux mode :
+                            Le gros ajout sur ma version du jeu est la modularité et la configuration libre des niveaux. En effet, tout les niveaux du jeu sont enregistrés dans des fichiers JSON présent dans le dossier <i>src/levels</i>.
+                            Il est donc possible, dans ces fichiers, de choisir le mode de placement des envahisseurs suivant deux modes :
                             <ul>
                                 <li>Grid : les envahisseurs se disposent en rectangle (comme dans le jeu originel)</li>
                                 <li>Custom : les envahisseurs se disposent suivant la configuration inscrite dans le fichier</li>
                             </ul>
                             Il est également possible de configurer entièrement les envahisseurs et leurs projectile ainsi que le joueur. Bien évidement, les données relative à la globalité du niveau sont eux aussi configurable.
 
-                            De plus, il est très facile d'ajouter un niveau car il suffit seulement d'ajouter un fichier JSON de niveau dans le dossier /src/levels avec le nom level-{id}.json et celui-ci sera automatiquement jouable en jeu à condition que la configuration soit bonne.
+                            De plus, il est très facile d'ajouter un niveau car il suffit seulement d'ajouter un fichier JSON de niveau dans le dossier <i>/src/levels</i> avec le nom <i>level-{id}.json</i> et celui-ci sera automatiquement jouable en jeu à condition que la configuration soit bonne.
 
                             <h4>Configuration générale du niveau :</h4>
                             <table class="table table-striped table-hover table-bordered">
@@ -371,7 +371,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : String
-                                            Description : Le nom du niveau apparaissant au moment du changement de niveau et dans le titre de la page.
+                                            <br>Description : Le nom du niveau apparaissant au moment du changement de niveau et dans le titre de la page.
                                         </td>
                                     </tr>
                                     <tr>
@@ -380,7 +380,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : Le numéro du niveau apparaissant lors de la transition.
+                                            <br>Description : Le numéro du niveau apparaissant lors de la transition.
                                         </td>
                                     </tr>
                                     <tr>
@@ -389,7 +389,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : Le nombre de tour minimum avant que les envahisseurs n'atteigne le joueur.
+                                            <br>Description : Le nombre de tour minimum avant que les envahisseurs n'atteigne le joueur.
                                         </td>
                                     </tr>
                                     <tr>
@@ -398,7 +398,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Invaders
-                                            Description : La configuration des envahisseurs.
+                                            <br>Description : La configuration des envahisseurs.
                                         </td>
                                     </tr>
                                     <tr>
@@ -407,7 +407,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Defender
-                                            Description : La configuration des envahisseurs.
+                                            <br>Description : La configuration des envahisseurs.
                                         </td>
                                     </tr>
                                     <tr>
@@ -416,7 +416,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Shields
-                                            Description : La configuration des boucliers.
+                                            <br>Description : La configuration des boucliers.
                                         </td>
                                     </tr>
                                     <tr>
@@ -425,7 +425,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Boss
-                                            Description : La configuration du boss du niveau.
+                                            <br>Description : La configuration du boss du niveau.
                                         </td>
                                     </tr>
                                 </tbody>
@@ -446,7 +446,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Temps (en milliseconde) nécéssaire entre les augmentations de vitesse de déplacement des envahisseurs.
+                                            <br>Description : Temps (en milliseconde) nécessaire entre les augmentations de vitesse de déplacement des envahisseurs.
                                         </td>
                                     </tr>
                                     <tr>
@@ -455,7 +455,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Temps (en milliseconde) nécéssaire entre les augmentations de vitesse des projectiles des envahisseurs.
+                                            <br>Description : Temps (en milliseconde) nécessaire entre les augmentations de vitesse des projectiles des envahisseurs.
                                         </td>
                                     </tr>
                                     <tr>
@@ -464,7 +464,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Temps (en milliseconde) nécéssaire entre les augmentations de précision des envahisseurs.
+                                            <br>Description : Temps (en milliseconde) nécessaire entre les augmentations de précision des envahisseurs.
                                         </td>
                                     </tr>
                                     <tr>
@@ -473,7 +473,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Temps (en milliseconde) nécéssaire entre les augmentations de probabilité de tire des envahisseurs.
+                                            <br>Description : Temps (en milliseconde) nécessaire entre les augmentations de probabilité de tire des envahisseurs.
                                         </td>
                                     </tr>
                                     <tr>
@@ -482,7 +482,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Valeur à ajouter à la vitesse précédente des projectiles lors de l'augmentation.
+                                            <br>Description : Valeur à ajouter à la vitesse précédente des projectiles lors de l'augmentation.
                                         </td>
                                     </tr>
                                     <tr>
@@ -491,7 +491,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Valeur à ajouter à la vitesse précédente de déplacement lors de l'augmentation.
+                                            <br>Description : Valeur à ajouter à la vitesse précédente de déplacement lors de l'augmentation.
                                         </td>
                                     </tr>
                                     <tr>
@@ -500,7 +500,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Valeur à ajouter à la précision précédente lors de l'augmentation.
+                                            <br>Description : Valeur à ajouter à la précision précédente lors de l'augmentation.
                                         </td>
                                     </tr>
                                     <tr>
@@ -509,7 +509,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Valeur à ajouter à la probabilité de tire précédente lors de l'augmentation.
+                                            <br>Description : Valeur à ajouter à la probabilité de tire précédente lors de l'augmentation.
                                         </td>
                                     </tr>
                                     <tr>
@@ -520,7 +520,7 @@ if(this.canShoot()) {
                                             Type : Object {
                                                 x: Value
                                             }
-                                            Description : Vitesse de déplacement horizontale initiale du groupe d'envahisseurs.
+                                            <br>Description : Vitesse de déplacement horizontale initiale du groupe d'envahisseurs.
                                         </td>
                                     </tr>
                                     <tr>
@@ -529,7 +529,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Enum { "grid", "custom" }
-                                            Description : Type de placement des envahisseurs.
+                                            <br>Description : Type de placement des envahisseurs.
                                         </td>
                                     </tr>
                                     <tr>
@@ -538,7 +538,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : (Utiliser seulement par le placement "grid") Définie combien d'envahisseurs sont présent sur chaque ligne.
+                                            <br>Description : (Utiliser seulement par le placement "grid") Définie combien d'envahisseurs sont présent sur chaque ligne.
                                         </td>
                                     </tr>
                                     <tr>
@@ -547,7 +547,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Array
-                                            Description : (Utiliser seulement par le placement "custom") Définie la configuration de placement du niveau.
+                                            <br>Description : (Utiliser seulement par le placement "custom") Définie la configuration de placement du niveau.
                                             Contient un ensemble de tableau de lignes contenant chacun un ensemble d'alias.
                                             Les alias contenu correspondent à ceux configurer dans la configuration des envahisseurs.
                                             Un alias vide ou inconnu résultera à un espace sur la grille.
@@ -560,7 +560,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Probabilité de tire par défaut des envahisseurs.
+                                            <br>Description : Probabilité de tire par défaut des envahisseurs.
                                         </td>
                                     </tr>
                                     <tr>
@@ -569,7 +569,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Taille des envahisseurs. Utilisé principalement pour la construction des envahisseurs sans models mais également pour le positionnement sur la grille de jeu.
+                                            <br>Description : Taille des envahisseurs. Utilisé principalement pour la construction des envahisseurs sans modèles mais également pour le positionnement sur la grille de jeu.
                                         </td>
                                     </tr>
                                     <tr>
@@ -578,7 +578,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Espacement entre envahisseurs. Utilisé conjointement avec la taille pour le positionnement sur la grille de jeu.
+                                            <br>Description : Espacement entre envahisseurs. Utilisé conjointement avec la taille pour le positionnement sur la grille de jeu.
                                         </td>
                                     </tr>
                                     <tr>
@@ -587,7 +587,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Array&#60;Invader&#62;
-                                            Description : Espacement entre envahisseurs. Utilisé conjointement avec la taille pour le positionnement sur la grille de jeu.
+                                            <br>Description : Espacement entre envahisseurs. Utilisé conjointement avec la taille pour le positionnement sur la grille de jeu.
                                         </td>
                                     </tr>
                                 </tbody>
@@ -608,7 +608,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : String
-                                            Description : Nom du type d'envahisseur.
+                                            <br>Description : Nom du type d'envahisseur.
                                         </td>
                                     </tr>
                                     <tr>
@@ -617,18 +617,18 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : Nombre de vie du type d'envahisseur.
+                                            <br>Description : Nombre de vie du type d'envahisseur.
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            models
+                                            modèles
                                         </td>
                                         <td>
                                             Type : Array&#60;Model&#62;
-                                            Description : Ensemble de models du type d'envahisseur.
-                                            Il est nécéssaire d'avoir au minimum autant de models que de vie du type d'envahisseur.
-                                            Par exemple, un type d'envahisseur avec 2 vies devra avoir au minimum deux models. Cela permet de facilement gérer l'apparition de dégats au moment où l'envahisseur est touché.
+                                            <br>Description : Ensemble de modèles du type d'envahisseur.
+                                            Il est nécessaire d'avoir au minimum autant de modèles que de vie du type d'envahisseur.
+                                            Par exemple, un type d'envahisseur avec 2 vies devra avoir au minimum deux modèles. Cela permet de facilement gérer l'apparition de dégâts au moment où l'envahisseur est touché.
                                         </td>
                                     </tr>
                                     <tr>
@@ -637,10 +637,10 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Array&#60;String&#62;
-                                            Description : Ensemble de couleurs du type d'envahisseur (Nécessaire seulement si l'envahisseur n'a pas de models).
-                                            Il est nécéssaire d'avoir au minimum autant de couleur que de vie du type d'envahisseur.
-                                            Par exemple, un type d'envahisseur avec 2 vies sans models devra avoir au minimum deux couleurs. Cela permet de facilement gérer l'apparition de dégats au moment où l'envahisseur est touché.
-                                            Une couleur est sous la forme héxadécimal (0xffffff);
+                                            <br>Description : Ensemble de couleurs du type d'envahisseur (Nécessaire seulement si l'envahisseur n'a pas de modèles).
+                                            Il est nécessaire d'avoir au minimum autant de couleur que de vie du type d'envahisseur.
+                                            Par exemple, un type d'envahisseur avec 2 vies sans modèles devra avoir au minimum deux couleurs. Cela permet de facilement gérer l'apparition de dégâts au moment où l'envahisseur est touché.
+                                            Une couleur est sous la forme hexadécimal (0xffffff);
                                         </td>
                                     </tr>
                                     <tr>
@@ -649,7 +649,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : (Nécessaire seulement sur le placement "grid") Nombre de ligne de ce type d'envahisseur.
+                                            <br>Description : (Nécessaire seulement sur le placement "grid") Nombre de ligne de ce type d'envahisseur.
                                         </td>
                                     </tr>
                                     <tr>
@@ -658,7 +658,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Nombre de points rapporté lors de l'élimination d'un envahisseur de ce type.
+                                            <br>Description : Nombre de points rapporté lors de l'élimination d'un envahisseur de ce type.
                                         </td>
                                     </tr>
                                     <tr>
@@ -667,7 +667,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Projectile
-                                            Description : Configuration des projectiles du type d'envahisseur.
+                                            <br>Description : Configuration des projectiles du type d'envahisseur.
                                         </td>
                                     </tr>
                                     <tr>
@@ -676,7 +676,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : String
-                                            Description : URI de l'icon de l'envahisseur. Utilisé sur l'écran d'accueil.
+                                            <br>Description : URI de l'icone de l'envahisseur. Utilisé sur l'écran d'accueil.
                                         </td>
                                     </tr>
                                     <tr>
@@ -685,7 +685,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Valeur de précision initial. Valeur comprise en 0 (tire aléatoire) et 100 (tire exactement sur le joueur).
+                                            <br>Description : Valeur de précision initial. Valeur comprise en 0 (tire aléatoire) et 100 (tire exactement sur le joueur).
                                         </td>
                                     </tr>
                                     <tr>
@@ -694,7 +694,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : String
-                                            Description : (Optionnel) (Utilisé seulement par le placement "custom") Alias du type d'envahisseur seulement pour facilité la configuration de placement. Si l'alias n'est pas spécifié, le nom de l'envahisseur est utilisé a la place de l'alias dans la configuration.
+                                            <br>Description : (Optionnel) (Utilisé seulement par le placement "custom") Alias du type d'envahisseur seulement pour facilité la configuration de placement. Si l'alias n'est pas spécifié, le nom de l'envahisseur est utilisé a la place de l'alias dans la configuration.
                                         </td>
                                     </tr>
                                 </tbody>
@@ -715,7 +715,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Vitesse de déplacement horizontale du joueur.
+                                            <br>Description : Vitesse de déplacement horizontale du joueur.
                                         </td>
                                     </tr>
                                     <tr>
@@ -724,7 +724,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Temps entre les tires du joueur.
+                                            <br>Description : Temps entre les tires du joueur.
                                         </td>
                                     </tr>
                                     <tr>
@@ -733,7 +733,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Model
-                                            Description : Model du joueur.
+                                            <br>Description : Model du joueur.
                                         </td>
                                     </tr>
                                     <tr>
@@ -742,7 +742,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : String
-                                            Description : Couleur du joueur si aucun model n'est spécifié.
+                                            <br>Description : Couleur du joueur si aucun model n'est spécifié.
                                         </td>
                                     </tr>
                                     <tr>
@@ -751,7 +751,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Largeur du joueur si aucun model n'est spécifié.
+                                            <br>Description : Largeur du joueur si aucun model n'est spécifié.
                                         </td>
                                     </tr>
                                     <tr>
@@ -760,7 +760,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Profondeur du joueur si aucun model n'est spécifié.
+                                            <br>Description : Profondeur du joueur si aucun model n'est spécifié.
                                         </td>
                                     </tr>
                                     <tr>
@@ -769,7 +769,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Projectile
-                                            Description : Configuration des projectiles du type d'envahisseur.
+                                            <br>Description : Configuration des projectiles du type d'envahisseur.
                                         </td>
                                     </tr>
                                 </tbody>
@@ -790,7 +790,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Temps (en milliseconde) minimum avant la première apparition du boss.
+                                            <br>Description : Temps (en milliseconde) minimum avant la première apparition du boss.
                                         </td>
                                     </tr>
                                     <tr>
@@ -799,7 +799,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Temps (en milliseconde) minimum avant que le boss ne réaparraise apres sa disparition sur un coin de l'écran.
+                                            <br>Description : Temps (en milliseconde) minimum avant que le boss ne réapparaisse après sa disparition sur un coin de l'écran.
                                         </td>
                                     </tr>
                                     <tr>
@@ -808,7 +808,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Temps (en milliseconde) minimum avant que le boss ne revive une fois tué.
+                                            <br>Description : Temps (en milliseconde) minimum avant que le boss ne revive une fois tué.
                                         </td>
                                     </tr>
                                     <tr>
@@ -819,7 +819,7 @@ if(this.canShoot()) {
                                             Type : Object {
                                                 x: Value
                                             }
-                                            Description : Vitesse de déplacement horizontale du boss.
+                                            <br>Description : Vitesse de déplacement horizontale du boss.
                                         </td>
                                     </tr>
                                     <tr>
@@ -828,7 +828,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Taille du boss. Utilisé principalement pour la construction du boss sans models.
+                                            <br>Description : Taille du boss. Utilisé principalement pour la construction du boss sans modèles.
                                         </td>
                                     </tr>
                                     <tr>
@@ -837,18 +837,18 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : Nombre de vie du boss.
+                                            <br>Description : Nombre de vie du boss.
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            models
+                                            modèles
                                         </td>
                                         <td>
                                             Type : Array&#60;Model&#62;
-                                            Description : Ensemble de models du boss.
-                                            Il est nécéssaire d'avoir au minimum autant de models que de vie du boss.
-                                            Par exemple, un boss avec 2 vies devra avoir au minimum deux models. Cela permet de facilement gérer l'apparition de dégats au moment où le boss est touché.
+                                            <br>Description : Ensemble de modèles du boss.
+                                            Il est nécessaire d'avoir au minimum autant de modèles que de vie du boss.
+                                            Par exemple, un boss avec 2 vies devra avoir au minimum deux modèles. Cela permet de facilement gérer l'apparition de dégâts au moment où le boss est touché.
                                         </td>
                                     </tr>
                                     <tr>
@@ -857,10 +857,10 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Array&#60;String&#62;
-                                            Description : Ensemble de couleurs du boss (Nécessaire seulement si le boss n'a pas de models).
-                                            Il est nécéssaire d'avoir au minimum autant de couleur que de vie du boss.
-                                            Par exemple, un boss avec 2 vies sans models devra avoir au minimum deux couleurs. Cela permet de facilement gérer l'apparition de dégats au moment où le boss est touché.
-                                            Une couleur est sous la forme héxadécimal (0xffffff);
+                                            <br>Description : Ensemble de couleurs du boss (Nécessaire seulement si le boss n'a pas de modèles).
+                                            Il est nécessaire d'avoir au minimum autant de couleur que de vie du boss.
+                                            Par exemple, un boss avec 2 vies sans modèles devra avoir au minimum deux couleurs. Cela permet de facilement gérer l'apparition de dégâts au moment où le boss est touché.
+                                            Une couleur est sous la forme hexadécimal (0xffffff);
                                         </td>
                                     </tr>
                                     <tr>
@@ -869,7 +869,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Nombre de points rapporté lors de l'élimination du boss.
+                                            <br>Description : Nombre de points rapporté lors de l'élimination du boss.
                                         </td>
                                     </tr>
                                     <tr>
@@ -878,7 +878,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Projectile
-                                            Description : Configuration des projectiles du boss.
+                                            <br>Description : Configuration des projectiles du boss.
                                         </td>
                                     </tr>
                                     <tr>
@@ -887,7 +887,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : String
-                                            Description : URI de l'icon du boss. Utilisé sur l'écran d'accueil.
+                                            <br>Description : URI de l'icone du boss. Utilisé sur l'écran d'accueil.
                                         </td>
                                     </tr>
                                 </tbody>
@@ -908,7 +908,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : Nombre de bouclier dans le niveau.
+                                            <br>Description : Nombre de bouclier dans le niveau.
                                         </td>
                                     </tr>
                                     <tr>
@@ -917,7 +917,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Profondeur du bouclier. Utilisé principalement pour la construction d'un bouclier sans models.
+                                            <br>Description : Profondeur du bouclier. Utilisé principalement pour la construction d'un bouclier sans modèles.
                                         </td>
                                     </tr>
                                     <tr>
@@ -926,7 +926,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Number
-                                            Description : Largeur du bouclier. Utilisé principalement pour la construction d'un bouclier sans models.
+                                            <br>Description : Largeur du bouclier. Utilisé principalement pour la construction d'un bouclier sans modèles.
                                         </td>
                                     </tr>
                                     <tr>
@@ -935,18 +935,18 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : Nombre de vie des boucliers.
+                                            <br>Description : Nombre de vie des boucliers.
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            models
+                                            modèles
                                         </td>
                                         <td>
                                             Type : Array&#60;Model&#62;
-                                            Description : Ensemble de models des boucliers.
-                                            Il est nécéssaire d'avoir au minimum autant de models que de vie des boucliers.
-                                            Par exemple, un bouclier avec 2 vies devra avoir au minimum deux models. Cela permet de facilement gérer l'apparition de dégats au moment où un bouclier est touché.
+                                            <br>Description : Ensemble de modèles des boucliers.
+                                            Il est nécessaire d'avoir au minimum autant de modèles que de vie des boucliers.
+                                            Par exemple, un bouclier avec 2 vies devra avoir au minimum deux modèles. Cela permet de facilement gérer l'apparition de dégâts au moment où un bouclier est touché.
                                         </td>
                                     </tr>
                                     <tr>
@@ -955,10 +955,10 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Array&#60;String&#62;
-                                            Description : Ensemble de couleurs des boucliers (Nécessaire seulement si les boucliers n'ont pas de models).
-                                            Il est nécéssaire d'avoir au minimum autant de couleur que de vie des boucliers.
-                                            Par exemple, un bouclier avec 2 vies sans models devra avoir au minimum deux couleurs. Cela permet de facilement gérer l'apparition de dégats au moment où un bouclier est touché.
-                                            Une couleur est sous la forme héxadécimal (0xffffff);
+                                            <br>Description : Ensemble de couleurs des boucliers (Nécessaire seulement si les boucliers n'ont pas de modèles).
+                                            Il est nécessaire d'avoir au minimum autant de couleur que de vie des boucliers.
+                                            Par exemple, un bouclier avec 2 vies sans modèles devra avoir au minimum deux couleurs. Cela permet de facilement gérer l'apparition de dégâts au moment où un bouclier est touché.
+                                            Une couleur est sous la forme hexadécimal (0xffffff);
                                         </td>
                                     </tr>
                                     <tr>
@@ -967,7 +967,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : Espacement entre les boucliers.
+                                            <br>Description : Espacement entre les boucliers.
                                         </td>
                                     </tr>
                                 </tbody>
@@ -988,7 +988,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : Vitesse de déplacement du projectile.
+                                            <br>Description : Vitesse de déplacement du projectile.
                                         </td>
                                     </tr>
                                     <tr>
@@ -997,7 +997,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Model
-                                            Description : Model du projectile.
+                                            <br>Description : Model du projectile.
                                         </td>
                                     </tr>
                                     <tr>
@@ -1006,8 +1006,8 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : String
-                                            Description : Couleur du projectile si il n'a pas de model.
-                                            Une couleur est sous la forme héxadécimal (0xffffff);
+                                            <br>Description : Couleur du projectile si il n'a pas de model.
+                                            Une couleur est sous la forme hexadécimal (0xffffff);
                                         </td>
                                     </tr>
                                     <tr>
@@ -1016,7 +1016,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Integer
-                                            Description : Taille du projectile. Utilisé si le projectile n'a pas de model pour dessiner le projectile.
+                                            <br>Description : Taille du projectile. Utilisé si le projectile n'a pas de model pour dessiner le projectile.
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1037,7 +1037,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : String
-                                            Description : URI du model GLTF à charger.
+                                            <br>Description : URI du model GLTF à charger.
                                         </td>
                                     </tr>
                                     <tr>
@@ -1046,7 +1046,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Vector3
-                                            Description : Vecteur de redimensionner.
+                                            <br>Description : Vecteur de redimensionner.
                                             De la forme : {
                                                 x: 1,
                                                 y: 1,
@@ -1060,7 +1060,7 @@ if(this.canShoot()) {
                                         </td>
                                         <td>
                                             Type : Vector3
-                                            Description : Vecteur de rotation.
+                                            <br>Description : Vecteur de rotation.
                                             De la forme : {
                                                 x: 0,
                                                 y: 0,
@@ -1100,9 +1100,9 @@ if(this.canShoot()) {
             {
                 "name": "Evoli",
                 "health": 1,
-                "models": [
+                "modèles": [
                     {
-                        "src": "/src/medias/models/Pokemons/evoli.gltf",
+                        "src": "/src/medias/modèles/Pokémons/evoli.gltf",
                         "scale": {
                             "x": 4,
                             "y": 4,
@@ -1125,7 +1125,7 @@ if(this.canShoot()) {
                 "points": 10,
                 "projectiles": {
                     "speed": 200,
-                    "models": [],
+                    "modèles": [],
                     "color": "0x0000ff",
                     "size": 4
                 },
@@ -1135,9 +1135,9 @@ if(this.canShoot()) {
             {
                 "name": "Pikachu",
                 "health": 1,
-                "models": [
+                "modèles": [
                     {
-                        "src": "/src/medias/models/Pokemons/pikachu.gltf",
+                        "src": "/src/medias/modèles/Pokémons/pikachu.gltf",
                         "scale": {
                             "x": 0.35,
                             "y": 0.35,
@@ -1160,7 +1160,7 @@ if(this.canShoot()) {
                 "points": 20,
                 "projectiles": {
                     "speed": 200,
-                    "models": [],
+                    "modèles": [],
                     "color": "0x0000ff",
                     "size": 4
                 },
@@ -1170,9 +1170,9 @@ if(this.canShoot()) {
             {
                 "name": "Carapuce",
                 "health": 2,
-                "models": [
+                "modèles": [
                     {
-                        "src": "/src/medias/models/Pokemons/carapuce.gltf",
+                        "src": "/src/medias/modèles/Pokémons/carapuce.gltf",
                         "scale": {
                             "x": 4,
                             "y": 4,
@@ -1186,7 +1186,7 @@ if(this.canShoot()) {
                         "animated": true
                     },
                     {
-                        "src": "/src/medias/models/Pokemons/carapuceHited.gltf",
+                        "src": "/src/medias/modèles/Pokémons/carapuceHited.gltf",
                         "scale": {
                             "x": 4,
                             "y": 4,
@@ -1209,7 +1209,7 @@ if(this.canShoot()) {
                 "points": 50,
                 "projectiles": {
                     "speed": 200,
-                    "models": [],
+                    "modèles": [],
                     "color": "0x0000ff",
                     "size": 4
                 },
@@ -1222,7 +1222,7 @@ if(this.canShoot()) {
         "speed": 100,
         "shotDelay": 0,
         "model": {
-            "src": "/src/medias/models/zinnia.gltf",
+            "src": "/src/medias/modèles/zinnia.gltf",
             "scale": {
                 "x": 1,
                 "y": 1,
@@ -1241,7 +1241,7 @@ if(this.canShoot()) {
         "projectiles": {
             "speed": 200,
             "model": {
-                "src": "/src/medias/models/PokeBalls/CherishBall.gltf",
+                "src": "/src/medias/modèles/PokeBalls/CherishBall.gltf",
                 "scale": {
                     "x": 1,
                     "y": 1,
@@ -1259,7 +1259,7 @@ if(this.canShoot()) {
     },
     "shields": {
         "count": 3,
-        "models": [],
+        "modèles": [],
         "colors": [
             "0xffffff",
             "0xb38b6d",
@@ -1282,9 +1282,9 @@ if(this.canShoot()) {
         },
         "size": 10,
         "health": 1,
-        "models": [
+        "modèles": [
             {
-                "src": "/src/medias/models/Pokemons/leviator.gltf",
+                "src": "/src/medias/modèles/Pokémons/leviator.gltf",
                 "scale": {
                     "x": 1,
                     "y": 1,
@@ -1300,7 +1300,7 @@ if(this.canShoot()) {
         ],
         "projectiles": {
             "speed": 400,
-            "models": [],
+            "modèles": [],
             "color": "0xffff00",
             "size": 4
         },
@@ -1321,9 +1321,9 @@ if(this.canShoot()) {
                             <div>
                                 <h4>Placement "custom"</h4>
                                 <p>
-                                    Le placement custom est le placement le plus personnalisable. En effet, il est possible de positioner les envahisseurs comme on le souhaite sur une grille.
+                                    Le placement custom est le placement le plus personnalisable. En effet, il est possible de positionner les envahisseurs comme on le souhaite sur une grille.
                                     Il est grandement inspiré du système d'ajout de craft du jeu populaire Minecraft disponible lors de la création d'un mod ou plugin dans le langage Java.
-                                    Ainsi si l'on défini 3 types d'envahisseurs avec un alias B, T et S et qu'on définie le tableau lines comme suit :
+                                    Ainsi si l'on défini 3 types d'envahisseurs avec un alias B, T et S et qu'on définie le tableau <i>lines</i> comme suit :
                                     <pre>
                                         <code class="lang-json">
 "placement": "custom",
@@ -1347,7 +1347,7 @@ if(this.canShoot()) {
                                         <li>Puis un espace</li>
                                     </ul>
 
-                                    Cette exemple nous donne le placement en coeur suivant :
+                                    Cette exemple nous donne le placement en cœur suivant :
                                     <img class="rounded mx-auto d-block" src="rapport/images/customPlacement.jpg" alt="Exemple de placement custom">
                                 </p>
                             </div>
@@ -1365,43 +1365,43 @@ if(this.canShoot()) {
                     <div id="positionementJoueur">
                         <h3>Positionnement du joueur</h3>
                         <p>
-                            Tout comme la taille du plateau, le positionnelment du joueur est entièrement automatique. Il est définie en fonction du nombre de ligne d'envahisseur et du nombre de tour avant que les envahisseur nous atteignent.
+                            Tout comme la taille du plateau, le positionnement du joueur est entièrement automatique. Il est définie en fonction du nombre de ligne d'envahisseur et du nombre de tour avant que les envahisseur nous atteignent.
                         </p>
                     </div>
 
                     <div id="interfaces">
                         <h3>Gestion des interfaces utilisateur du jeu</h3>
                         <p>
-                            Toute les interfaces sont inséré dans des fichiers html qui sont ensuite chargé sur la page de jeu. Cela permet au code d'être plus clair et lors du développement de pouvoir facilement construire l'interface.
+                            Toute les interfaces sont insérées dans des fichiers html qui sont ensuite chargés sur la page de jeu. Cela permet au code d'être plus clair et lors du développement de pouvoir facilement construire l'interface.
                         </p>
                     </div>
 
                     <div id="evenements">
-                        <h3>Système d'évenement</h3>
+                        <h3>Système d'évènement</h3>
                         <p>
-                            Le jeu est constuit autour d'évenement Javascript. Cela permet donc d'avoir une seul class coordinatrice et de pouvoir avoir des module totalement indépendant de la scene. La communication entre les instances de class se fait donc de manière totalement asynchrone ce qui est idéale pour un jeu vidéo.
+                            Le jeu est construit autour d'évènement Javascript. Cela permet donc d'avoir une seul class coordinatrice et de pouvoir avoir des module totalement indépendant de la scène. La communication entre les instances de class se fait donc de manière totalement asynchrone ce qui est idéale pour un jeu vidéo.
                         </p>
                     </div>
 
                     <div id="sauvegarde">
                         <h3>Sauvegarde du score</h3>
                         <p>
-                            Dans le but de pouvoir visualiser son meilleur score après avoir jouer ou de pouvoir partager son score avec ses amis, j'ai implémenter une sauvegarde du meilleur score dans le local storage du navigateur. Cela permet donc, même après fermeture du navigateur, de retrouver son meilleur score et ainsi, d'essayer de le battre.
+                            Dans le but de pouvoir visualiser son meilleur score après avoir jouer ou de pouvoir partager son score avec ses amis, j'ai implémenter une sauvegarde du meilleur score dans le "localStorage" du navigateur. Cela permet donc, même après fermeture du navigateur, de retrouver son meilleur score et ainsi, d'essayer de le battre.
                         </p>
                     </div>
 
                     <div id="bonus">
                         <h3>Bonus</h3>
                         <p>
-                            Au cours de la partie, le joueur pourra être ammené à obtenir des Bonus lorsqu'il tue un envahisseur avec 1% de chance. Il n'y a actuellement qu'un seul bonus représenté par un model de coueur et donnant 1 vie supplémentaire au joueur lorsqu'il le ramasse.
-                            Les bonus sont issue d'une class abstraite et Bonus non instantiable. Il suffit donc pour créer un nouveau bonus d'hériter de cette classe et d'implémenter la méthode launchEffect(). Il faut bien entendu ajouter le nouveau bonus à la liste des bonus disponible dans la class Game, pour qu'il soit pris en compte.
+                            Au cours de la partie, le joueur pourra être amené à obtenir des Bonus lorsqu'il tue un envahisseur avec 1% de chance. Il n'y a actuellement qu'un seul bonus représenté par un model de cœur et donnant 1 vie supplémentaire au joueur lorsqu'il le ramasse.
+                            Les bonus sont issue d'une class abstraite et Bonus non instanciable. Il suffit donc pour créer un nouveau bonus d'hériter de cette classe et d'implémenter la méthode launchEffect(). Il faut bien entendu ajouter le nouveau bonus à la liste des bonus disponible dans la class Game, pour qu'il soit pris en compte.
                         </p>
                     </div>
 
                     <div id="manette">
                         <h3>Support de la manette de jeu</h3>
                         <p>
-                            En plus des fleches directionnel du clavier, le joueur peut également brancher une manette de jeu (testé avec une manette de XBox) et se déplacer avec les fleches directionnel de la manette. Il pourra également tirer avec la touche A de la manette et mettre en pause avec la touche START.
+                            En plus des flèches directionnel du clavier, le joueur peut également brancher une manette de jeu (testé avec une manette de XBox) et se déplacer avec les flèches directionnel de la manette. Il pourra également tirer avec la touche A de la manette et mettre en pause avec la touche START.
                         </p>
                     </div>
                 </p>

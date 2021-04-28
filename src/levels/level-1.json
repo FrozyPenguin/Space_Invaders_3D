@@ -225,7 +225,7 @@
         "projectiles": {
             "speed": 400,
             "models": [],
-            "color": "0xffff00",
+            "color": "0xff0000",
             "size": 4
         },
         "points": 100,

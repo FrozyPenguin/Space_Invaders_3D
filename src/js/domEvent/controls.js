@@ -18,7 +18,6 @@ function initDomControls() {
 
     pauseBtn.addEventListener('click', (event) => {
         userPaused = true;
-        console.log(userPaused)
         pause(event);
     });
 
