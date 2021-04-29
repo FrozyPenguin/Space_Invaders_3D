@@ -120,7 +120,7 @@
                         "animated": true
                     },
                     {
-                        "src": "/src/medias/models/Pokemons/SmogoHited2.gltf",
+                        "src": "/src/medias/models/Pokemons/smogoHited2.gltf",
                         "scale": {
                             "x": 0.3,
                             "y": 0.3,
