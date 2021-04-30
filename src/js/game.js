@@ -378,6 +378,7 @@ class Game {
 
         gameEvent.on('onRetry', () => {
             this.score = 0;
+            document.querySelector('#score #actual').innerHTML = this.score;
             this.startGame();
         })
 
